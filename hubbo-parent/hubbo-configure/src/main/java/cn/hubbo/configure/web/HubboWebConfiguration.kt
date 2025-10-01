@@ -1,0 +1,38 @@
+package cn.hubbo.configure.web
+
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer
+import com.fasterxml.jackson.module.kotlin.KotlinModule
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.http.converter.HttpMessageConverter
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
+import java.nio.charset.Charset
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+
+@Configuration
+open class HubboWebConfiguration {
+
+
+    @Bean
+    fun httpMessageConvert(): HttpMessageConverter<Any> {
+        val httpMessageConverter = MappingJackson2HttpMessageConverter()
+        val objectMapper = ObjectMapper()
+        val pattern = "yyyy-MM-dd HH:mm:ss"
+        val dateTimeFormatter = DateTimeFormatter.ofPattern(pattern)
+        objectMapper.dateFormat = SimpleDateFormat(pattern)
+        objectMapper.registerModule(KotlinModule.Builder().build())
+        val javaTimeModule = JavaTimeModule()
+        javaTimeModule.addSerializer(LocalDateTime::class.java, LocalDateTimeSerializer(dateTimeFormatter))
+        javaTimeModule.addDeserializer(LocalDateTime::class.java, LocalDateTimeDeserializer(dateTimeFormatter))
+        objectMapper.registerModule(javaTimeModule)
+        httpMessageConverter.objectMapper = objectMapper
+        httpMessageConverter.defaultCharset = Charset.forName("UTF-8")
+        return httpMessageConverter
+    }
+
+}

@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: hubbo-sofa-web-application
+
+  profiles:
+    active: dev

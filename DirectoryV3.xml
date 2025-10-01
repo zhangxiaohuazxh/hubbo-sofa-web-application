@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<trees>
+    <tree path="/hubbo-parent/hubbo-integration" title="集成模块(RPC,HTTP调用)" extension="" presentableText=""
+          tooltipTitle=""
+          icon="ToolwindowsToolWindowHierarchy"/>
+    <tree path="/hubbo-parent/hubbo-service" title="service接口层" extension="" presentableText="" tooltipTitle=""
+          icon="ProvidersSpark"/>
+    <tree path="/hubbo-parent/hubbo-service-impl" title="service实现" extension="" presentableText="" tooltipTitle=""
+          icon="ProvidersSinglestore"/>
+    <tree path="/hubbo-parent/hubbo-utils" title="工具类" extension="" presentableText="" tooltipTitle=""
+          icon="ProvidersApache"/>
+    <tree path="/hubbo-parent/hubbo-web" title="web控制器" extension="" presentableText="" tooltipTitle=""
+          icon="GeneralWeb"/>
+    <tree path="/hubbo-parent/hubbo-dao" title="持久层" extension="" presentableText="" tooltipTitle=""
+          icon="ProvidersOracle"/>
+    <tree path="/hubbo-parent/hubbo-common" title="公共依赖" extension="" presentableText="" tooltipTitle=""
+          icon="ProvidersGreenplum"/>
+    <tree path="/hubbo-parent/hubbo-configure" icon="ProvidersDocumentDB" title="自动配置" extension=""
+          presentableText="" tooltipTitle="" textColor="" backgroundColor=""/>
+    <tree path="/hubbo-parent/hubbo-boot" icon="ProvidersSinglestore" title="启动入口" extension="" presentableText=""
+          tooltipTitle="" textColor="" backgroundColor=""/>
+</trees>
