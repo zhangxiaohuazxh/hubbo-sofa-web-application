@@ -1,9 +1,15 @@
-package cn.hubbo.configure;
+package cn.hubbo.configure
 
-import org.springframework.context.annotation.Configuration;
+import org.mybatis.spring.annotation.MapperScan
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration
+import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.EnableAspectJAutoProxy
 
+@EnableAutoConfiguration
+@EnableAspectJAutoProxy(exposeProxy = true)
+@MapperScan("cn.hubbo.dal")
 @Configuration
-public class HubboConfiguration {
+open class HubboConfiguration {
 
 
 }

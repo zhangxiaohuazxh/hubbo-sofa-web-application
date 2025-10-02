@@ -17,13 +17,15 @@
     <modules>
         <module>hubbo-utils</module>
         <module>hubbo-common</module>
-        <module>hubbo-dao</module>
+        <module>hubbo-dal</module>
         <module>hubbo-service</module>
-        <module>hubbo-service-impl</module>
+        <module>hubbo-service-facade</module>
         <module>hubbo-integration</module>
         <module>hubbo-configure</module>
         <module>hubbo-web</module>
         <module>hubbo-boot</module>
+        <module>hubbo-entity</module>
+        <module>hubbo-auth</module>
     </modules>
 
 
@@ -33,10 +35,11 @@
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
         <maven.compiler.source>24</maven.compiler.source>
         <maven.compiler.target>24</maven.compiler.target>
-        <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
+        <maven.compiler-plugin.version>3.11.0</maven.compiler-plugin.version>
         <spring.boot.maven.plugin.version>3.5.6</spring.boot.maven.plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <grpc.version>1.74.0</grpc.version>
         <gson.version>2.13.2</gson.version>
         <rxjava.version>3.1.12</rxjava.version>
         <guava.version>33.5.0-jre</guava.version>
@@ -47,19 +50,25 @@
         <fastjson2.version>2.0.59</fastjson2.version>
         <map.struct.version>1.6.3</map.struct.version>
         <commons.io.version>2.20.0</commons.io.version>
-        <netty-all.version>4.2.6.Final</netty-all.version>
-        <commons-codec.version>1.19.0</commons-codec.version>
+        <spring.grpc.version>0.11.0</spring.grpc.version>
+        <netty.all.version>4.2.6.Final</netty.all.version>
+        <moshi.kotlin.version>1.15.2</moshi.kotlin.version>
+        <protobuf.java.version>4.31.1</protobuf.java.version>
+        <commons.codec.version>1.19.0</commons.codec.version>
         <commons.lang3.version>3.19.0</commons.lang3.version>
         <org.apache.foray.version>0.12.3</org.apache.foray.version>
         <sofa.common.tools.version>2.1.1</sofa.common.tools.version>
         <postgresql.driver.version>42.7.8</postgresql.driver.version>
         <mapstruct.processor.version>1.6.3</mapstruct.processor.version>
+        <native.maven.plugin.version>0.11.1</native.maven.plugin.version>
+        <commons.collections4.version>4.5.0</commons.collections4.version>
+        <protobuf.maven.plugin.version>3.8.0</protobuf.maven.plugin.version>
         <jackson.module.kotlin.version>2.20.0</jackson.module.kotlin.version>
         <mybatis.flex.processor.version>1.11.3</mybatis.flex.processor.version>
         <lombok.mapstruct.binding.version>0.2.0</lombok.mapstruct.binding.version>
-        <mapstruct-plus.processor.version>1.5.0</mapstruct-plus.processor.version>
+        <mapstruct.plus.processor.version>1.5.0</mapstruct.plus.processor.version>
         <mybatis.flex.springboot3.version>1.11.3</mybatis.flex.springboot3.version>
-        <mapstruct-plus.springboot.version>1.5.0</mapstruct-plus.springboot.version>
+        <mapstruct.plus.springboot.version>1.5.0</mapstruct.plus.springboot.version>
         <rocketmq.springboot.starter.version>2.3.4</rocketmq.springboot.starter.version>
     </properties>
 
@@ -110,12 +119,12 @@
             <dependency>
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
-                <version>${commons-codec.version}</version>
+                <version>${commons.codec.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.netty</groupId>
                 <artifactId>netty-all</artifactId>
-                <version>${netty-all.version}</version>
+                <version>${netty.all.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.mapstruct</groupId>
@@ -135,12 +144,12 @@
             <dependency>
                 <groupId>io.github.linpeilie</groupId>
                 <artifactId>mapstruct-plus-spring-boot-starter</artifactId>
-                <version>${mapstruct-plus.springboot.version}</version>
+                <version>${mapstruct.plus.springboot.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.github.linpeilie</groupId>
                 <artifactId>mapstruct-plus-processor</artifactId>
-                <version>${mapstruct-plus.processor.version}</version>
+                <version>${mapstruct.plus.processor.version}</version>
             </dependency>
             <dependency>
                 <groupId>cn.dev33</groupId>
@@ -208,6 +217,40 @@
                 <artifactId>jackson-datatype-jsr310</artifactId>
                 <version>2.20.0</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>${commons.collections4.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-bom</artifactId>
+                <version>${kotlin.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.squareup.moshi</groupId>
+                <artifactId>moshi-kotlin</artifactId>
+                <version>${moshi.kotlin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.squareup.moshi</groupId>
+                <artifactId>moshi-adapters</artifactId>
+                <version>${moshi.kotlin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.squareup.moshi</groupId>
+                <artifactId>moshi</artifactId>
+                <version>${moshi.kotlin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.grpc</groupId>
+                <artifactId>spring-grpc-dependencies</artifactId>
+                <version>${spring.grpc.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -215,6 +258,7 @@
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib</artifactId>
+            <version>${kotlin.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
@@ -227,6 +271,7 @@
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-test</artifactId>
+            <version>${kotlin.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -235,6 +280,30 @@
     <build>
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <groupId>io.github.ascopes</groupId>
+                    <artifactId>protobuf-maven-plugin</artifactId>
+                    <version>${protobuf.maven.plugin.version}</version>
+                    <configuration>
+                        <protocVersion>${protobuf.java.version}</protocVersion>
+                        <binaryMavenPlugins>
+                            <binaryMavenPlugin>
+                                <groupId>io.grpc</groupId>
+                                <artifactId>protoc-gen-grpc-java</artifactId>
+                                <version>${grpc.version}</version>
+                                <options>@generated=omit</options>
+                            </binaryMavenPlugin>
+                        </binaryMavenPlugins>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>generate</id>
+                            <goals>
+                                <goal>generate</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
                 <plugin>
                     <groupId>org.jetbrains.kotlin</groupId>
                     <artifactId>kotlin-maven-plugin</artifactId>
@@ -274,13 +343,28 @@
                         </execution>
                     </executions>
                 </plugin>
+                <plugin>
+                    <groupId>org.graalvm.buildtools</groupId>
+                    <artifactId>native-maven-plugin</artifactId>
+                    <version>${native.maven.plugin.version}</version>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
-                <version>${kotlin.version}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <jvmTarget>${maven.compiler.target}</jvmTarget>
+                    <args>
+                        <arg>-Xjsr305=strict</arg>
+                    </args>
+                    <compilerPlugins>
+                        <plugin>spring</plugin>
+                        <plugin>no-arg</plugin>
+                    </compilerPlugins>
+                </configuration>
                 <executions>
                     <execution>
                         <id>compile</id>
@@ -288,6 +372,12 @@
                         <goals>
                             <goal>compile</goal>
                         </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <sourceDir>${project.basedir}/src/main/kotlin</sourceDir>
+                                <sourceDir>${project.basedir}/src/main/java</sourceDir>
+                            </sourceDirs>
+                        </configuration>
                     </execution>
                     <execution>
                         <id>test-compile</id>
@@ -295,14 +385,30 @@
                         <goals>
                             <goal>test-compile</goal>
                         </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <sourceDir>${project.basedir}/src/test/kotlin</sourceDir>
+                                <sourceDir>${project.basedir}/src/test/java</sourceDir>
+                            </sourceDirs>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <jvmTarget>${maven.compiler.target}</jvmTarget>
-                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.jetbrains.kotlin</groupId>
+                        <artifactId>kotlin-maven-allopen</artifactId>
+                        <version>${kotlin.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.jetbrains.kotlin</groupId>
+                        <artifactId>kotlin-maven-noarg</artifactId>
+                        <version>${kotlin.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>
+
 
     <profiles>
         <profile>

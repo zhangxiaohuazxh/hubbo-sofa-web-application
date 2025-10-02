@@ -19,7 +19,7 @@ open class HubboWebConfiguration {
 
 
     @Bean
-    fun httpMessageConvert(): HttpMessageConverter<Any> {
+    open fun httpMessageConvert(): HttpMessageConverter<Any> {
         val httpMessageConverter = MappingJackson2HttpMessageConverter()
         val objectMapper = ObjectMapper()
         val pattern = "yyyy-MM-dd HH:mm:ss"
