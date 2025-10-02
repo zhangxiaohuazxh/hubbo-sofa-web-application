@@ -19,4 +19,6 @@
           presentableText="" tooltipTitle="" textColor="" backgroundColor=""/>
     <tree path="/hubbo-parent/hubbo-boot" icon="ProvidersSinglestore" title="启动入口" extension="" presentableText=""
           tooltipTitle="" textColor="" backgroundColor=""/>
+    <tree path="/hubbo-parent/hubbo-entity" title="实体类聚合"/>
+    <tree path="/hubbo-parent/hubbo-auth" title="鉴权"/>
 </trees>

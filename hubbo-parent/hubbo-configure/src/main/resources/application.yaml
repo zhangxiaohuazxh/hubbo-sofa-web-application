@@ -4,3 +4,4 @@ spring:
 
   profiles:
     active: dev
+    include: auth,datasource,mybatis,security
