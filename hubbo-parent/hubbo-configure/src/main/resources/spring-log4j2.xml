@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 日志级别从低到高优先级为: ALL < TRACE < DEBUG < INFO < WARN < ERROR < FATAL < OFF -->
+<!-- configuration后面的status,这个用于设置log4j2自身内部的信息输出,可以不设置,当设置成trace时,你会看到log4j2内部各种详细输出 -->
+<!--monitorInterval: 监视配置文件变化间隔时间,单位秒,Log4j2能够自动检测配置文件是否修改,同时更新配置 -->
+<configuration monitorInterval="600">
+
+    <!--  配置参考文档 https://blog.csdn.net/qq_30614345/article/details/134492204  -->
+
+    <Properties>
+        <!--当天文件保存目录,建议不要配置相对路径-->
+        <property name="LOG_DIR">../logs</property>
+        <!--历史文件保存目录-->
+        <property name="HISTORY_LOG_DIR">../logs/history</property>
+        <!--项目名称-->
+        <property name="FILE_NAME" value="hubbo"/>
+        <!--如果当天日志文件大于100MB,则存档-->
+        <property name="SPLIT_SIZE">100MB</property>
+        <!--文件保存个数，这里的30说明可保留30个,即30天-->
+        <property name="FILE_COUNT">30</property>
+        <!--interval属性用来指定多久滚动一次,默认是1 hour-->
+        <property name="INTERVAL">30</property>
+        <!--输出日志的格式:%d表示日期时间,%thread表示线程名,%-5level级别从左显示5个字符宽度,%logger{50}表示logger名字最长50个字符,否则按照句点分割,%line表示行号,%msg日志消息,%n换行符-->
+        <property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} => [%thread] => %-5level %logger{50}:(%line) - %msg%n
+        </property>
+        <property name="SOURCE_LOG_FILE_NAME">hubbo-source</property>
+    </Properties>
+
+
+    <appenders>
+        <!--1、控制台输出-->
+        <console name="Console" target="SYSTEM_OUT">
+            <!--控制台只输出level及其以上级别的信息(onMatch),其他的直接拒绝(onMismatch)-->
+            <!--<ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>-->
+            <filters>
+                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            </filters>
+            <!--输出日志的格式-->
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+        </console>
+
+        <RollingFile name="RollingFile" fileName="${LOG_DIR}/${FILE_NAME}.log"
+                     filePattern="${HISTORY_LOG_DIR}/${FILE_NAME}-INFO-%d{yyyy-MM-dd}-%i.log.gz">
+            <filters>
+                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            </filters>
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <!--interval属性用来指定多久滚动一次,默认是1 hour-->
+                <TimeBasedTriggeringPolicy interval="${INTERVAL}"/>
+                <!--日志文件大小超过多少时进行存档-->
+                <SizeBasedTriggeringPolicy size="${SPLIT_SIZE}"/>
+            </Policies>
+            <!-- DefaultRolloverStrategy属性如不设置,则默认为最多同一文件夹下7个文件开始覆盖-->
+            <DefaultRolloverStrategy max="${FILE_COUNT}"/>
+        </RollingFile>
+
+        <!-- 整合elk -->
+        <!--        <Socket name="Logstash" host="127.0.0.1" port="4560" protocol="TCP">-->
+        <!--            <PatternLayout pattern="${logPattern}"/>-->
+        <!--        </Socket>-->
+
+        <RollingFile name="RollingFileSource" fileName="${LOG_DIR}/${SOURCE_LOG_FILE_NAME}.log"
+                     filePattern="${HISTORY_LOG_DIR}/${SOURCE_LOG_FILE_NAME}-DEBUG-%d{yyyy-MM-dd}-%i.log.gz">
+            <filters>
+                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            </filters>
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="${INTERVAL}"/>
+                <SizeBasedTriggeringPolicy size="${SPLIT_SIZE}"/>
+            </Policies>
+            <DefaultRolloverStrategy max="${FILE_COUNT}"/>
+        </RollingFile>
+
+        <Rewrite name="RewriteSensitiveData">
+            <RegexReplaceRewritePolicy/>
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFile"/>
+        </Rewrite>
+    </appenders>
+
+
+    <loggers>
+        <!-- 控制整个项目的日志等级 -->
+        <root level="info">
+            <AppenderRef ref="Console"/>
+            <appender-ref ref="RollingFile"/>
+        </root>
+
+        <AsyncLogger name="org.springframework" level="info" additivity="false">
+            <AppenderRef ref="Console"/>
+            <appender-ref ref="RollingFile"/>
+        </AsyncLogger>
+
+        <AsyncLogger name="org.mybatis" level="info" additivity="false">
+            <AppenderRef ref="Console"/>
+            <appender-ref ref="RollingFile"/>
+        </AsyncLogger>
+
+        <AsyncLogger name="cn.hubbo" level="info" additivity="false">
+            <appender-ref ref="RollingFileSource"/>
+            <appender-ref ref="RewriteSensitiveData"/>
+        </AsyncLogger>
+    </loggers>
+
+
+</configuration>

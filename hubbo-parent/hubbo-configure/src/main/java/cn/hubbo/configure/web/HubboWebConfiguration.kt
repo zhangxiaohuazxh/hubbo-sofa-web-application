@@ -1,10 +1,14 @@
 package cn.hubbo.configure.web
 
+import cn.hubbo.utils.fory.ForyComponentRegisterManager
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer
 import com.fasterxml.jackson.module.kotlin.KotlinModule
+import org.apache.fory.Fory
+import org.apache.fory.ThreadLocalFory
+import org.apache.fory.config.Language
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.converter.HttpMessageConverter
@@ -34,5 +38,18 @@ open class HubboWebConfiguration {
         httpMessageConverter.defaultCharset = Charset.forName("UTF-8")
         return httpMessageConverter
     }
+
+    @Bean
+    open fun fory(): ThreadLocalFory {
+        val fory = Fory.builder().requireClassRegistration(true)
+            .registerGuavaTypes(true)
+            .suppressClassRegistrationWarnings(true)
+            .withLanguage(Language.JAVA)
+            .withLanguage(Language.JAVASCRIPT)
+            .buildThreadLocalFory()
+        ForyComponentRegisterManager.register(fory)
+        return fory
+    }
+
 
 }

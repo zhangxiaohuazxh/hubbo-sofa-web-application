@@ -42,6 +42,12 @@
             <artifactId>mybatis-flex-spring-boot3-starter</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>cn.hubbo</groupId>
+            <artifactId>hubbo-service-facade</artifactId>
+            <version>0.1</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
 

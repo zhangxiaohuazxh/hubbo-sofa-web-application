@@ -46,6 +46,7 @@
         <sofa.rpc.version>6.0.4</sofa.rpc.version>
         <sl4j.api.version>2.0.17</sl4j.api.version>
         <sa-token.version>1.44.0</sa-token.version>
+        <disruptor.version>4.0.0</disruptor.version>
         <sofa.boot.version>4.5.0</sofa.boot.version>
         <fastjson2.version>2.0.59</fastjson2.version>
         <map.struct.version>1.6.3</map.struct.version>
@@ -56,7 +57,7 @@
         <protobuf.java.version>4.31.1</protobuf.java.version>
         <commons.codec.version>1.19.0</commons.codec.version>
         <commons.lang3.version>3.19.0</commons.lang3.version>
-        <org.apache.foray.version>0.12.3</org.apache.foray.version>
+        <org.apache.fory.version>0.12.3</org.apache.fory.version>
         <sofa.common.tools.version>2.1.1</sofa.common.tools.version>
         <postgresql.driver.version>42.7.8</postgresql.driver.version>
         <mapstruct.processor.version>1.6.3</mapstruct.processor.version>
@@ -134,7 +135,12 @@
             <dependency>
                 <groupId>org.apache.fory</groupId>
                 <artifactId>fory-core</artifactId>
-                <version>${org.apache.foray.version}</version>
+                <version>${org.apache.fory.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.fory</groupId>
+                <artifactId>fory-kotlin</artifactId>
+                <version>${org.apache.fory.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.projectlombok</groupId>
@@ -250,6 +256,11 @@
                 <version>${spring.grpc.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.lmax</groupId>
+                <artifactId>disruptor</artifactId>
+                <version>${disruptor.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

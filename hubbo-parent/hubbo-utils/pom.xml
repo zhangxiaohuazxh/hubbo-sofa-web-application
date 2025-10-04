@@ -47,6 +47,19 @@
             <groupId>com.squareup.moshi</groupId>
             <artifactId>moshi</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.fory</groupId>
+            <artifactId>fory-kotlin</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
 </project>
