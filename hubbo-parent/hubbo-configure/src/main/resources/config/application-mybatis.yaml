@@ -1,0 +1,9 @@
+mybatis-flex:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+
+  global-config:
+    print-banner: true
+  type-aliases-package: cn.hubbo.entity

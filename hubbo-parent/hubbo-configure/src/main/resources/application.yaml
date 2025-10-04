@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: hubbo-sofa-web-application
+
+  profiles:
+    active: dev
+    include: auth,datasource,mybatis,security,log4j2
