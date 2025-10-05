@@ -23,6 +23,8 @@
         <property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} => [%thread] => %-5level %logger{50}:(%line) - %msg%n
         </property>
         <property name="SOURCE_LOG_FILE_NAME">hubbo-source</property>
+        <property name="STRUCTURED_LOG_FILE_NAME">hubbo-structured</property>
+        <property name="SOURCE_STRUCTURED_LOG_FILE_NAME">hubbo-source-structured</property>
     </Properties>
 
 
@@ -72,10 +74,38 @@
             <DefaultRolloverStrategy max="${FILE_COUNT}"/>
         </RollingFile>
 
+        <RollingFile name="StructuredRollingJsonFile" fileName="${LOG_DIR}/${STRUCTURED_LOG_FILE_NAME}.json"
+                     filePattern="${HISTORY_LOG_DIR}/${STRUCTURED_LOG_FILE_NAME}-DEBUG-%d{yyyy-MM-dd}-%i.json.gz">
+            <filters>
+                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            </filters>
+            <JsonTemplateLayout eventTemplateUri="classpath:logging/template.json"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="${INTERVAL}"/>
+                <SizeBasedTriggeringPolicy size="${SPLIT_SIZE}"/>
+            </Policies>
+            <DefaultRolloverStrategy max="${FILE_COUNT}"/>
+        </RollingFile>
+
+        <RollingFile name="StructuredRollingJsonFileSource"
+                     fileName="${LOG_DIR}/${SOURCE_STRUCTURED_LOG_FILE_NAME}.json"
+                     filePattern="${HISTORY_LOG_DIR}/${SOURCE_STRUCTURED_LOG_FILE_NAME}-DEBUG-%d{yyyy-MM-dd}-%i.json.gz">
+            <filters>
+                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            </filters>
+            <JsonTemplateLayout eventTemplateUri="classpath:logging/template.json" eventEol="true"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="${INTERVAL}"/>
+                <SizeBasedTriggeringPolicy size="${SPLIT_SIZE}"/>
+            </Policies>
+            <DefaultRolloverStrategy max="${FILE_COUNT}"/>
+        </RollingFile>
+
         <Rewrite name="RewriteSensitiveData">
             <RegexReplaceRewritePolicy/>
             <AppenderRef ref="Console"/>
             <AppenderRef ref="RollingFile"/>
+            <AppenderRef ref="StructuredRollingJsonFile"/>
         </Rewrite>
     </appenders>
 
@@ -95,11 +125,14 @@
         <AsyncLogger name="org.mybatis" level="info" additivity="false">
             <AppenderRef ref="Console"/>
             <appender-ref ref="RollingFile"/>
+            <AppenderRef ref="StructuredRollingJsonFile"/>
         </AsyncLogger>
 
         <AsyncLogger name="cn.hubbo" level="info" additivity="false">
             <appender-ref ref="RollingFileSource"/>
             <appender-ref ref="RewriteSensitiveData"/>
+            <AppenderRef ref="StructuredRollingJsonFile"/>
+            <AppenderRef ref="StructuredRollingJsonFileSource"/>
         </AsyncLogger>
     </loggers>
 

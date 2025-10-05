@@ -1,2 +1,2 @@
 logging:
-  config: classpath:spring-log4j2.xml
+  config: classpath:logging/log4j2.xml

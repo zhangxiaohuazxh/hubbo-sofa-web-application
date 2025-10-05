@@ -50,6 +50,7 @@
         <sofa.boot.version>4.5.0</sofa.boot.version>
         <fastjson2.version>2.0.59</fastjson2.version>
         <map.struct.version>1.6.3</map.struct.version>
+        <freemarker.version>2.3.34</freemarker.version>
         <commons.io.version>2.20.0</commons.io.version>
         <spring.grpc.version>0.11.0</spring.grpc.version>
         <netty.all.version>4.2.6.Final</netty.all.version>
@@ -70,6 +71,7 @@
         <mapstruct.plus.processor.version>1.5.0</mapstruct.plus.processor.version>
         <mybatis.flex.springboot3.version>1.11.3</mybatis.flex.springboot3.version>
         <mapstruct.plus.springboot.version>1.5.0</mapstruct.plus.springboot.version>
+        <transmittable.thread.local.version>2.14.5</transmittable.thread.local.version>
         <rocketmq.springboot.starter.version>2.3.4</rocketmq.springboot.starter.version>
     </properties>
 
@@ -262,6 +264,16 @@
                 <artifactId>disruptor</artifactId>
                 <version>${disruptor.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>transmittable-thread-local</artifactId>
+                <version>${transmittable.thread.local.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.freemarker</groupId>
+                <artifactId>freemarker</artifactId>
+                <version>${freemarker.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -375,11 +387,14 @@
                         <plugin>spring</plugin>
                         <plugin>no-arg</plugin>
                     </compilerPlugins>
+                    <pluginOptions>
+                        <option>no-arg:annotation=cn.hubbo.utils.fory.NoArgConstructor</option>
+                    </pluginOptions>
                 </configuration>
                 <executions>
                     <execution>
                         <id>compile</id>
-                        <phase>compile</phase>
+                        <phase>process-sources</phase>
                         <goals>
                             <goal>compile</goal>
                         </goals>
@@ -400,6 +415,7 @@
                             <sourceDirs>
                                 <sourceDir>${project.basedir}/src/test/kotlin</sourceDir>
                                 <sourceDir>${project.basedir}/src/test/java</sourceDir>
+                                <sourceDir>target/generated-sources/annotations</sourceDir>
                             </sourceDirs>
                         </configuration>
                     </execution>

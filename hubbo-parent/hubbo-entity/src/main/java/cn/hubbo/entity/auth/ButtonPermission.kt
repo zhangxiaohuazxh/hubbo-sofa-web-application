@@ -7,47 +7,40 @@ import com.mybatisflex.annotation.Id
 import com.mybatisflex.annotation.KeyType
 import com.mybatisflex.annotation.Table
 import java.io.Serializable
-import java.sql.Timestamp
 import java.time.LocalDateTime
 
 /**
- * 用户基础信息表
+ * 按钮权限关联信息表
  */
 @Fory
 @NoArgConstructor
-@Table("t_user")
-data class User(
+@Table("t_button_permission")
+data class ButtonPermission(
 
     /**
-     * 用户编号，分布式id
+     * 按钮权限编号
      */
     @Id(keyType = KeyType.None)
-    @Column("user_id")
-    var userId: Long? = null,
+    @Column("id")
+    var id: Long? = null,
 
     /**
-     * 用户名
+     * 按钮权限字符
      */
-    @Column("user_name")
-    var userName: String? = null,
+    @Column("button_permission_code")
+    var buttonPermissionCode: String? = null,
 
     /**
-     * 手机号
+     * 按钮名称
      */
-    @Column("phone")
-    var phone: String? = null,
+    @Column("button_name")
+    var buttonName: String? = null,
 
     /**
-     * 用户密码，不要存储明文
+     * 权限编号
      */
-    @Column("passwd")
-    var passwd: String? = null,
-
-    /**
-     * 头像url地址
-     */
-    @Column("profile_url")
-    var profileUrl: String? = null,
+    @Column("permission_id")
+    var permissionId: Int? = null,
 
     /**
      * 是否启用
@@ -62,7 +55,7 @@ data class User(
     var deleted: Boolean = false,
 
     /**
-     * 创建人，用户自行注册的话值就是自己的id
+     * 创建人
      */
     @Column("create_by")
     var createBy: Long? = null,
@@ -83,18 +76,6 @@ data class User(
      * 更新时间
      */
     @Column("update_time")
-    var updateTime: Timestamp? = null,
-
-    /**
-     * 最近一次的上线时间
-     */
-    @Column("recent_online_time")
-    var recentOnlineTime: Timestamp? = null,
-
-    /**
-     * 对用户的备注信息
-     */
-    @Column("description")
-    var description: String? = null
+    var updateTime: LocalDateTime? = null
 
 ) : Serializable
