@@ -19,6 +19,13 @@
           presentableText="" tooltipTitle="" textColor="" backgroundColor=""/>
     <tree path="/hubbo-parent/hubbo-boot" icon="ProvidersSinglestore" title="启动入口" extension="" presentableText=""
           tooltipTitle="" textColor="" backgroundColor=""/>
-    <tree path="/hubbo-parent/hubbo-entity" title="实体类聚合"/>
-    <tree path="/hubbo-parent/hubbo-auth" title="鉴权"/>
+    <tree path="/hubbo-parent/hubbo-entity" title="实体类聚合" extension="" presentableText="" tooltipTitle=""
+          icon="ToolwindowsToolWindowJsonPath"/>
+    <tree path="/hubbo-parent/hubbo-auth" title="鉴权" extension="" presentableText="" tooltipTitle=""
+          icon="ProvidersVertica"/>
+    <tree path="/hubbo-parent" icon="ToolwindowsDocumentation"/>
+    <tree path="/hubbo-parent/hubbo-service-facade" icon="ToolwindowsToolWindowVariableView"/>
+    <tree path="/documents" icon="ObjectBrowserShowLibraryContents"/>
+    <tree path="/script" icon="ToolwindowsToolWindowInternal"/>
+    <tree path="/hubbo-parent/hubbo-dal" icon="ActionsQuickfixOffBulb"/>
 </trees>

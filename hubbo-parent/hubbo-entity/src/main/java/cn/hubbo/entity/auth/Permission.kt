@@ -7,47 +7,35 @@ import com.mybatisflex.annotation.Id
 import com.mybatisflex.annotation.KeyType
 import com.mybatisflex.annotation.Table
 import java.io.Serializable
-import java.sql.Timestamp
 import java.time.LocalDateTime
 
 /**
- * 用户基础信息表
+ * 权限信息表
  */
 @Fory
 @NoArgConstructor
-@Table("t_user")
-data class User(
+@Table("t_permission")
+data class Permission(
 
     /**
-     * 用户编号，分布式id
+     * 权限id
      */
     @Id(keyType = KeyType.None)
-    @Column("user_id")
-    var userId: Long? = null,
+    @Column("permission_id")
+    var permissionId: Long? = null,
 
     /**
-     * 用户名
+     * 权限字符串，三段式，module.menu.action,module模块，
+     * 如system，auth，menu可以是一级菜单也可以是二级三级菜单，action即要执行的动作
      */
-    @Column("user_name")
-    var userName: String? = null,
+    @Column("permission_code")
+    var permissionCode: String? = null,
 
     /**
-     * 手机号
+     * 权限名称
      */
-    @Column("phone")
-    var phone: String? = null,
-
-    /**
-     * 用户密码，不要存储明文
-     */
-    @Column("passwd")
-    var passwd: String? = null,
-
-    /**
-     * 头像url地址
-     */
-    @Column("profile_url")
-    var profileUrl: String? = null,
+    @Column("permission_name")
+    var permissionName: String? = null,
 
     /**
      * 是否启用
@@ -62,7 +50,7 @@ data class User(
     var deleted: Boolean = false,
 
     /**
-     * 创建人，用户自行注册的话值就是自己的id
+     * 创建人
      */
     @Column("create_by")
     var createBy: Long? = null,
@@ -83,18 +71,6 @@ data class User(
      * 更新时间
      */
     @Column("update_time")
-    var updateTime: Timestamp? = null,
-
-    /**
-     * 最近一次的上线时间
-     */
-    @Column("recent_online_time")
-    var recentOnlineTime: Timestamp? = null,
-
-    /**
-     * 对用户的备注信息
-     */
-    @Column("description")
-    var description: String? = null
+    var updateTime: LocalDateTime? = null
 
 ) : Serializable
