@@ -1,8 +1,7 @@
 package cn.hubbo.web.test
 
 import cn.hubbo.common.constants.LibraryConstants
-import cn.hubbo.service.auth.RoleService
-import com.alipay.sofa.runtime.api.annotation.SofaReference
+import cn.hubbo.entity.vo.ResultVO
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.GetMapping
@@ -20,15 +19,10 @@ class TestController {
         val logger: Logger = LoggerFactory.getLogger(TestController::class.java)
     }
 
-    @SofaReference
-    open val roleService: RoleService? = null
-
-
     @GetMapping("/sysdate")
-    fun localDateTime(): LocalDateTime {
-        var role = roleService!!.getById(1L)
-        print("role $role")
-        return LocalDateTime.now(ZoneId.of(LibraryConstants.DEFAULT_ZONE_ID.value))
+    fun localDateTime(): ResultVO<Any> {
+        logger.info("访问系统时间接口")
+        return ResultVO.success(LocalDateTime.now(ZoneId.of(LibraryConstants.DEFAULT_ZONE_ID.value)))
     }
 
 }

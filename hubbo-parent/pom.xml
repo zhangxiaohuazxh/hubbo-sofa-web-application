@@ -55,6 +55,8 @@
         <spring.grpc.version>0.11.0</spring.grpc.version>
         <netty.all.version>4.2.6.Final</netty.all.version>
         <moshi.kotlin.version>1.15.2</moshi.kotlin.version>
+        <sofa.registry.version>6.5.6</sofa.registry.version>
+        <sofa.registry.version>6.5.6</sofa.registry.version>
         <protobuf.java.version>4.31.1</protobuf.java.version>
         <commons.codec.version>1.19.0</commons.codec.version>
         <commons.lang3.version>3.19.0</commons.lang3.version>
@@ -273,6 +275,11 @@
                 <groupId>org.freemarker</groupId>
                 <artifactId>freemarker</artifactId>
                 <version>${freemarker.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>registry-client-all</artifactId>
+                <version>${sofa.registry.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
