@@ -6,6 +6,7 @@ import com.mybatisflex.annotation.Column
 import com.mybatisflex.annotation.Id
 import com.mybatisflex.annotation.KeyType
 import com.mybatisflex.annotation.Table
+import lombok.EqualsAndHashCode
 import java.io.Serializable
 import java.sql.Timestamp
 import java.time.LocalDateTime
@@ -16,7 +17,8 @@ import java.time.LocalDateTime
 @Fory
 @NoArgConstructor
 @Table("t_user")
-data class User(
+@EqualsAndHashCode
+open class User(
 
     /**
      * 用户编号，分布式id
@@ -95,6 +97,12 @@ data class User(
      * 对用户的备注信息
      */
     @Column("description")
-    var description: String? = null
+    var description: String? = null,
+
+    /**
+    租户id
+     */
+    @Column("tenant_id")
+    var tenantId: Long? = null
 
 ) : Serializable

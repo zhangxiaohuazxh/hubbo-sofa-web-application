@@ -45,7 +45,6 @@
         <guava.version>33.5.0-jre</guava.version>
         <sofa.rpc.version>6.0.4</sofa.rpc.version>
         <sl4j.api.version>2.0.17</sl4j.api.version>
-        <sa-token.version>1.44.0</sa-token.version>
         <disruptor.version>4.0.0</disruptor.version>
         <sofa.boot.version>4.5.0</sofa.boot.version>
         <fastjson2.version>2.0.59</fastjson2.version>
@@ -55,9 +54,12 @@
         <spring.grpc.version>0.11.0</spring.grpc.version>
         <netty.all.version>4.2.6.Final</netty.all.version>
         <moshi.kotlin.version>1.15.2</moshi.kotlin.version>
+        <sofa.registry.version>6.5.6</sofa.registry.version>
+        <sofa.registry.version>6.5.6</sofa.registry.version>
         <protobuf.java.version>4.31.1</protobuf.java.version>
         <commons.codec.version>1.19.0</commons.codec.version>
         <commons.lang3.version>3.19.0</commons.lang3.version>
+        <reactor.netty.version>1.3.0-M7</reactor.netty.version>
         <org.apache.fory.version>0.12.3</org.apache.fory.version>
         <sofa.common.tools.version>2.1.1</sofa.common.tools.version>
         <postgresql.driver.version>42.7.8</postgresql.driver.version>
@@ -73,6 +75,7 @@
         <mapstruct.plus.springboot.version>1.5.0</mapstruct.plus.springboot.version>
         <transmittable.thread.local.version>2.14.5</transmittable.thread.local.version>
         <rocketmq.springboot.starter.version>2.3.4</rocketmq.springboot.starter.version>
+        <sa.token.spring.boot3.starter.version>1.44.0</sa.token.spring.boot3.starter.version>
     </properties>
 
 
@@ -158,11 +161,6 @@
                 <groupId>io.github.linpeilie</groupId>
                 <artifactId>mapstruct-plus-processor</artifactId>
                 <version>${mapstruct.plus.processor.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.dev33</groupId>
-                <artifactId>sa-token-spring-boot-starter</artifactId>
-                <version>${sa-token.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.mybatis-flex</groupId>
@@ -273,6 +271,21 @@
                 <groupId>org.freemarker</groupId>
                 <artifactId>freemarker</artifactId>
                 <version>${freemarker.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>registry-client-all</artifactId>
+                <version>${sofa.registry.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.projectreactor.netty</groupId>
+                <artifactId>reactor-netty</artifactId>
+                <version>${reactor.netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.dev33</groupId>
+                <artifactId>sa-token-spring-boot3-starter</artifactId>
+                <version>${sa.token.spring.boot3.starter.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

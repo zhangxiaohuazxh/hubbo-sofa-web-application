@@ -4,31 +4,34 @@ import cn.hubbo.utils.fory.Fory
 import cn.hubbo.utils.fory.NoArgConstructor
 import com.mybatisflex.annotation.Column
 import com.mybatisflex.annotation.Id
-import com.mybatisflex.annotation.KeyType
 import com.mybatisflex.annotation.Table
-import java.io.Serializable
+import java.sql.Timestamp
 import java.time.LocalDateTime
 
-/**
- * 角色基础信息表
- */
+
 @Fory
+@Table("t_dict_data")
 @NoArgConstructor
-@Table("t_role")
-data class Role(
+data class DictData(
 
     /**
-     * 角色id
+     * 字典编号
      */
-    @Id(keyType = KeyType.None)
-    @Column("role_id")
-    var roleId: Long? = null,
+    @Id
+    @Column("dict_id")
+    var dictId: Long? = null,
 
     /**
-     * 角色名称
+     * 码值类型
      */
-    @Column("role_name")
-    var roleName: String? = null,
+    @Column("dict_code")
+    var dictCode: String? = null,
+
+    /**
+     * 码值
+     */
+    @Column("dict_value")
+    var dictValue: String? = null,
 
     /**
      * 是否启用
@@ -43,7 +46,7 @@ data class Role(
     var deleted: Boolean = false,
 
     /**
-     * 创建人
+     * 创建人，用户自行注册的话值就是自己的id
      */
     @Column("create_by")
     var createBy: Long? = null,
@@ -64,7 +67,13 @@ data class Role(
      * 更新时间
      */
     @Column("update_time")
-    var updateTime: LocalDateTime? = null,
+    var updateTime: Timestamp? = null,
+
+    /**
+     * 对用户的备注信息
+     */
+    @Column("description")
+    var description: String? = null,
 
     /**
     租户id
@@ -72,5 +81,7 @@ data class Role(
     @Column("tenant_id")
     var tenantId: Long? = null
 
+) {
 
-) : Serializable
+
+}

@@ -1,6 +1,9 @@
 package cn.hubbo.configure.web
 
 import cn.hubbo.utils.fory.ForyComponentRegisterManager
+import com.alipay.sofa.registry.client.api.RegistryClient
+import com.alipay.sofa.registry.client.provider.DefaultRegistryClient
+import com.alipay.sofa.registry.client.provider.DefaultRegistryClientConfigBuilder
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer
@@ -9,6 +12,7 @@ import com.fasterxml.jackson.module.kotlin.KotlinModule
 import org.apache.fory.Fory
 import org.apache.fory.ThreadLocalFory
 import org.apache.fory.config.Language
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.converter.HttpMessageConverter
@@ -19,11 +23,17 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @Configuration
-open class HubboWebConfiguration {
+class HubboWebConfiguration {
+
+    @Value(value = $$"${registry.endpoint}")
+    private val endpoint: String? = null
+
+    @Value($$"${registry.endpointPort}")
+    private val endpointPort: Int = 9063
 
 
     @Bean
-    open fun httpMessageConvert(): HttpMessageConverter<Any> {
+    fun httpMessageConvert(): HttpMessageConverter<Any> {
         val httpMessageConverter = MappingJackson2HttpMessageConverter()
         val objectMapper = ObjectMapper()
         val pattern = "yyyy-MM-dd HH:mm:ss"
@@ -40,7 +50,7 @@ open class HubboWebConfiguration {
     }
 
     @Bean
-    open fun fory(): ThreadLocalFory {
+    fun fory(): ThreadLocalFory {
         val fory = Fory.builder().requireClassRegistration(true)
             .registerGuavaTypes(true)
             .suppressClassRegistrationWarnings(true)
@@ -49,6 +59,18 @@ open class HubboWebConfiguration {
             .buildThreadLocalFory()
         ForyComponentRegisterManager.register(fory)
         return fory
+    }
+
+
+    @Bean
+    fun registry(): RegistryClient {
+        val clientConfig = DefaultRegistryClientConfigBuilder.start()
+            .setRegistryEndpoint(endpoint)
+            .setRegistryEndpointPort(endpointPort)
+            .build()
+        val registryClient = DefaultRegistryClient(clientConfig)
+        registryClient.init()
+        return registryClient
     }
 
 

@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS t_user
     update_time        timestamp             DEFAULT CURRENT_TIMESTAMP,
     recent_online_time timestamp             DEFAULT CURRENT_TIMESTAMP,
     description        varchar(255),
+    tenant_id          bigint       NOT NULL,
     CONSTRAINT t_user_pk PRIMARY KEY (user_id)
     );
 
@@ -37,6 +38,7 @@ COMMENT ON COLUMN t_user.update_by IS '更新人';
 COMMENT ON COLUMN t_user.update_time IS '更新时间';
 COMMENT ON COLUMN t_user.recent_online_time IS '最近一次的上线时间';
 COMMENT ON COLUMN t_user.description IS '对用户的备注信息';
+comment on column t_user.tenant_id is '租户id';
 
 
 -- 角色信息表
@@ -51,6 +53,7 @@ CREATE TABLE t_role
     create_time timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP,
     update_by   bigint,
     update_time timestamp DEFAULT CURRENT_TIMESTAMP,
+    tenant_id   bigint                  not null,
     CONSTRAINT t_role_pk PRIMARY KEY (role_id)
 );
 
@@ -63,6 +66,7 @@ COMMENT ON COLUMN t_role.create_by IS '创建人';
 COMMENT ON COLUMN t_role.create_time IS '创建时间';
 COMMENT ON COLUMN t_role.update_by IS '更新人';
 COMMENT ON COLUMN t_role.update_time IS '更新时间';
+comment on column t_role.tenant_id is '租户id';
 
 
 -- 用户角色关联表
@@ -79,6 +83,7 @@ CREATE TABLE t_user_role
     update_by   bigint,
     update_time timestamp DEFAULT CURRENT_TIMESTAMP,
     description varchar(255),
+    tenant_id   bigint                  not null,
     CONSTRAINT t_user_role_pk PRIMARY KEY (id)
 );
 
@@ -93,6 +98,7 @@ COMMENT ON COLUMN t_user_role.create_time IS '创建时间';
 COMMENT ON COLUMN t_user_role.update_by IS '更新人';
 COMMENT ON COLUMN t_user_role.update_time IS '更新时间';
 COMMENT ON COLUMN t_user_role.description IS '备注描述信息';
+comment on column t_user_role.tenant_id is '租户id';
 
 
 -- 权限信息
@@ -109,6 +115,7 @@ CREATE TABLE t_permission
     update_by       bigint,
     update_time     timestamp DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT t_permission_pk PRIMARY KEY (permission_id),
+    tenant_id       bigint                  not null,
     UNIQUE (permission_code)
 );
 
@@ -122,6 +129,7 @@ COMMENT ON COLUMN t_permission.create_by IS '创建人';
 COMMENT ON COLUMN t_permission.create_time IS '创建时间';
 COMMENT ON COLUMN t_permission.update_by IS '更新人';
 COMMENT ON COLUMN t_permission.update_time IS '更新时间';
+COMMENT ON COLUMN t_permission.tenant_id IS '租户id';
 
 
 -- 权限角色关联表
@@ -137,6 +145,7 @@ CREATE TABLE t_role_permission
     update_by     bigint,
     update_time   timestamp          DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT t_role_permission_pk PRIMARY KEY (id),
+    tenant_id     bigint    not null,
     CONSTRAINT t_role_permission_uk unique (role_id, permission_id, enabled)
 );
 
@@ -149,6 +158,7 @@ COMMENT ON COLUMN t_role_permission.create_by IS '创建人';
 COMMENT ON COLUMN t_role_permission.create_time IS '创建时间';
 COMMENT ON COLUMN t_role_permission.update_by IS '更新人';
 COMMENT ON COLUMN t_role_permission.update_time IS '更新时间';
+COMMENT ON COLUMN t_role_permission.tenant_id IS '租户id';
 
 
 -- 菜单信息表
@@ -174,6 +184,7 @@ CREATE TABLE t_menu
     create_time   timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     update_by     bigint,
     update_time   timestamp             DEFAULT CURRENT_TIMESTAMP,
+    tenant_id     bigint       not null,
     CONSTRAINT t_menu_pk PRIMARY KEY (menu_id)
 );
 
@@ -197,6 +208,7 @@ COMMENT ON COLUMN t_menu.create_by IS '创建人';
 COMMENT ON COLUMN t_menu.create_time IS '创建时间';
 COMMENT ON COLUMN t_menu.update_by IS '更新人';
 COMMENT ON COLUMN t_menu.update_time IS '更新时间';
+COMMENT ON COLUMN t_menu.tenant_id IS '租户id';
 
 
 -- 菜单权限关联表
@@ -212,6 +224,7 @@ CREATE TABLE t_menu_permission
     create_time   timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     update_by     bigint,
     update_time   timestamp          DEFAULT CURRENT_TIMESTAMP,
+    tenant_id     bigint    not null,
     CONSTRAINT t_menu_permission_pk PRIMARY KEY (id)
 );
 
@@ -225,6 +238,7 @@ COMMENT ON COLUMN t_menu_permission.create_by IS '创建人';
 COMMENT ON COLUMN t_menu_permission.create_time IS '创建时间';
 COMMENT ON COLUMN t_menu_permission.update_by IS '更新人';
 COMMENT ON COLUMN t_menu_permission.update_time IS '更新时间';
+COMMENT ON COLUMN t_menu_permission.tenant_id IS '租户id';
 
 
 -- 按钮权限表
@@ -242,6 +256,7 @@ CREATE TABLE t_button_permission
     update_by              bigint,
     update_time            timestamp             DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT t_button_permission_pk PRIMARY KEY (id),
+    tenant_id              bigint       not null,
     UNIQUE (button_permission_code)
 );
 
@@ -256,3 +271,35 @@ COMMENT ON COLUMN t_button_permission.create_time IS '创建时间';
 COMMENT ON COLUMN t_button_permission.update_by IS '更新人';
 COMMENT ON COLUMN t_button_permission.update_time IS '更新时间';
 COMMENT ON COLUMN t_button_permission.permission_id IS '权限编号';
+COMMENT ON COLUMN t_button_permission.tenant_id IS '租户';
+
+drop table if exists t_dict_data;
+create table t_dict_data
+(
+
+    dict_id     bigint      not null,
+    dict_code   varchar(65) not null,
+    code_value  varchar(255),
+    enabled     boolean              DEFAULT true,
+    deleted     boolean              DEFAULT false NOT NULL,
+    create_by   bigint      NOT NULL,
+    create_time timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    update_by   bigint,
+    update_time timestamp            DEFAULT CURRENT_TIMESTAMP,
+    description varchar(255),
+    tenant_id   bigint      not null,
+    constraint t_dict_data_pk primary key (dict_id)
+);
+
+comment on table t_dict_data is '字典表';
+comment on column t_dict_data.dict_id is '字典编号';
+comment on column t_dict_data.dict_code is '码值类型';
+comment on column t_dict_data.code_value is '码值';
+comment on column t_dict_data.enabled is '是否启用';
+comment on column t_dict_data.deleted is '逻辑删除标志位';
+comment on column t_dict_data.create_by is '创建人';
+comment on column t_dict_data.create_time is '创建时间';
+comment on column t_dict_data.update_by is '更新人';
+comment on column t_dict_data.update_time is '更新时间';
+comment on column t_dict_data.description is '备注信息';
+comment on column t_dict_data.tenant_id is '租户id';

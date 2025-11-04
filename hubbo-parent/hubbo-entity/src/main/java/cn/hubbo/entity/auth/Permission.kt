@@ -71,6 +71,13 @@ data class Permission(
      * 更新时间
      */
     @Column("update_time")
-    var updateTime: LocalDateTime? = null
+    var updateTime: LocalDateTime? = null,
+
+    /**
+    租户id
+     */
+    @Column("tenant_id")
+    var tenantId: Long? = null
+
 
 ) : Serializable
