@@ -34,10 +34,17 @@ class SysAuthenticationApi {
 
     @PostMapping("/validToken")
     fun validToken(@RequestHeader(name = "Authorization", required = true) headerValue: String): ResultVO<Any> {
-        Thread.sleep(2000)
         //  todo 验证token
         return ResultVO.success(true)
     }
+
+
+    @PostMapping("/logout")
+    fun logout(): ResultVO<Any> {
+        StpUtil.logout()
+        return ResultVO.success()
+    }
+
 
 
 }

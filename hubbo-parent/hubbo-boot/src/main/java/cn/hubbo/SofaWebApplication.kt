@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import java.util.UUID
 
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = ["cn.hubbo"])
 class SofaWebApplication {
 
 

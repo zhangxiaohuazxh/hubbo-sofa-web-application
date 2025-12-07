@@ -15,7 +15,7 @@ import java.time.LocalDateTime
 @Fory
 @NoArgConstructor
 @Table("t_menu")
-data class Menu(
+open class Menu(
 
     /**
      * 菜单编号
@@ -46,7 +46,7 @@ data class Menu(
      * 菜单层级
      */
     @Column("level")
-    var level: String? = null,
+    var level: Int? = null,
 
     /**
      * 标题

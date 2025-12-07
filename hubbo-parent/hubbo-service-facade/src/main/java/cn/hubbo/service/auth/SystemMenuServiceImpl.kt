@@ -1,44 +1,45 @@
-package cn.hubbo.service.auth;
+package cn.hubbo.service.auth
 
-import cn.hubbo.entity.auth.Menu;
-import com.alipay.sofa.runtime.api.annotation.SofaService;
-import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
+import cn.hubbo.entity.auth.Menu
+import cn.hubbo.entity.vo.MenuVO
+import cn.hubbo.service.mapper.SysAuthMapper
+import com.alipay.sofa.runtime.api.annotation.SofaReference
+import com.alipay.sofa.runtime.api.annotation.SofaService
+import lombok.Data
+import lombok.extern.slf4j.Slf4j
+import org.springframework.stereotype.Service
 
 @Slf4j
-@SofaService(interfaceType = SystemMenuService.class)
+@SofaService(interfaceType = SystemMenuService::class)
 @Service
-@RequiredArgsConstructor
 @Data
-public class SystemMenuServiceImpl implements SystemMenuService {
+class SystemMenuServiceImpl : SystemMenuService {
 
-    @NonNull
-    private MenuService menuService;
+    @SofaReference
+    private val menuService: MenuService? = null
 
-    @NonNull
-    private RoleService roleService;
+    @SofaReference
+    private val roleService: RoleService? = null
 
-    @NonNull
-    private PermissionService permissionService;
+    @SofaReference
+    private val permissionService: PermissionService? = null
 
-    @NonNull
-    private UserService userService;
+    @SofaReference
+    private val userService: UserService? = null
 
-    @NonNull
-    private ButtonPermissionService buttonPermissionService;
+    @SofaReference
+    private val buttonPermissionService: ButtonPermissionService? = null
 
-
-    @Override
-    public List<Menu> queryMenuList() {
-        return List.of();
+    companion object {
+        @JvmStatic
+        private val systemAuthMapper: SysAuthMapper = SysAuthMapper.INSTANCE
     }
 
 
+    override fun queryUserMenuList(): List<MenuVO> {
+        val menuList: List<Menu> = menuService!!.queryUserMenuList()
+        return systemAuthMapper.menuList2MenuVOList(menuList.toList())
+    }
 
 
 }

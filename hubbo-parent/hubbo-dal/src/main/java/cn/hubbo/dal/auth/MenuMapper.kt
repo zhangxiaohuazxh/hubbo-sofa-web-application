@@ -7,5 +7,6 @@ import org.apache.ibatis.annotations.Mapper
 @Mapper
 interface MenuMapper : BaseMapper<Menu> {
 
+    fun selectUserMenuList(): List<Menu>
 
 }
