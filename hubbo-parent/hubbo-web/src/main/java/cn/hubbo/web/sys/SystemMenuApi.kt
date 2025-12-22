@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @Slf4j
 @RestController
-@RequestMapping("/sys/menu")
+@RequestMapping("/sys")
 @RequiredArgsConstructor
 class SystemMenuApi {
     @SofaReference(interfaceType = SystemMenuService::class)
@@ -25,9 +25,15 @@ class SystemMenuApi {
         val logger: Logger = LoggerFactory.getLogger(SystemMenuApi::class.java)
     }
 
-    @GetMapping("/list")
+    @GetMapping("/menu/list")
     fun list(): ResultVO<List<MenuVO>> {
-        logger.info("list data")
+        return ResultVO.success(systemMenuService!!.queryUserMenuList())
+    }
+
+    @GetMapping("/routes/list")
+    fun routes(): ResultVO<List<MenuVO>> {
+        logger.info("routes data")
+        // todo 路由处理
         return ResultVO.success(systemMenuService!!.queryUserMenuList())
     }
 

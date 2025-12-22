@@ -22,7 +22,7 @@ open class Menu(
      */
     @Id(keyType = KeyType.None)
     @Column("menu_id")
-    var menuId: Long? = null,
+    open val menuId: Long? = null,
 
     /**
      * 菜单名

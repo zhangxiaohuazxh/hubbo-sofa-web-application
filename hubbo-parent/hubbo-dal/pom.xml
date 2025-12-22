@@ -17,7 +17,6 @@
         <dependency>
             <groupId>cn.hubbo</groupId>
             <artifactId>hubbo-common</artifactId>
-            <version>0.1</version>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>

@@ -38,8 +38,29 @@ class SystemMenuServiceImpl : SystemMenuService {
 
     override fun queryUserMenuList(): List<MenuVO> {
         val menuList: List<Menu> = menuService!!.queryUserMenuList()
-        return systemAuthMapper.menuList2MenuVOList(menuList.toList())
+        val list = systemAuthMapper.menuList2MenuVOList(menuList.toList())
+        return list.stream()
+            .filter { it.upperMenuId == null || it.level == 1 }
+            .distinct()
+            .map { mapping(it, list, mutableSetOf()) }
+            .toList()
     }
 
+    fun mapping(menuVO: MenuVO, menuList: List<MenuVO>, visited: MutableSet<Long>): MenuVO {
+        val menuId = menuVO.menuId
+        if (menuId != null && !visited.add(menuId)) {
+            menuVO.children = emptyList()
+            return menuVO
+        }
+        menuVO.children = menuList.stream()
+            .filter {
+                it.upperMenuId?.equals(menuVO.menuId) == true
+                        && it.menuId != null
+                        && it.menuId?.equals(it.upperMenuId) == false
+            }
+            .map { mapping(it, menuList, visited) }
+            .toList()
+        return menuVO
+    }
 
 }

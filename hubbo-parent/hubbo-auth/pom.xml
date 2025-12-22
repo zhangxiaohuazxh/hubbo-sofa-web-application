@@ -15,13 +15,11 @@
         <dependency>
             <groupId>cn.hubbo</groupId>
             <artifactId>hubbo-service</artifactId>
-            <version>0.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>cn.hubbo</groupId>
             <artifactId>hubbo-entity</artifactId>
-            <version>0.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

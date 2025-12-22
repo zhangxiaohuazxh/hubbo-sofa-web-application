@@ -18,12 +18,10 @@
         <dependency>
             <groupId>cn.hubbo</groupId>
             <artifactId>hubbo-service</artifactId>
-            <version>0.1</version>
         </dependency>
         <dependency>
             <groupId>cn.hubbo</groupId>
             <artifactId>hubbo-integration</artifactId>
-            <version>0.1</version>
         </dependency>
         <dependency>
             <groupId>com.alipay.sofa</groupId>
@@ -47,7 +45,6 @@
         <dependency>
             <groupId>cn.hubbo</groupId>
             <artifactId>hubbo-auth</artifactId>
-            <version>0.1</version>
         </dependency>
     </dependencies>
 
