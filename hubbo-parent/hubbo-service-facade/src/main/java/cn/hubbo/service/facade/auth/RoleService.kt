@@ -1,4 +1,4 @@
-package cn.hubbo.service.auth
+package cn.hubbo.service.facade.auth
 
 import cn.hubbo.dal.auth.RoleMapper
 import cn.hubbo.entity.auth.Role

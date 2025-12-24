@@ -30,6 +30,17 @@
             </exclusions>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>runtime-sofa-boot-starter</artifactId>
+            <version>${sofa.boot.version}</version>
+        </dependency>
+        <!-- todo sofa ark jar包执行报错 -->
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>sofa-boot-actuator-autoconfigure</artifactId>
+            <version>${sofa.boot.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -132,10 +143,12 @@
                         <annotationProcessorPath>
                             <groupId>org.mapstruct</groupId>
                             <artifactId>mapstruct-processor</artifactId>
+                            <version>${mapstruct.processor.version}</version>
                         </annotationProcessorPath>
                         <annotationProcessorPath>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
                         </annotationProcessorPath>
                     </annotationProcessorPaths>
                 </configuration>
@@ -154,6 +167,31 @@
                     <mainClass>cn.hubbo.SofaWebApplication</mainClass>
                 </configuration>
             </plugin>
+            <!--            <plugin>-->
+            <!--                <groupId>com.alipay.sofa</groupId>-->
+            <!--                <artifactId>sofa-ark-maven-plugin</artifactId>-->
+            <!--                <version>${sofa.ark.maven.plugin}</version>-->
+            <!--                <executions>-->
+            <!--                    <execution>-->
+            <!--                        <goals>-->
+            <!--                            <goal>repackage</goal>-->
+            <!--                        </goals>-->
+            <!--                        <configuration>-->
+            <!--                            &lt;!&ndash;是否打包、安装和发布 ark biz，详细参考 Ark Biz 文档，默认为false&ndash;&gt;-->
+            <!--                            <attach>true</attach>-->
+            <!--                            &lt;!&ndash;ark 包和 ark biz 的打包存放目录，默认为工程 build 目录&ndash;&gt;-->
+            <!--                            <outputDirectory>target</outputDirectory>-->
+            <!--                            &lt;!&ndash;default none&ndash;&gt;-->
+            <!--                            <arkClassifier>executable-ark</arkClassifier>-->
+            <!--                            &lt;!&ndash; ark-biz 包的启动优先级，值越小，优先级越高&ndash;&gt;-->
+            <!--                            <priority>200</priority>-->
+            <!--                            &lt;!&ndash;设置应用的根目录，用于读取 ${base.dir}/conf/ark/bootstrap.application 配置文件，默认为 ${project.basedir}&ndash;&gt;-->
+            <!--                            <baseDir>../</baseDir>-->
+            <!--                            <mainClass>cn.hubbo.SofaWebApplication</mainClass>-->
+            <!--                        </configuration>-->
+            <!--                    </execution>-->
+            <!--                </executions>-->
+            <!--            </plugin>-->
         </plugins>
     </build>
 

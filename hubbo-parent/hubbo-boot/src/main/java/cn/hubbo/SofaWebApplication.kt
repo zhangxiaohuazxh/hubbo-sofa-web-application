@@ -1,13 +1,15 @@
 package cn.hubbo
 
+import org.mybatis.spring.annotation.MapperScan
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.slf4j.MDC
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import java.util.UUID
+import java.util.*
 
 
+@MapperScan(basePackages = ["cn.hubbo.dal"])
 @SpringBootApplication
 class SofaWebApplication {
 

@@ -16,27 +16,7 @@
     <dependencies>
         <dependency>
             <groupId>cn.hubbo</groupId>
-            <artifactId>hubbo-utils</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.alipay.sofa.common</groupId>
-            <artifactId>sofa-common-tools</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>cn.hubbo</groupId>
             <artifactId>hubbo-entity</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-log4j2</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-layout-template-json</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.lmax</groupId>
-            <artifactId>disruptor</artifactId>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -47,6 +27,18 @@
             <artifactId>junit-jupiter-api</artifactId>
             <version>${junit.jupiter.api.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.fory</groupId>
+            <artifactId>fory-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
         </dependency>
     </dependencies>
 

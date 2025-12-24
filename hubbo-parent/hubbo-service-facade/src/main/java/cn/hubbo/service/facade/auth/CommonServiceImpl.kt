@@ -1,8 +1,8 @@
-package cn.hubbo.service.auth
+package cn.hubbo.service.facade.auth
 
 import cn.hubbo.dal.auth.DictDataMapper
+import cn.hubbo.service.auth.CommonService
 import com.alipay.sofa.runtime.api.annotation.SofaService
-import lombok.AllArgsConstructor
 import org.springframework.stereotype.Service
 
 @SofaService(interfaceType = CommonService::class)

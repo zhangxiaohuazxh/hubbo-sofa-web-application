@@ -14,28 +14,17 @@
     <dependencies>
         <dependency>
             <groupId>cn.hubbo</groupId>
-            <artifactId>hubbo-service</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>cn.hubbo</groupId>
             <artifactId>hubbo-entity</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>cn.dev33</groupId>
-            <artifactId>sa-token-spring-boot3-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.alipay.sofa</groupId>
-            <artifactId>runtime-sofa-boot-starter</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <scope>compile</scope>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-spring-boot3-starter</artifactId>
         </dependency>
     </dependencies>
 

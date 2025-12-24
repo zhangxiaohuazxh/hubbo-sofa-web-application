@@ -1,12 +1,14 @@
-package cn.hubbo.service.auth
+package cn.hubbo.service.facade.auth
 
 import cn.hubbo.entity.auth.Menu
 import cn.hubbo.entity.vo.MenuVO
+import cn.hubbo.service.auth.SystemMenuService
 import cn.hubbo.service.mapper.SysAuthMapper
 import com.alipay.sofa.runtime.api.annotation.SofaReference
 import com.alipay.sofa.runtime.api.annotation.SofaService
 import lombok.Data
 import lombok.extern.slf4j.Slf4j
+import org.jspecify.annotations.NonNull
 import org.springframework.stereotype.Service
 
 @Slf4j
@@ -32,11 +34,11 @@ class SystemMenuServiceImpl : SystemMenuService {
 
     companion object {
         @JvmStatic
-        private val systemAuthMapper: SysAuthMapper = SysAuthMapper.INSTANCE
+        private val systemAuthMapper: SysAuthMapper by lazy { SysAuthMapper.INSTANCE }
     }
 
 
-    override fun queryUserMenuList(): List<MenuVO> {
+    override fun queryUserMenuList(): List<@NonNull MenuVO> {
         val menuList: List<Menu> = menuService!!.queryUserMenuList()
         val list = systemAuthMapper.menuList2MenuVOList(menuList.toList())
         return list.stream()
@@ -46,7 +48,7 @@ class SystemMenuServiceImpl : SystemMenuService {
             .toList()
     }
 
-    fun mapping(menuVO: MenuVO, menuList: List<MenuVO>, visited: MutableSet<Long>): MenuVO {
+    fun mapping(menuVO: @NonNull MenuVO, menuList: @NonNull List<MenuVO>, visited: MutableSet<Long>): MenuVO {
         val menuId = menuVO.menuId
         if (menuId != null && !visited.add(menuId)) {
             menuVO.children = emptyList()

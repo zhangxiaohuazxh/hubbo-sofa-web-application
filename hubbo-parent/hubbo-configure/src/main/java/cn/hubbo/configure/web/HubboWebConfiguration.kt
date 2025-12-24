@@ -1,9 +1,6 @@
 package cn.hubbo.configure.web
 
 import cn.hubbo.utils.fory.ForyComponentRegisterManager
-import com.alipay.sofa.registry.client.api.RegistryClient
-import com.alipay.sofa.registry.client.provider.DefaultRegistryClient
-import com.alipay.sofa.registry.client.provider.DefaultRegistryClientConfigBuilder
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer
@@ -60,18 +57,5 @@ class HubboWebConfiguration {
         ForyComponentRegisterManager.register(fory)
         return fory
     }
-
-
-    @Bean
-    fun registry(): RegistryClient {
-        val clientConfig = DefaultRegistryClientConfigBuilder.start()
-            .setRegistryEndpoint(endpoint)
-            .setRegistryEndpointPort(endpointPort)
-            .build()
-        val registryClient = DefaultRegistryClient(clientConfig)
-        registryClient.init()
-        return registryClient
-    }
-
 
 }
