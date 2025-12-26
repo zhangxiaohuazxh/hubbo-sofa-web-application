@@ -11,8 +11,6 @@
 
     <artifactId>hubbo-test</artifactId>
 
-    <properties>
-    </properties>
 
     <dependencies>
         <dependency>
@@ -27,6 +25,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>cn.hubbo</groupId>
+            <artifactId>hubbo-native-invocation</artifactId>
         </dependency>
     </dependencies>
 

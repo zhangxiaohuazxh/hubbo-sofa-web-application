@@ -37,6 +37,10 @@
             <groupId>cn.hubbo</groupId>
             <artifactId>hubbo-auth</artifactId>
         </dependency>
+        <dependency>
+            <groupId>cn.hubbo</groupId>
+            <artifactId>hubbo-native-invocation</artifactId>
+        </dependency>
     </dependencies>
 
 

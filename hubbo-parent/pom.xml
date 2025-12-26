@@ -21,6 +21,7 @@
         <module>hubbo-entity</module>
         <module>hubbo-auth</module>
         <module>hubbo-test</module>
+        <module>hubbo-native-invocation</module>
     </modules>
 
 
@@ -261,6 +262,11 @@
                 <artifactId>hubbo-auth</artifactId>
                 <version>${hubbo.version}</version>
             </dependency>
+            <dependency>
+                <groupId>cn.hubbo</groupId>
+                <artifactId>hubbo-native-invocation</artifactId>
+                <version>${hubbo.version}</version>
+            </dependency>
             <!-- hubbo 模块化 -->
             <!-- SOFA BOOT相关依赖 -->
             <dependency>
@@ -491,6 +497,10 @@
                     <groupId>org.graalvm.buildtools</groupId>
                     <artifactId>native-maven-plugin</artifactId>
                     <version>${native.maven.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
                 </plugin>
             </plugins>
         </pluginManagement>
