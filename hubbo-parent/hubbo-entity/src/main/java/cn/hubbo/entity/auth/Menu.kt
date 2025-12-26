@@ -15,14 +15,14 @@ import java.time.LocalDateTime
 @Fory
 @NoArgConstructor
 @Table("t_menu")
-data class Menu(
+open class Menu(
 
     /**
      * 菜单编号
      */
     @Id(keyType = KeyType.None)
     @Column("menu_id")
-    var menuId: Long? = null,
+    open val menuId: Long? = null,
 
     /**
      * 菜单名
@@ -46,7 +46,7 @@ data class Menu(
      * 菜单层级
      */
     @Column("level")
-    var level: String? = null,
+    var level: Int? = null,
 
     /**
      * 标题
@@ -130,6 +130,13 @@ data class Menu(
      * 更新时间
      */
     @Column("update_time")
-    var updateTime: LocalDateTime? = null
+    var updateTime: LocalDateTime? = null,
+
+    /**
+    租户id
+     */
+    @Column("tenant_id")
+    var tenantId: Long? = null
+
 
 ) : Serializable

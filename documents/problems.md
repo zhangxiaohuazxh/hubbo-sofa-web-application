@@ -9,3 +9,8 @@
 ## Ops
 
 ### 踩坑记录
+
+### 待解决问题
+
+1. sofa boot 程序打包ark jar包程序运行失败，报错 no class found
+2. 支持native image

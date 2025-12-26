@@ -1,0 +1,6 @@
+postgres:
+  host: 172.16.0.130
+  port: 5432
+  username: postgres
+  passwd: code@102400
+  dbname: hubbo

@@ -9,6 +9,7 @@ import com.fasterxml.jackson.module.kotlin.KotlinModule
 import org.apache.fory.Fory
 import org.apache.fory.ThreadLocalFory
 import org.apache.fory.config.Language
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.converter.HttpMessageConverter
@@ -19,11 +20,17 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @Configuration
-open class HubboWebConfiguration {
+class HubboWebConfiguration {
+
+    @Value(value = $$"${registry.endpoint}")
+    private val endpoint: String? = null
+
+    @Value($$"${registry.endpointPort}")
+    private val endpointPort: Int = 9063
 
 
     @Bean
-    open fun httpMessageConvert(): HttpMessageConverter<Any> {
+    fun httpMessageConvert(): HttpMessageConverter<Any> {
         val httpMessageConverter = MappingJackson2HttpMessageConverter()
         val objectMapper = ObjectMapper()
         val pattern = "yyyy-MM-dd HH:mm:ss"
@@ -40,7 +47,7 @@ open class HubboWebConfiguration {
     }
 
     @Bean
-    open fun fory(): ThreadLocalFory {
+    fun fory(): ThreadLocalFory {
         val fory = Fory.builder().requireClassRegistration(true)
             .registerGuavaTypes(true)
             .suppressClassRegistrationWarnings(true)
@@ -50,6 +57,5 @@ open class HubboWebConfiguration {
         ForyComponentRegisterManager.register(fory)
         return fory
     }
-
 
 }

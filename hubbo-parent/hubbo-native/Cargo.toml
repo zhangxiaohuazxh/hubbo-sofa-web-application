@@ -1,0 +1,32 @@
+[package]
+name = "hubbo-native"
+version = "0.1.0"
+edition = "2024"
+description = "hubbo与系统底层API交互的依赖库"
+authors = ["张晓华", "yunjiang"]
+license = "GPL-2"
+readme = "../../README.md"
+
+
+[lib]
+name = "hubbo_native_dynamic_lib"
+crate-type = ["cdylib"]
+
+[dependencies]
+anyhow = "1.0.100"
+chrono = "0.4.42"
+once_cell = "1.21.3"
+
+[dev-dependencies]
+
+
+[profile.dev]
+opt-level = 2
+debug = true
+
+[profile.release]
+opt-level = 3
+lto = true
+panic = "abort"
+debug = false
+

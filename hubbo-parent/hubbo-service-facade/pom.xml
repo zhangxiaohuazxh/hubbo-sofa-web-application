@@ -18,31 +18,28 @@
         <dependency>
             <groupId>cn.hubbo</groupId>
             <artifactId>hubbo-service</artifactId>
-            <version>0.1</version>
         </dependency>
         <dependency>
             <groupId>cn.hubbo</groupId>
             <artifactId>hubbo-integration</artifactId>
-            <version>0.1</version>
         </dependency>
         <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>runtime-sofa-boot-starter</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <scope>compile</scope>
+            <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-logging</artifactId>
-                </exclusion>
-            </exclusions>
+            <groupId>cn.hubbo</groupId>
+            <artifactId>hubbo-auth</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.hubbo</groupId>
+            <artifactId>hubbo-native-invocation</artifactId>
         </dependency>
     </dependencies>
 

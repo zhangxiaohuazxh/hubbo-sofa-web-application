@@ -20,8 +20,7 @@
         <!--interval属性用来指定多久滚动一次,默认是1 hour-->
         <property name="INTERVAL">30</property>
         <!--输出日志的格式:%d表示日期时间,%thread表示线程名,%-5level级别从左显示5个字符宽度,%logger{50}表示logger名字最长50个字符,否则按照句点分割,%line表示行号,%msg日志消息,%n换行符-->
-        <property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} => [%thread] => %-5level %logger{50}:(%line) - %msg%n
-        </property>
+        <property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} => [%thread] => %-5level [TRACE_ID:%X{traceId}] %logger{50}:(%line) - %msg%n</property>
         <property name="SOURCE_LOG_FILE_NAME">hubbo-source</property>
         <property name="STRUCTURED_LOG_FILE_NAME">hubbo-structured</property>
         <property name="SOURCE_STRUCTURED_LOG_FILE_NAME">hubbo-source-structured</property>

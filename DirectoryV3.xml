@@ -28,4 +28,5 @@
     <tree path="/documents" icon="ObjectBrowserShowLibraryContents"/>
     <tree path="/script" icon="ToolwindowsToolWindowInternal"/>
     <tree path="/hubbo-parent/hubbo-dal" icon="ActionsQuickfixOffBulb"/>
+    <tree path="/hubbo-parent/hubbo-test" icon="ActionsQuickfixOffBulb"/>
 </trees>
