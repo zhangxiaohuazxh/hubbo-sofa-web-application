@@ -17,7 +17,8 @@ public interface SysAuthMapper {
 	@Mappings(
 			value = {
 					@Mapping(source = "menuName", target = "label"),
-					@Mapping(source = "path", target = "key")
+					@Mapping(source = "path", target = "key"),
+					@Mapping(target = "children", ignore = true),
 			}
 	)
 	MenuVO menu2MenuVO(Menu menu);

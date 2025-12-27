@@ -6,5 +6,9 @@ enum class LibraryConstants(val value: String) {
 
     TRACE_ID("traceId"),
 
+    HUBBO_DYNAMIC_LIBRARY_NAME("hubbo_native_dynamic_lib"),
+
+    HUBBO_DYNAMIC_LIBRARY_PATH("lib"),
+
 
 }

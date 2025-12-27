@@ -4,7 +4,6 @@ import cn.dev33.satoken.stp.StpUtil
 import cn.hubbo.auth.service.AuthenticationService
 import cn.hubbo.entity.vo.ResultVO
 import cn.hubbo.entity.vo.UserLoginParams
-import com.alipay.sofa.runtime.api.annotation.SofaReference
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.*
@@ -19,7 +18,7 @@ class SysAuthenticationApi {
         val logger: Logger = LoggerFactory.getLogger(SysAuthenticationApi::class.java)
     }
 
-    @SofaReference
+
     val authenticationService: AuthenticationService? = null
 
 
@@ -44,7 +43,6 @@ class SysAuthenticationApi {
         StpUtil.logout()
         return ResultVO.success()
     }
-
 
 
 }

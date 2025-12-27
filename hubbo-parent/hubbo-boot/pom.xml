@@ -19,28 +19,6 @@
             <groupId>cn.hubbo</groupId>
             <artifactId>hubbo-web</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-logging</artifactId>
-                </exclusion>
-            </exclusions>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.alipay.sofa</groupId>
-            <artifactId>runtime-sofa-boot-starter</artifactId>
-            <version>${sofa.boot.version}</version>
-        </dependency>
-        <!-- todo sofa ark jar包执行报错 -->
-        <dependency>
-            <groupId>com.alipay.sofa</groupId>
-            <artifactId>sofa-boot-actuator-autoconfigure</artifactId>
-            <version>${sofa.boot.version}</version>
-        </dependency>
     </dependencies>
 
     <build>
@@ -109,47 +87,45 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>default-compile</id>
-                        <phase>none</phase>
-                    </execution>
-                    <execution>
-                        <id>default-testCompile</id>
-                        <phase>none</phase>
-                    </execution>
-                    <execution>
-                        <id>java-compile</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>java-test-compile</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <version>${maven.compiler.plugin.version}</version>
                 <configuration>
+                    <source>25</source>
+                    <target>25</target>
+                    <release>25</release>
+                    <encoding>UTF-8</encoding>
+                    <compilerArgs>
+                        <arg>--enable-preview</arg>
+                    </compilerArgs>
+                    <verbose>true</verbose>
+                    <showCompilationChanges>true</showCompilationChanges>
+                    <showWarnings>true</showWarnings>
+                    <showDeprecation>true</showDeprecation>
                     <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                            <version>${lombok.mapstruct.binding.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${mapstruct.processor.version}</version>
+                        </path>
+                        <path>
+                            <groupId>com.google.auto.service</groupId>
+                            <artifactId>auto-service</artifactId>
+                            <version>${auto.service.version}</version>
+                        </path>
                         <path>
                             <groupId>com.mybatis-flex</groupId>
                             <artifactId>mybatis-flex-processor</artifactId>
                             <version>${mybatis.flex.processor.version}</version>
                         </path>
-                        <annotationProcessorPath>
-                            <groupId>org.mapstruct</groupId>
-                            <artifactId>mapstruct-processor</artifactId>
-                            <version>${mapstruct.processor.version}</version>
-                        </annotationProcessorPath>
-                        <annotationProcessorPath>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                            <version>${lombok.version}</version>
-                        </annotationProcessorPath>
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
@@ -164,34 +140,11 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <outputDirectory>target</outputDirectory>
+                    <classifier>ark-biz</classifier>
                     <mainClass>cn.hubbo.SofaWebApplication</mainClass>
                 </configuration>
             </plugin>
-            <!--            <plugin>-->
-            <!--                <groupId>com.alipay.sofa</groupId>-->
-            <!--                <artifactId>sofa-ark-maven-plugin</artifactId>-->
-            <!--                <version>${sofa.ark.maven.plugin}</version>-->
-            <!--                <executions>-->
-            <!--                    <execution>-->
-            <!--                        <goals>-->
-            <!--                            <goal>repackage</goal>-->
-            <!--                        </goals>-->
-            <!--                        <configuration>-->
-            <!--                            &lt;!&ndash;是否打包、安装和发布 ark biz，详细参考 Ark Biz 文档，默认为false&ndash;&gt;-->
-            <!--                            <attach>true</attach>-->
-            <!--                            &lt;!&ndash;ark 包和 ark biz 的打包存放目录，默认为工程 build 目录&ndash;&gt;-->
-            <!--                            <outputDirectory>target</outputDirectory>-->
-            <!--                            &lt;!&ndash;default none&ndash;&gt;-->
-            <!--                            <arkClassifier>executable-ark</arkClassifier>-->
-            <!--                            &lt;!&ndash; ark-biz 包的启动优先级，值越小，优先级越高&ndash;&gt;-->
-            <!--                            <priority>200</priority>-->
-            <!--                            &lt;!&ndash;设置应用的根目录，用于读取 ${base.dir}/conf/ark/bootstrap.application 配置文件，默认为 ${project.basedir}&ndash;&gt;-->
-            <!--                            <baseDir>../</baseDir>-->
-            <!--                            <mainClass>cn.hubbo.SofaWebApplication</mainClass>-->
-            <!--                        </configuration>-->
-            <!--                    </execution>-->
-            <!--                </executions>-->
-            <!--            </plugin>-->
         </plugins>
     </build>
 

@@ -3,7 +3,7 @@ package cn.hubbo.web.sys
 import cn.hubbo.entity.vo.MenuVO
 import cn.hubbo.entity.vo.ResultVO
 import cn.hubbo.service.auth.SystemMenuService
-import com.alipay.sofa.runtime.api.annotation.SofaReference
+import lombok.NonNull
 import lombok.RequiredArgsConstructor
 import lombok.extern.slf4j.Slf4j
 import org.slf4j.Logger
@@ -17,7 +17,8 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/sys")
 @RequiredArgsConstructor
 class SystemMenuApi {
-    @SofaReference(interfaceType = SystemMenuService::class)
+
+    @NonNull
     private val systemMenuService: SystemMenuService? = null
 
     companion object {

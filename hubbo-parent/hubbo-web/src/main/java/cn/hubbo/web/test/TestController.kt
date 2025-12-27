@@ -3,7 +3,6 @@ package cn.hubbo.web.test
 import cn.hubbo.common.constants.LibraryConstants
 import cn.hubbo.entity.vo.ResultVO
 import cn.hubbo.service.auth.CommonService
-import com.alipay.sofa.runtime.api.annotation.SofaReference
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.*
@@ -20,7 +19,7 @@ class TestController {
         val logger: Logger = LoggerFactory.getLogger(TestController::class.java)
     }
 
-    @SofaReference
+
     val commonService: CommonService? = null
 
     @GetMapping("/sysdate")

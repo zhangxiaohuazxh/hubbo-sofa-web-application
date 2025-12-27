@@ -1,5 +1,6 @@
 package cn.hubbo.utils.fory
 
+import cn.hubbo.common.annotation.Fory
 import org.apache.fory.ThreadSafeFory
 import java.io.File
 import java.net.URL

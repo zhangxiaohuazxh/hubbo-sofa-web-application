@@ -4,32 +4,31 @@ import cn.hubbo.entity.auth.Menu
 import cn.hubbo.entity.vo.MenuVO
 import cn.hubbo.service.auth.SystemMenuService
 import cn.hubbo.service.mapper.SysAuthMapper
-import com.alipay.sofa.runtime.api.annotation.SofaReference
-import com.alipay.sofa.runtime.api.annotation.SofaService
 import lombok.Data
+import lombok.RequiredArgsConstructor
 import lombok.extern.slf4j.Slf4j
 import org.jspecify.annotations.NonNull
 import org.springframework.stereotype.Service
 
 @Slf4j
-@SofaService(interfaceType = SystemMenuService::class)
 @Service
 @Data
+@RequiredArgsConstructor
 class SystemMenuServiceImpl : SystemMenuService {
 
-    @SofaReference
+    @lombok.NonNull
     private val menuService: MenuService? = null
 
-    @SofaReference
+    @lombok.NonNull
     private val roleService: RoleService? = null
 
-    @SofaReference
+    @lombok.NonNull
     private val permissionService: PermissionService? = null
 
-    @SofaReference
+    @lombok.NonNull
     private val userService: UserService? = null
 
-    @SofaReference
+    @lombok.NonNull
     private val buttonPermissionService: ButtonPermissionService? = null
 
     companion object {
