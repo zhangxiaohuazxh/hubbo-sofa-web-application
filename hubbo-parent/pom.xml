@@ -3,6 +3,13 @@
     <modelVersion>4.0.0</modelVersion>
 
 
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>4.0.1</version>
+        <relativePath/>
+    </parent>
+
     <groupId>cn.hubbo</groupId>
     <artifactId>hubbo-parent</artifactId>
     <version>0.1</version>
@@ -11,17 +18,21 @@
     <modules>
         <module>hubbo-utils</module>
         <module>hubbo-common</module>
+        <module>hubbo-entity</module>
         <module>hubbo-dal</module>
         <module>hubbo-service</module>
-        <module>hubbo-service-facade</module>
+        <module>hubbo-native-invocation</module>
         <module>hubbo-integration</module>
+        <module>hubbo-service-facade</module>
         <module>hubbo-configure</module>
+        <module>hubbo-auth</module>
+        <module>hubbo-schueduler</module>
         <module>hubbo-web</module>
         <module>hubbo-boot</module>
-        <module>hubbo-entity</module>
-        <module>hubbo-auth</module>
         <module>hubbo-test</module>
-        <module>hubbo-native-invocation</module>
+        <!-- 模板代码生成工具 -->
+        <module>hubbo-native-binding</module>
+        <module>hubbo-annotations</module>
     </modules>
 
 
@@ -57,6 +68,7 @@
         <moshi.kotlin.version>1.15.2</moshi.kotlin.version>
         <sofa.registry.version>6.5.6</sofa.registry.version>
         <sofa.registry.version>6.5.6</sofa.registry.version>
+        <spring.cloud.version>2025.1.0</spring.cloud.version>
         <protobuf.java.version>4.31.1</protobuf.java.version>
         <commons.codec.version>1.19.0</commons.codec.version>
         <commons.lang3.version>3.19.0</commons.lang3.version>
@@ -66,19 +78,20 @@
         <org.apache.fory.version>0.12.3</org.apache.fory.version>
         <resilience4j.all.version>2.3.0</resilience4j.all.version>
         <sofa.common.tools.version>2.1.1</sofa.common.tools.version>
-        <druid.spring.boot.starter>1.2.8</druid.spring.boot.starter>
+        <druid.spring.boot.starter>1.2.27</druid.spring.boot.starter>
         <postgresql.driver.version>42.7.8</postgresql.driver.version>
         <mapstruct.processor.version>1.6.3</mapstruct.processor.version>
         <native.maven.plugin.version>0.11.1</native.maven.plugin.version>
+        <resilience4j.rxjava3.version>2.3.0</resilience4j.rxjava3.version>
         <commons.collections4.version>4.5.0</commons.collections4.version>
         <protobuf.maven.plugin.version>3.8.0</protobuf.maven.plugin.version>
         <sofa.boot.healthcheck.version>3.25.0</sofa.boot.healthcheck.version>
-        <maven.compiler.plugin.version>3.14.1</maven.compiler.plugin.version>
+        <maven.compiler.plugin.version>3.9.0</maven.compiler.plugin.version>
         <jackson.module.kotlin.version>2.20.0</jackson.module.kotlin.version>
         <mybatis.flex.processor.version>1.11.3</mybatis.flex.processor.version>
         <lombok.mapstruct.binding.version>0.2.0</lombok.mapstruct.binding.version>
         <mapstruct.plus.processor.version>1.5.0</mapstruct.plus.processor.version>
-        <mybatis.flex.springboot3.version>1.11.3</mybatis.flex.springboot3.version>
+        <mybatis.flex.springboot4.version>1.11.5</mybatis.flex.springboot4.version>
         <resilience4j.spring.boot3.version>2.3.0</resilience4j.spring.boot3.version>
         <mapstruct.plus.springboot.version>1.5.0</mapstruct.plus.springboot.version>
         <transmittable.thread.local.version>2.14.5</transmittable.thread.local.version>
@@ -89,11 +102,6 @@
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>${sl4j.api.version}</version>
-            </dependency>
             <dependency>
                 <groupId>io.netty</groupId>
                 <artifactId>netty-all</artifactId>
@@ -111,8 +119,8 @@
             </dependency>
             <dependency>
                 <groupId>com.mybatis-flex</groupId>
-                <artifactId>mybatis-flex-spring-boot3-starter</artifactId>
-                <version>${mybatis.flex.springboot3.version}</version>
+                <artifactId>mybatis-flex-spring-boot4-starter</artifactId>
+                <version>${mybatis.flex.springboot4.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.mybatis-flex</groupId>
@@ -270,59 +278,22 @@
                 <artifactId>hubbo-native-invocation</artifactId>
                 <version>${hubbo.version}</version>
             </dependency>
+            <dependency>
+                <groupId>cn.hubbo</groupId>
+                <artifactId>hubbo-schueduler</artifactId>
+                <version>${hubbo.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.hubbo</groupId>
+                <artifactId>hubbo-native-binding</artifactId>
+                <version>${hubbo.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.hubbo</groupId>
+                <artifactId>hubbo-annotations</artifactId>
+                <version>${hubbo.version}</version>
+            </dependency>
             <!-- hubbo 模块化 -->
-            <!-- SOFA BOOT相关依赖 -->
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>sofaboot-dependencies</artifactId>
-                <version>${sofa.boot.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>runtime-sofa-boot-starter</artifactId>
-                <version>${sofa.boot.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>sofa-boot-actuator-autoconfigure</artifactId>
-            </dependency>
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>isle-sofa-boot-starter</artifactId>
-            </dependency>
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>rpc-sofa-boot-starter</artifactId>
-            </dependency>
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>tracer-sofa-boot-starter</artifactId>
-            </dependency>
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>ark-sofa-boot-starter</artifactId>
-            </dependency>
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>sofa-ark-springboot-starter</artifactId>
-            </dependency>
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>registry-client-all</artifactId>
-            </dependency>
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>healthcheck-sofa-boot-starter</artifactId>
-                <version>${sofa.boot.healthcheck.version}</version>
-            </dependency>
-            <!-- 弃用 -->
-            <dependency>
-                <groupId>com.alipay.sofa.lookout</groupId>
-                <artifactId>lookout-sofa-boot-starter</artifactId>
-            </dependency>
-            <!-- SOFA BOOT相关依赖 -->
             <!-- 序列化与类型转换相关的工具 -->
             <dependency>
                 <groupId>org.mapstruct</groupId>
@@ -419,6 +390,25 @@
                 <artifactId>auto-service</artifactId>
                 <version>${auto.service.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring.cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.github.resilience4j</groupId>
+                <artifactId>resilience4j-bom</artifactId>
+                <version>2.3.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.github.resilience4j</groupId>
+                <artifactId>resilience4j-rxjava3</artifactId>
+                <version>${resilience4j.rxjava3.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -451,6 +441,7 @@
 
 
     <build>
+        <sourceDirectory>hubbo-native/src</sourceDirectory>
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -466,7 +457,6 @@
                             <arg>--enable-preview</arg>
                         </compilerArgs>
                         <verbose>true</verbose>
-                        <showCompilationChanges>true</showCompilationChanges>
                         <showWarnings>true</showWarnings>
                         <showDeprecation>true</showDeprecation>
                         <annotationProcessorPaths>
@@ -573,6 +563,16 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>exec-maven-plugin</artifactId>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.22.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>2.22.2</version>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -588,7 +588,6 @@
                         <arg>--enable-preview</arg>
                     </compilerArgs>
                     <verbose>true</verbose>
-                    <showCompilationChanges>true</showCompilationChanges>
                     <showWarnings>true</showWarnings>
                     <showDeprecation>true</showDeprecation>
                 </configuration>

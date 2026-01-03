@@ -51,6 +51,14 @@
             <groupId>com.alibaba.fastjson2</groupId>
             <artifactId>fastjson2</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.squareup</groupId>
+            <artifactId>javapoet</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.hubbo</groupId>
+            <artifactId>hubbo-annotations</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -127,7 +135,6 @@
                         <arg>--enable-preview</arg>
                     </compilerArgs>
                     <verbose>true</verbose>
-                    <showCompilationChanges>true</showCompilationChanges>
                     <showWarnings>true</showWarnings>
                     <showDeprecation>true</showDeprecation>
                     <annotationProcessorPaths>

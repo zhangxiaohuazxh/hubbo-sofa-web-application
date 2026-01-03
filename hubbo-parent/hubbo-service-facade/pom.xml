@@ -37,6 +37,10 @@
             <groupId>cn.hubbo</groupId>
             <artifactId>hubbo-native-invocation</artifactId>
         </dependency>
+        <dependency>
+            <groupId>cn.hubbo</groupId>
+            <artifactId>hubbo-schueduler</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
