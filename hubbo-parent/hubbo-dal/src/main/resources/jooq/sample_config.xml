@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<configuration xmlns="https://www.jooq.org/xsd/jooq-runtime-3.20.10.xsd"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="https://www.jooq.org/xsd/jooq-runtime-3.20.10.xsd">
+    <jdbc>
+        <driver>org.postgresql.Driver</driver>
+        <url>
+            jdbc:postgresql://hubbo.cn:34393/hubbo
+        </url>
+        <user>pg</user>
+        <password>12192121</password>
+    </jdbc>
+
+    <generator>
+        <database>
+            <inputSchema>public</inputSchema>
+            <includes>t_user|t_menu</includes>
+            <excludes>test</excludes>
+        </database>
+        <target>
+            <packageName>cn.hubbo.dal</packageName>
+            <directory>src/main/java</directory>
+        </target>
+        <pojos>true</pojos>
+        <interfaces>true</interfaces>
+        <daos>true</daos>
+    </generator>
+
+
+</configuration>

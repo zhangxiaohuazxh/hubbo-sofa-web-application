@@ -14,7 +14,7 @@ data class MethodDeclaration(
     /**
      * 返回值类型
      */
-    val returnType: TypeMirror?,
+    val returnType: TypeMirror,
 
     /**
      * 修饰符

@@ -4,6 +4,7 @@ import com.google.common.collect.Lists.newArrayList
 import com.squareup.javapoet.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.lang.foreign.Linker
 import java.util.function.Predicate
 import javax.annotation.processing.Filer
 import javax.annotation.processing.RoundEnvironment
@@ -46,6 +47,8 @@ class JavaCodeUtils {
     companion object {
 
         val logger: Logger = LoggerFactory.getLogger(JavaCodeUtils::class.java)
+
+        val linker: Linker = Linker.nativeLinker()
 
 
         @JvmStatic
@@ -217,6 +220,16 @@ class JavaCodeUtils {
                 }
             }
             return methodBuilder.build()
+        }
+
+        @JvmStatic
+        fun getForeignFunctionInterfaceInvokeCodeBlocks(methodDeclaration: MethodDeclaration): List<CodeBlock> {
+            val name = methodDeclaration.returnType.kind.name
+            // todo 只支持基元类型、字符串、数组
+            // todo 检查入参类型是否合法
+            // todo 检查返回值类型是否合法
+            // todo 结构体类型处理
+            return listOf()
         }
 
 

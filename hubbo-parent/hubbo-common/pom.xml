@@ -141,7 +141,6 @@
                         <arg>-Amaven.incremental.annotation.processing=false</arg>
                     </compilerArgs>
                     <verbose>true</verbose>
-                    <showCompilationChanges>true</showCompilationChanges>
                     <showWarnings>true</showWarnings>
                     <showDeprecation>true</showDeprecation>
                     <annotationProcessorPaths>

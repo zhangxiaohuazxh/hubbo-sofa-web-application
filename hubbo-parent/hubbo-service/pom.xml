@@ -31,10 +31,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-cache</artifactId>
         </dependency>
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.cloud</groupId>-->
-        <!--            <artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId>-->
-        <!--        </dependency>-->
     </dependencies>
 
     <build>
@@ -112,7 +108,6 @@
                         <arg>--enable-preview</arg>
                     </compilerArgs>
                     <verbose>true</verbose>
-                    <showCompilationChanges>true</showCompilationChanges>
                     <showWarnings>true</showWarnings>
                     <showDeprecation>true</showDeprecation>
                     <annotationProcessorPaths>
