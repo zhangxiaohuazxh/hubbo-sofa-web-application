@@ -1,21 +1,40 @@
-target/
-pom.xml.tag
-pom.xml.releaseBackup
-pom.xml.versionsBackup
-pom.xml.next
-release.properties
-dependency-reduced-pom.xml
-buildNumber.properties
-.mvn/timing.properties
-# https://maven.apache.org/wrapper/#usage-without-binary-jar
-.mvn/wrapper/maven-wrapper.jar
+### gradle ###
+.gradle
+build/
+#!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
 
-# Eclipse m2e generated files
-# Eclipse Core
-.project
-# JDT-specific (Eclipse Java Development Tools)
-.classpath
-*.iml
+
+### IntelliJ IDEA ###
 .idea
-.vscode
+.idea/modules.xml
+.idea/jarRepositories.xml
+.idea/compiler.xml
+.idea/libraries/
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+
+### Kotlin ###
+.kotlin
+
+
+### VS Code ###
+.vscode/
+
+
+### Mac OS ###
+.DS_Store
+
+
+### Zed ###
 .zed
+
+
+### Rust ###
+target

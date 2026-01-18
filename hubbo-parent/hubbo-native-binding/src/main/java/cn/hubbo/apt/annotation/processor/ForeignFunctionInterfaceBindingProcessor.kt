@@ -16,9 +16,9 @@ import javax.lang.model.element.TypeElement
 
 private val log: Logger = LoggerFactory.getLogger(ForeignFunctionInterfaceBindingProcessor::class.java)
 
-@AutoService(Processor::class)
-@SupportedAnnotationTypes("cn.hubbo.annotation.FFI")
-@SupportedSourceVersion(SourceVersion.RELEASE_25)
+//@AutoService(Processor::class)
+//@SupportedAnnotationTypes("cn.hubbo.annotation.FFI")
+//@SupportedSourceVersion(SourceVersion.RELEASE_25)
 class ForeignFunctionInterfaceBindingProcessor : AbstractProcessor() {
 
     companion object {

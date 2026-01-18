@@ -16,8 +16,10 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-@Slf4j
+
 public final class MathLibInvocation {
+
+	private static final Logger log = LoggerFactory.getLogger(MathLibInvocation.class);
 
 	static final Linker LINKER = Linker.nativeLinker();
 
