@@ -14,7 +14,6 @@ dependencies {
     api(libs.bundles.coroutines)
     api(libs.bundles.annotations)
     api(libs.sl4j)
-    compileOnly("org.projectlombok:lombok:1.18.42")
     api(project(":hubbo-annotations"))
 
 }

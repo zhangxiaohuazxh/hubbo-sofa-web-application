@@ -5,11 +5,14 @@ plugins {
 }
 
 allprojects {
+    tasks.withType<Copy>().configureEach {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
     group = "com.hubbo"
     version = "0.0.1"
     repositories {
         mavenLocal()
-        maven("https://mirrors.huaweicloud.com/repository/maven/")
+        maven("https://maven.aliyun.com/repository/public")
     }
 }
 

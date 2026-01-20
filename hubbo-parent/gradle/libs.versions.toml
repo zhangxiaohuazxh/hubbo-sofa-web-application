@@ -35,6 +35,8 @@ transmittableThreadLocal = "2.14.5"
 jspecify = "1.0.0"
 sl4j = "2.0.17"
 log4jTemplateJson = "2.25.3"
+lombok = "1.18.42"
+kotlinReactorExtension = "1.3.0"
 
 [libraries]
 guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
@@ -75,6 +77,9 @@ kotlin-spring-plugin = { group = "org.jetbrains.kotlin.plugin.spring", name = "o
 kotlin-jvm-plugin = { group = "org.jetbrains.kotlin.jvm", name = "org.jetbrains.kotlin.jvm.gradle.plugin", version.ref = "kotlin" }
 spring-boot-dependencies = { group = "org.springframework.boot", name = "spring-boot-dependencies", version.ref = "springBoot" }
 log4j-json-layout = { group = "org.apache.logging.log4j", name = "log4j-layout-template-json", version.ref = "log4jTemplateJson" }
+lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }
+jooq-meta-kotlin = { group = "org.jooq", name = "jooq-meta-kotlin", version.ref = "jooq" }
+reactor-kotlin-extensions = { group = "io.projectreactor.kotlin", name = "reactor-kotlin-extensions", version.ref = "kotlinReactorExtension" }
 
 [bundles]
 alibaba = ["fastjson2"]

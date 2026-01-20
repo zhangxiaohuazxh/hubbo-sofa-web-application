@@ -1,4 +1,4 @@
-package cn.hubbo.utils.kotlin
+package cn.hubbo.utils.extension
 
 import org.apache.commons.lang3.StringUtils
 

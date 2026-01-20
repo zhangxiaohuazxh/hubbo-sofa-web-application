@@ -1,6 +1,3 @@
-import gradle.kotlin.dsl.accessors._beddff3d7d050b6e161a3a7cbd15896e.distributions
-import gradle.kotlin.dsl.accessors._beddff3d7d050b6e161a3a7cbd15896e.main
-import gradle.kotlin.dsl.accessors._beddff3d7d050b6e161a3a7cbd15896e.runtimeClasspath
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
@@ -22,13 +19,24 @@ val libs = rootProject.extensions.getByType<org.gradle.api.artifacts.VersionCata
 dependencies {
     val springBom = libs.findLibrary("spring-boot-dependencies").get()
     api(platform(springBom))
+    add("compileOnly", libs.findLibrary("lombok").get())
+    add("compileOnly", libs.findLibrary("jspecify").get())
     add("implementation", libs.findLibrary("kotlin-stdlib").get())
     add("implementation", libs.findLibrary("kotlin-reflect").get())
+    add("implementation", libs.findLibrary("kotlinx-coroutines-core").get())
+    add("implementation", libs.findLibrary("reactor-kotlin-extensions").get())
+    add("implementation", libs.findLibrary("kotlinx-coroutines-reactor").get())
 }
 
 configurations.all {
     exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
 }
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
+}
+
 kotlin {
     compilerOptions {
         freeCompilerArgs.addAll("-Xjsr305=strict", "-Xannotation-default-target=param-property")
@@ -39,6 +47,16 @@ kotlin {
 application {
     mainClass.set("cn.hubbo.SofaWebApplication")
 }
+
+
+tasks.withType<Copy> {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+tasks.withType<Jar> {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
 
 tasks.withType<Test> {
     useJUnitPlatform()

@@ -1,4 +1,4 @@
-package cn.hubbo.utils.kotlin
+package cn.hubbo.utils.extension
 
 import kotlin.math.pow
 
