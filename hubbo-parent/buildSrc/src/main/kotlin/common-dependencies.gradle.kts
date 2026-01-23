@@ -7,6 +7,7 @@ plugins {
     id("io.spring.dependency-management")
     id("org.jetbrains.kotlin.plugin.spring")
     id("org.springframework.boot")
+    id("com.google.devtools.ksp")
 }
 
 repositories {
@@ -26,6 +27,13 @@ dependencies {
     add("implementation", libs.findLibrary("kotlinx-coroutines-core").get())
     add("implementation", libs.findLibrary("reactor-kotlin-extensions").get())
     add("implementation", libs.findLibrary("kotlinx-coroutines-reactor").get())
+    add("implementation", libs.findLibrary("moshi").get())
+    add("implementation", libs.findLibrary("moshi-kotlin").get())
+    add("implementation", libs.findLibrary("moshi-adapters").get())
+    add("implementation", libs.findLibrary("moshi-kotlin-codegen").get())
+    add("ksp", libs.findLibrary("moshi-kotlin-codegen").get())
+    //    add("ksp", libs.findLibrary("fastjson2-extension").get())
+    //    add("kapt", "com.squareup.moshi:moshi-kotlin-codegen")
 }
 
 configurations.all {

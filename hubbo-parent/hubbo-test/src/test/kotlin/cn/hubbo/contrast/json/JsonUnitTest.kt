@@ -1,12 +1,13 @@
-package unit.contrast
+package cn.hubbo.contrast.json
 
-import com.alibaba.fastjson2.JSON.toJSONString
-import com.google.common.base.Stopwatch.createStarted
+import cn.hubbo.assist.domain.User
+import com.alibaba.fastjson2.JSON
+import com.alibaba.fastjson2.JSONFactory
+import com.google.common.base.Stopwatch
 import com.squareup.moshi.Moshi
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import unit.domain.User
-import java.util.concurrent.TimeUnit.MILLISECONDS
+import java.util.concurrent.TimeUnit
 
 class JsonUnitTest {
 
@@ -23,13 +24,15 @@ class JsonUnitTest {
 
         val moshi = Moshi.Builder().build()!!
 
-        const val WARM_UP_TIMES = 10000
+        const val WARM_UP_TIMES = 1000
 
         val user = User("test")
 
         @JvmStatic
         @BeforeAll
         fun warmup(): Unit {
+            JSONFactory.setDisableReferenceDetect(true)
+
             fastJsonWarmup()
             moshiJsonWarmup()
         }
@@ -38,7 +41,7 @@ class JsonUnitTest {
             val user = User("test")
             var str = ""
             for (i in 0 until WARM_UP_TIMES) {
-                str = toJSONString(user)
+                str = JSON.toJSONString(user)
             }
             println(str)
         }
@@ -58,22 +61,21 @@ class JsonUnitTest {
     @Test
     fun testFastJsonAndMoshi() {
         val adapter = moshi.adapter<User>(User::class.java)
-        var stopwatch = createStarted()
-        val loopTimes = 100000
+        var stopwatch = Stopwatch.createStarted()
+        val loopTimes = 10000
         var str = ""
         for (i in loopTimes downTo 0) {
-            str = toJSONString(user)
+            str = JSON.toJSONString(user)
         }
-        var cost = stopwatch.elapsed(MILLISECONDS)
+        var cost = stopwatch.elapsed(TimeUnit.MILLISECONDS)
         println("fastjson cost $cost ms")
-        stopwatch = createStarted()
+        stopwatch = Stopwatch.createStarted()
         for (i in loopTimes downTo 0) {
             str = adapter.toJson(user)
         }
-        cost = stopwatch.elapsed(MILLISECONDS)
+        cost = stopwatch.elapsed(TimeUnit.MILLISECONDS)
         println("moshi cost $cost ms")
     }
 
 
 }
-

@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    api(libs.postgresql.r2dbc)
+    api(libs.bundles.r2dbc)
     api(libs.postgresql.driver)
     api(project(":hubbo-common"))
     implementation(libs.jooq.meta.kotlin)

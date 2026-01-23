@@ -4,3 +4,5 @@ spring:
   profiles:
     active: dev
     include: local,auth,datasource,mybatis,security,log4j2,registry
+  webflux:
+    base-path: /api

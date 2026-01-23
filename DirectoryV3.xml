@@ -28,5 +28,11 @@
     <tree path="/documents" icon="ObjectBrowserShowLibraryContents"/>
     <tree path="/script" icon="ToolwindowsToolWindowInternal"/>
     <tree path="/hubbo-parent/hubbo-dal" icon="ActionsQuickfixOffBulb"/>
-    <tree path="/hubbo-parent/hubbo-test" icon="ActionsQuickfixOffBulb"/>
+    <tree path="/hubbo-parent/hubbo-test" icon="ActionsQuickfixOffBulb" title="测试" extension="" presentableText=""
+          tooltipTitle="" textColor="" backgroundColor=""/>
+    <tree path="/hubbo-parent/hubbo-test/src/test/kotlin/unit/contrast" title="对照测试"/>
+    <tree path="/hubbo-parent/hubbo-test/src/test/kotlin/cn/hubbo/unit" title="单元测试"/>
+    <tree path="/hubbo-parent/hubbo-test/src/test/kotlin/cn/hubbo/contrast" title="对照测试"/>
+    <tree path="/hubbo-parent/hubbo-test/src/test/kotlin/cn/hubbo/integration" title="集成测试"/>
+    <tree path="/hubbo-parent/hubbo-test/src/test/kotlin/cn/hubbo/assist" title="测试辅助类包"/>
 </trees>

@@ -3,3 +3,7 @@ management:
     web:
       exposure:
         include: "*"
+
+spring:
+  main:
+    lazy-initialization: true

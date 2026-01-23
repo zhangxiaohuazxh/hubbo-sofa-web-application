@@ -14,6 +14,8 @@ dependencies {
     api(libs.bundles.coroutines)
     api(libs.bundles.annotations)
     api(libs.sl4j)
+    api(libs.disruptor)
+    //    ksp("com.squareup.moshi:moshi-kotlin-codegen")
     api(project(":hubbo-annotations"))
 
 }

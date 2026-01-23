@@ -1,7 +1,6 @@
 description = "描述信息"
 
 plugins {
-    alias(libs.plugins.ksp) apply false
 }
 
 allprojects {
