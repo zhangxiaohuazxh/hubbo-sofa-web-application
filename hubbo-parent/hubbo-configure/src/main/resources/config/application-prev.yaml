@@ -1,0 +1,3 @@
+# 启用对 X-Forwarded-* 头部信息的支持信任Nginx传递的头部,并使用其中的IP、协议、端口等信息,getRemoteAddress()方法会返回正确的IP
+server:
+  forward-headers-strategy: native

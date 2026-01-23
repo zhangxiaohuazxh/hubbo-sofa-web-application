@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<trees>
+    <tree path="/hubbo-test/src/test/kotlin/local" title="本地测试，不需要提交"/>
+    <tree path="/hubbo-test/src/test/java/cn/hubbo/unit" title="单元测试，以模块为单位" extension="" presentableText=""
+          tooltipTitle="" icon="" textColor="" backgroundColor=""/>
+    <tree path="/hubbo-test/src/test/java/cn/hubbo/integration" title="集成测试"/>
+</trees>

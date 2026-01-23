@@ -1,0 +1,2 @@
+### 获取当前系统时间
+GET http://localhost:8080/api/test/datetime

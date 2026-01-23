@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<trees>
+    <tree path="/hubbo-parent/hubbo-integration" title="集成模块(RPC,HTTP调用)" extension="" presentableText=""
+          tooltipTitle=""
+          icon="ToolwindowsToolWindowHierarchy"/>
+    <tree path="/hubbo-parent/hubbo-service" title="service接口层" extension="" presentableText="" tooltipTitle=""
+          icon="ProvidersSpark"/>
+    <tree path="/hubbo-parent/hubbo-service-impl" title="service实现" extension="" presentableText="" tooltipTitle=""
+          icon="ProvidersSinglestore"/>
+    <tree path="/hubbo-parent/hubbo-utils" title="工具类" extension="" presentableText="" tooltipTitle=""
+          icon="ProvidersApache"/>
+    <tree path="/hubbo-parent/hubbo-web" title="web控制器" extension="" presentableText="" tooltipTitle=""
+          icon="GeneralWeb"/>
+    <tree path="/hubbo-parent/hubbo-dao" title="持久层" extension="" presentableText="" tooltipTitle=""
+          icon="ProvidersOracle"/>
+    <tree path="/hubbo-parent/hubbo-common" title="公共依赖" extension="" presentableText="" tooltipTitle=""
+          icon="ProvidersGreenplum"/>
+    <tree path="/hubbo-parent/hubbo-configure" icon="ProvidersDocumentDB" title="自动配置" extension=""
+          presentableText="" tooltipTitle="" textColor="" backgroundColor=""/>
+    <tree path="/hubbo-parent/hubbo-boot" icon="ProvidersSinglestore" title="启动入口" extension="" presentableText=""
+          tooltipTitle="" textColor="" backgroundColor=""/>
+    <tree path="/hubbo-parent/hubbo-entity" title="实体类聚合" extension="" presentableText="" tooltipTitle=""
+          icon="ToolwindowsToolWindowJsonPath"/>
+    <tree path="/hubbo-parent/hubbo-auth" title="鉴权" extension="" presentableText="" tooltipTitle=""
+          icon="ProvidersVertica"/>
+    <tree path="/hubbo-parent" icon="ToolwindowsDocumentation"/>
+    <tree path="/hubbo-parent/hubbo-service-facade" icon="ToolwindowsToolWindowVariableView"/>
+    <tree path="/documents" icon="ObjectBrowserShowLibraryContents"/>
+    <tree path="/script" icon="ToolwindowsToolWindowInternal"/>
+    <tree path="/hubbo-parent/hubbo-dal" icon="ActionsQuickfixOffBulb"/>
+    <tree path="/hubbo-parent/hubbo-test" icon="ActionsQuickfixOffBulb" title="测试" extension="" presentableText=""
+          tooltipTitle="" textColor="" backgroundColor=""/>
+    <tree path="/hubbo-parent/hubbo-test/src/test/kotlin/unit/contrast" title="对照测试"/>
+    <tree path="/hubbo-parent/hubbo-test/src/test/kotlin/cn/hubbo/unit" title="单元测试"/>
+    <tree path="/hubbo-parent/hubbo-test/src/test/kotlin/cn/hubbo/contrast" title="对照测试"/>
+    <tree path="/hubbo-parent/hubbo-test/src/test/kotlin/cn/hubbo/integration" title="集成测试"/>
+    <tree path="/hubbo-parent/hubbo-test/src/test/kotlin/cn/hubbo/assist" title="测试辅助类包"/>
+</trees>

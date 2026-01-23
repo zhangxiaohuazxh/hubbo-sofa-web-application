@@ -1,0 +1,50 @@
+[package]
+name = "hubbo-native"
+version = "0.1.0"
+edition = "2024"
+description = "hubbo与系统底层API交互的依赖库"
+authors = ["张晓华", "yunjiang"]
+license = "GPL-2"
+readme = "../../README.md"
+
+
+[lib]
+name = "hubbo_native_dynamic_lib"
+crate-type = ["cdylib"]
+
+[dependencies]
+anyhow = "1.0.100"
+chrono = "0.4.42"
+git2 = "0.20.3"
+#gitoxide = "0.49.0"
+once_cell = "1.21.3"
+
+[dev-dependencies]
+
+
+[profile.dev]
+opt-level = 2
+debug = true
+
+[profile.release]
+opt-level = 3
+lto = true
+panic = "abort"
+debug = false
+
+[target.x86_64-unknown-linux-gnu]
+linker = "gcc"
+
+[target.x86_64-unknown-linux-musl]
+linker = "musl-gcc"
+rustflags = ["-C", "linker=rust-lld"]
+
+[target.aarch64-unknown-linux-gnu]
+linker = "aarch64-linux-gnu-gcc"
+
+[target.aarch64-apple-darwin]
+linker = "clang"
+
+[target.x86_64-pc-windows-msvc]
+linker = "x86_64-w64-mingw32-gcc"
+
