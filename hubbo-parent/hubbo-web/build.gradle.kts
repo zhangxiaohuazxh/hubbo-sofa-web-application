@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":hubbo-configure"))
+    api(project(":hubbo-configure"))
     api(project(":hubbo-service-facade"))
     api("org.springframework.boot:spring-boot-starter-webflux")
 }

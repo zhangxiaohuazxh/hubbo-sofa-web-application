@@ -18,6 +18,8 @@ dependencies {
     implementation(libs.kotlin.noarg)
     implementation(libs.bundles.moshi)
     implementation(libs.spring.boot.plugin)
+    implementation(libs.jooq.plugin)
+    implementation(libs.jooq.gradle)
     implementation(libs.kotlin.spring.plugin)
     implementation(libs.kotlin.jvm.plugin)
     implementation(libs.spring.dependency.management.plugin)

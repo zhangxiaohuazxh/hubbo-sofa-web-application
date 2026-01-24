@@ -1,6 +1,9 @@
-spring:
+r2dbc:
   datasource:
     url: jdbc:postgresql://${postgres.host}:${postgres.port}/${postgres.dbname}?directConnection=true&useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
+    host: ${postgres.host}
+    port: ${postgres.port}
+    dbname: ${postgres.dbname}
     username: ${postgres.username}
     password: ${postgres.passwd}
-    driver-class-name: org.postgresql.Driver
+    driver: postgresql

@@ -13,6 +13,7 @@ dependencies {
     api(libs.bundles.squareup)
     api(libs.bundles.coroutines)
     api(libs.bundles.annotations)
+    api("jakarta.validation:jakarta.validation-api")
     api(libs.sl4j)
     api(libs.disruptor)
     //    ksp("com.squareup.moshi:moshi-kotlin-codegen")

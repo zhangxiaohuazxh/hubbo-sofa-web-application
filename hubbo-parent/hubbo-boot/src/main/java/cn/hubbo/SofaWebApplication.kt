@@ -1,14 +1,17 @@
 package cn.hubbo
 
+import cn.hubbo.config.db.DbProperties
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.slf4j.MDC
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 import java.util.*
 
 
 @SpringBootApplication
+@EnableConfigurationProperties(value = [DbProperties::class])
 class SofaWebApplication {
 
 

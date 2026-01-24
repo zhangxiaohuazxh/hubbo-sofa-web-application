@@ -8,6 +8,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.spring")
     id("org.springframework.boot")
     id("com.google.devtools.ksp")
+    //    id("org.jooq.jooq-codegen-gradle")
 }
 
 repositories {
@@ -30,8 +31,10 @@ dependencies {
     add("implementation", libs.findLibrary("moshi").get())
     add("implementation", libs.findLibrary("moshi-kotlin").get())
     add("implementation", libs.findLibrary("moshi-adapters").get())
-    add("implementation", libs.findLibrary("moshi-kotlin-codegen").get())
+    add("compileOnly", libs.findLibrary("moshi-kotlin-codegen").get())
     add("ksp", libs.findLibrary("moshi-kotlin-codegen").get())
+    //    add("implementation", libs.findLibrary("jooq-gradle").get())
+    //    add("implementation", libs.findLibrary("jooq-plugin").get())
     //    add("ksp", libs.findLibrary("fastjson2-extension").get())
     //    add("kapt", "com.squareup.moshi:moshi-kotlin-codegen")
 }
@@ -56,6 +59,10 @@ application {
     mainClass.set("cn.hubbo.SofaWebApplication")
 }
 
+
+tasks.withType<Zip> {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
 
 tasks.withType<Copy> {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
