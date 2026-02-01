@@ -1,0 +1,43 @@
+services:
+  redis:
+    # 建议锁定大版本，以保证稳定性
+    image: redis:8.4-bookworm
+    container_name: redis
+    # 容器异常退出后总是自动重启
+    restart: always
+    # 设置启动命令和参数
+    command: ["redis-server","/etc/redis/redis.conf"]
+    environment:
+      # 设置时区，日志时间会更直观
+      TZ: Asia/Shanghai
+    ports:
+      - "6379:6379"
+    volumes:
+      # 数据持久化：使用命名卷将 Redis 数据存储在容器的/data目录
+      - ./redis.conf:/etc/redis/redis.conf
+      - data:/data
+      - log:/var/log/redis
+    logging:
+      # 日志持久化：使用 Docker 的 json-file 日志驱动
+      # 这是推荐的方式，日志由 Docker 统一管理，并会自动轮转，防止占满磁盘
+      driver: "json-file"
+      options:
+        # 单个日志文件最大为 10MB
+        max-size: "10m"
+        # 最多保留 3 个日志文件
+        max-file: "3"
+    networks:
+      # 使用自定义网络，实现服务间的隔离
+      - compose-network
+
+# 顶层 volumes 定义：声明一个名为 data 的命名卷，由 Docker 负责管理
+volumes:
+  data:
+    driver: local
+  log:
+    driver: local
+
+# 顶层 networks 定义：声明一个自定义网络
+networks:
+  compose-network:
+    driver: bridge

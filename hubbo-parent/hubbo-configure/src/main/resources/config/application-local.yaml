@@ -1,6 +1,7 @@
+# 示例配置文件，并不会真的生效，真正的配置在 用户目录下,如 C:\Users\yunjiang\.config\hubbo
 postgres:
-  host: 172.16.0.130
+  host: 8.8.8.8
   port: 5432
   username: postgres
-  passwd: code@102400
-  dbname: hubbo
+  passwd: xxx
+  dbname: xxx

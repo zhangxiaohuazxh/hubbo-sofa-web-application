@@ -38,3 +38,7 @@ out/
 
 ### Rust ###
 target
+
+#环境信息
+.env
+env/**/*.conf

@@ -33,7 +33,7 @@
             <!--控制台只输出level及其以上级别的信息(onMatch),其他的直接拒绝(onMismatch)-->
             <!--<ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>-->
             <filters>
-                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+                <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
             </filters>
             <!--输出日志的格式-->
             <PatternLayout pattern="${LOG_PATTERN}"/>
@@ -42,7 +42,7 @@
         <RollingFile name="RollingFile" fileName="${LOG_DIR}/${FILE_NAME}.log"
                      filePattern="${HISTORY_LOG_DIR}/${FILE_NAME}-INFO-%d{yyyy-MM-dd}-%i.log.gz">
             <filters>
-                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+                <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
             </filters>
             <PatternLayout pattern="${LOG_PATTERN}"/>
             <Policies>
@@ -63,7 +63,7 @@
         <RollingFile name="RollingFileSource" fileName="${LOG_DIR}/${SOURCE_LOG_FILE_NAME}.log"
                      filePattern="${HISTORY_LOG_DIR}/${SOURCE_LOG_FILE_NAME}-DEBUG-%d{yyyy-MM-dd}-%i.log.gz">
             <filters>
-                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+                <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
             </filters>
             <PatternLayout pattern="${LOG_PATTERN}"/>
             <Policies>
@@ -76,7 +76,7 @@
         <RollingFile name="StructuredRollingJsonFile" fileName="${LOG_DIR}/${STRUCTURED_LOG_FILE_NAME}.json"
                      filePattern="${HISTORY_LOG_DIR}/${STRUCTURED_LOG_FILE_NAME}-DEBUG-%d{yyyy-MM-dd}-%i.json.gz">
             <filters>
-                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+                <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
             </filters>
             <JsonTemplateLayout eventTemplateUri="classpath:logging/template.json"/>
             <Policies>
@@ -90,7 +90,7 @@
                      fileName="${LOG_DIR}/${SOURCE_STRUCTURED_LOG_FILE_NAME}.json"
                      filePattern="${HISTORY_LOG_DIR}/${SOURCE_STRUCTURED_LOG_FILE_NAME}-DEBUG-%d{yyyy-MM-dd}-%i.json.gz">
             <filters>
-                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+                <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
             </filters>
             <JsonTemplateLayout eventTemplateUri="classpath:logging/template.json" eventEol="true"/>
             <Policies>
@@ -101,7 +101,7 @@
         </RollingFile>
 
         <Rewrite name="RewriteSensitiveData">
-            <RegexReplaceRewritePolicy/>
+            <!--            <RegexReplaceRewritePolicy/>-->
             <AppenderRef ref="Console"/>
             <AppenderRef ref="RollingFile"/>
             <AppenderRef ref="StructuredRollingJsonFile"/>
@@ -121,7 +121,7 @@
             <appender-ref ref="RollingFile"/>
         </AsyncLogger>
 
-        <AsyncLogger name="org.mybatis" level="info" additivity="false">
+        <AsyncLogger name="org.jooq.impl.DiagnosticsListeners" level="info" additivity="false">
             <AppenderRef ref="Console"/>
             <appender-ref ref="RollingFile"/>
             <AppenderRef ref="StructuredRollingJsonFile"/>

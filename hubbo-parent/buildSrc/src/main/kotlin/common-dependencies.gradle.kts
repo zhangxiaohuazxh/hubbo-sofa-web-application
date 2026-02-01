@@ -59,20 +59,6 @@ application {
     mainClass.set("cn.hubbo.SofaWebApplication")
 }
 
-
-tasks.withType<Zip> {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-}
-
-tasks.withType<Copy> {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-}
-
-tasks.withType<Jar> {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-}
-
-
 tasks.withType<Test> {
     useJUnitPlatform()
 }

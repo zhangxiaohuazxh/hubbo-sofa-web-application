@@ -1,0 +1,57 @@
+services:
+  postgres:
+    # 锁定生产版本
+    image: postgres:17.7-trixie
+    container_name: postgres
+    # 异常自动重启
+    restart: always
+    # 添加健康检查，监控数据库状态
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    # 从.env 文件读取，避免明文
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+      TZ: Asia/Shanghai
+      # 明确数据存储路径
+      PGDATA: /var/lib/postgresql/data
+    ports:
+      # 仅本地监听，通过应用或代理访问
+      - "5432:5432"
+    # 数据持久化
+    volumes:
+      # 使用命名卷，提高可移植性
+      - data:/var/lib/postgresql/data
+      - log:/var/log/postgresql
+      # - ./init-scripts:/docker-entrypoint-initdb.d  # 初始化脚本目录（可选）
+    logging:
+      # 生产建议使用 json-file
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits:
+          # 限制 CPU 使用率
+          cpus: "2"
+          # 限制最大内存
+          memory: 4G
+    networks:
+      # 自定义网络，隔离其他服务
+      - compose-network
+
+networks:
+  compose-network:
+    # 生产可替换为 overlay 网络（集群场景）
+    driver: bridge
+
+# 数据卷
+volumes:
+  data:
+  log:
