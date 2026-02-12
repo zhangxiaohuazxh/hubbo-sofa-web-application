@@ -42,3 +42,6 @@ target
 #环境信息
 .env
 env/**/*.conf
+# 忽略系统中的日志文件
+*.log
+hubbo-*.json

@@ -1,7 +1,8 @@
-package cn.hubbo.integration.service
+package cn.hubbo.integration.service.system.auth
 
 import cn.hubbo.config.db.DbProperties
 import cn.hubbo.dal.UserDao
+import cn.hubbo.integration.SofaApplicationTest
 import jakarta.annotation.Resource
 import kotlinx.coroutines.reactor.awaitSingleOrNull
 import kotlinx.coroutines.runBlocking
@@ -11,12 +12,10 @@ import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.boot.test.context.SpringBootTest
 import reactor.core.publisher.Mono
 
 @Disabled
-@SpringBootTest
-class UserServiceTest {
+class UserServiceTest : SofaApplicationTest() {
 
     @Resource
     private lateinit var context: DSLContext

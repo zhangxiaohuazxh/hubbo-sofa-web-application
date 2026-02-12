@@ -5,6 +5,7 @@
 package cn.hubbo.dal.keys
 
 
+import cn.hubbo.dal.tables.TButtonPermission
 import cn.hubbo.dal.tables.TDictData
 import cn.hubbo.dal.tables.TMenu
 import cn.hubbo.dal.tables.TMenuPermission
@@ -13,6 +14,7 @@ import cn.hubbo.dal.tables.TRole
 import cn.hubbo.dal.tables.TRolePermission
 import cn.hubbo.dal.tables.TUser
 import cn.hubbo.dal.tables.TUserRole
+import cn.hubbo.dal.tables.records.TButtonPermissionRecord
 import cn.hubbo.dal.tables.records.TDictDataRecord
 import cn.hubbo.dal.tables.records.TMenuPermissionRecord
 import cn.hubbo.dal.tables.records.TMenuRecord
@@ -32,6 +34,8 @@ import org.jooq.impl.Internal
 // UNIQUE and PRIMARY KEY definitions
 // -------------------------------------------------------------------------
 
+val T_BUTTON_PERMISSION_BUTTON_PERMISSION_CODE_KEY: UniqueKey<TButtonPermissionRecord> = Internal.createUniqueKey(TButtonPermission.T_BUTTON_PERMISSION, DSL.name("t_button_permission_button_permission_code_key"), arrayOf(TButtonPermission.T_BUTTON_PERMISSION.BUTTON_PERMISSION_CODE), true)
+val T_BUTTON_PERMISSION_PK: UniqueKey<TButtonPermissionRecord> = Internal.createUniqueKey(TButtonPermission.T_BUTTON_PERMISSION, DSL.name("t_button_permission_pk"), arrayOf(TButtonPermission.T_BUTTON_PERMISSION.ID), true)
 val T_DICT_DATA_PK: UniqueKey<TDictDataRecord> = Internal.createUniqueKey(TDictData.T_DICT_DATA, DSL.name("t_dict_data_pk"), arrayOf(TDictData.T_DICT_DATA.DICT_ID), true)
 val T_MENU_PK: UniqueKey<TMenuRecord> = Internal.createUniqueKey(TMenu.T_MENU, DSL.name("t_menu_pk"), arrayOf(TMenu.T_MENU.MENU_ID), true)
 val T_MENU_PERMISSION_PK: UniqueKey<TMenuPermissionRecord> = Internal.createUniqueKey(TMenuPermission.T_MENU_PERMISSION, DSL.name("t_menu_permission_pk"), arrayOf(TMenuPermission.T_MENU_PERMISSION.ID), true)

@@ -1,3 +1,4 @@
+import gradle.kotlin.dsl.accessors._992bbca79c236b7e3f795b1df9d9c752.api
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {

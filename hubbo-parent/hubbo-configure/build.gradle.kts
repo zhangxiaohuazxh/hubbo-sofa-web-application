@@ -37,7 +37,7 @@ val env = tasks.register("env") {
         val moduleName = project.parent?.project?.name ?: project.name
         val localConfigHome = Paths.get(System.getProperty("user.home"), ".config", moduleName.replace("-parent", ""))
         if (localConfigHome.exists()) {
-            val targetClassPath = project.layout.buildDirectory.dir("classes/config").get().asFile.toPath()
+            val targetClassPath = project.layout.buildDirectory.dir("resources/main/config").get().asFile.toPath()
             if (!targetClassPath.exists()) {
                 targetClassPath.createDirectory()
             }

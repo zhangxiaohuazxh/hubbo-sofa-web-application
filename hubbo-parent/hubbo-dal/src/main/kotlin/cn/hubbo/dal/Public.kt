@@ -4,6 +4,7 @@
 package cn.hubbo.dal
 
 
+import cn.hubbo.dal.tables.TButtonPermission
 import cn.hubbo.dal.tables.TDictData
 import cn.hubbo.dal.tables.TMenu
 import cn.hubbo.dal.tables.TMenuPermission
@@ -42,6 +43,11 @@ open class Public : SchemaImpl(DSL.name("public"), DefaultCatalog.DEFAULT_CATALO
          */
         val PUBLIC: Public = Public()
     }
+
+    /**
+     * 按钮权限关联信息表
+     */
+    val T_BUTTON_PERMISSION: TButtonPermission get() = TButtonPermission.T_BUTTON_PERMISSION
 
     /**
      * 字典表
@@ -86,6 +92,7 @@ open class Public : SchemaImpl(DSL.name("public"), DefaultCatalog.DEFAULT_CATALO
     override fun getCatalog(): Catalog = DefaultCatalog.DEFAULT_CATALOG
 
     override fun getTables(): List<Table<*>> = listOf(
+        TButtonPermission.T_BUTTON_PERMISSION,
         TDictData.T_DICT_DATA,
         TMenu.T_MENU,
         TMenuPermission.T_MENU_PERMISSION,

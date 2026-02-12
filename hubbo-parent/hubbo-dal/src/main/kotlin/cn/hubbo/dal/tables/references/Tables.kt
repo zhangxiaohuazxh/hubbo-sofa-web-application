@@ -5,6 +5,7 @@
 package cn.hubbo.dal.tables.references
 
 
+import cn.hubbo.dal.tables.TButtonPermission
 import cn.hubbo.dal.tables.TDictData
 import cn.hubbo.dal.tables.TMenu
 import cn.hubbo.dal.tables.TMenuPermission
@@ -15,6 +16,11 @@ import cn.hubbo.dal.tables.TUser
 import cn.hubbo.dal.tables.TUserRole
 
 
+
+/**
+ * 按钮权限关联信息表
+ */
+val T_BUTTON_PERMISSION: TButtonPermission = TButtonPermission.T_BUTTON_PERMISSION
 
 /**
  * 字典表

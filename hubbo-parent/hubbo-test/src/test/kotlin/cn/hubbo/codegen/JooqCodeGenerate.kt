@@ -50,7 +50,8 @@ class JooqCodeGenerate {
             "t_permission",
             "t_menu_permission",
             "t_role_permission",
-            "t_dict_data"
+            "t_dict_data",
+            "t_button_permission"
         )
 
         private val excludeTables = null
@@ -68,10 +69,15 @@ class JooqCodeGenerate {
 
     @BeforeEach
     fun init() {
-        //        System.clearProperty("all_proxy")
+        logger.info("properties信息 {}", properties)
+        System.clearProperty("all_proxy")
         if (!isReachable(properties.host, properties.port)) {
             System.setProperty("all_proxy", "socks5://127.0.0.1:1080")
-            logger.warn("数据库服务器不可达，尝试使用网络代理连接")
+            System.setProperty("socksProxyHost", "127.0.0.1")
+            System.setProperty("socksProxyPort", "1080")
+            System.setProperty("socksProxyVersion", "5")
+            logger.warn("数据库服务器不可达，已设置 SOCKS5 代理连接: 127.0.0.1:1080")
+            logger.info("再次检测网络是否可达 {}", isReachable(properties.host, properties.port))
         } else {
             logger.info("网络可达，取消代理设置")
         }
@@ -92,7 +98,7 @@ class JooqCodeGenerate {
         }
     }
 
-    @Disabled
+    //        @Disabled
     @Test
     fun generate(): Unit = runBlocking {
         val module = "hubbo-dal"
