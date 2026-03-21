@@ -2,7 +2,10 @@ package cn.hubbo.utils
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.net.Inet4Address
 import java.net.InetSocketAddress
+import java.net.NetworkInterface
+import java.net.NetworkInterface.getNetworkInterfaces
 import java.net.Socket
 
 class NetUtils {
@@ -11,6 +14,9 @@ class NetUtils {
     companion object {
 
         private val logger: Logger by lazy { LoggerFactory.getLogger(NetUtils::class.java) }
+
+        private val virtualNetWorkInterfaceNames =
+            listOf<String>("VIRTUAL", "TUNNEL", "TAP", "VNIC", "VMNET", "VBOX", "PPP")
 
         /**
          * 判断网络是否可达
@@ -31,6 +37,50 @@ class NetUtils {
             }.onFailure { exception ->
                 log.error("host:{} port:{}网络不可达", host, port, exception)
             }.getOrDefault(false)
+        }
+
+        @JvmStatic
+        fun isVirtualNetWorkInterface(`interface`: NetworkInterface): Boolean {
+            val displayName = `interface`.displayName
+            //val hardwareAddress = `interface`.hardwareAddress
+            return !virtualNetWorkInterfaceNames.none {
+                displayName.uppercase().contains(it)
+            }
+        }
+
+        @JvmStatic
+        fun getLocalHosts(log: Logger = logger): List<NetworkInterface> {
+            val list = ArrayList<NetworkInterface>(10)
+            runCatching {
+                getNetworkInterfaces().iterator().forEach { it ->
+                    if (!it.isLoopback && !it.isVirtual && it.isUp && !isVirtualNetWorkInterface(it)) {
+                        list.add(it)
+                    }
+                }
+            }.onFailure {
+                log.error("获取本机ip失败", it)
+            }
+            return list
+        }
+
+        @JvmStatic
+        fun getLocalHost(log: Logger = logger): String {
+            val hosts: List<NetworkInterface> = getLocalHosts()
+            if (!hosts.isEmpty()) {
+                for (`interface` in hosts) {
+                    val displayName = `interface`.displayName.uppercase()
+                    if (displayName.contains("INTEL") || displayName.contains("REALTEK")) {
+                        val iterator = `interface`.inetAddresses.iterator()
+                        while (iterator.hasNext()) {
+                            val address = iterator.next()
+                            if (address is Inet4Address) {
+                                return address.hostAddress
+                            }
+                        }
+                    }
+                }
+            }
+            return ""
         }
 
 

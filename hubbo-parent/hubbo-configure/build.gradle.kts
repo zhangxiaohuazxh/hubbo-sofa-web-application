@@ -36,7 +36,8 @@ val env = tasks.register("env") {
         logger.lifecycle("=======================env task=======================")
         val moduleName = project.parent?.project?.name ?: project.name
         val localConfigHome = Paths.get(System.getProperty("user.home"), ".config", moduleName.replace("-parent", ""))
-        if (localConfigHome.exists()) {
+        val path = System.getProperty("user.home") + ".config" + moduleName.replace("-parent", "")
+        if (File(path).exists()) {
             val targetClassPath = project.layout.buildDirectory.dir("resources/main/config").get().asFile.toPath()
             if (!targetClassPath.exists()) {
                 targetClassPath.createDirectory()

@@ -1,5 +1,5 @@
-import gradle.kotlin.dsl.accessors._992bbca79c236b7e3f795b1df9d9c752.api
 import org.springframework.boot.gradle.tasks.bundling.BootJar
+import org.springframework.boot.gradle.tasks.run.BootRun
 
 plugins {
     id("application")
@@ -62,6 +62,27 @@ application {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+    jvmArgs(
+        "--add-opens", "java.base/java.lang=ALL-UNNAMED",
+        "--add-opens", "java.base/java.lang.reflect=ALL-UNNAMED",
+        "-Xmx2g"
+    )
+    testLogging {
+        // 显示标准输出和错误输出
+        showStandardStreams = true
+        // 设置显示的事件类型
+        events("passed", "skipped", "failed", "standardOut", "standardError")
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+    }
+}
+
+tasks.withType<BootRun> {
+    jvmArgs(
+        "--add-opens", "java.base/java.lang=ALL-UNNAMED",
+        "--add-opens", "java.base/java.lang.reflect=ALL-UNNAMED",
+        "-Dlog4j2.enableThreadlocals=false",
+        "-Dlog4j2.enableDirectEncoders=false"
+    )
 }
 
 tasks.withType<JavaCompile> {

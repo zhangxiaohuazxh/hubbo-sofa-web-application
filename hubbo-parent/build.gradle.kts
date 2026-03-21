@@ -23,6 +23,7 @@ allprojects {
     version = "0.0.1"
     repositories {
         mavenLocal()
+        mavenCentral()
         maven("https://maven.aliyun.com/repository/public")
     }
 }

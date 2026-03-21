@@ -19,15 +19,21 @@
         <property name="FILE_COUNT">30</property>
         <!--interval属性用来指定多久滚动一次,默认是1 hour-->
         <property name="INTERVAL">30</property>
+        <!-- @formatter:off-->
         <!--输出日志的格式:%d表示日期时间,%thread表示线程名,%-5level级别从左显示5个字符宽度,%logger{50}表示logger名字最长50个字符,否则按照句点分割,%line表示行号,%msg日志消息,%n换行符-->
-        <property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} => [%thread] => %-5level [TRACE_ID:%X{traceId}] %logger{50}:(%line) - %msg%n</property>
+        <property name="LOG_PATTERN">${sys:ip.address}:${sys:server.port}-%d{yyyy-MM-dd-HH:mm:ss.SSS}-%t-%-5level-[%X{traceId}]-%sdt%n</property>
+        <property name="CONSOLE_LOG_PATTERN">%style{${sys:ip.address}:${sys:server.port}}{bright,magenta}-%style{%d{yyyy-MM-dd-HH:mm:ss.SSS}}{green}-%style{%t}{blue}-%highlight{%-5level}{FATAL=red, ERROR=red, WARN=yellow, INFO=green, DEBUG=blue, TRACE=blue}-%style{[%X{traceId}]}{bright,green}-%style{%l}{cyan}-%style{%sdt}{bright,magenta}%n</property>
+        <property name="SOURCE_LOG_PATTERN">%style{${sys:ip.address}:${sys:server.port}}{bright,magenta}-%style{%d{yyyy-MM-dd-HH:mm:ss.SSS}}{green}-%style{%t}{blue}-%highlight{%-5level}{FATAL=red, ERROR=red, WARN=yellow, INFO=green, DEBUG=blue, TRACE=blue}-%style{[%X{traceId}]}{bright,green}-%style{%l}{cyan}-%style{%msg}{bright,magenta}%n</property>
+        <!-- @formatter:on-->
         <property name="SOURCE_LOG_FILE_NAME">hubbo-source</property>
-        <property name="STRUCTURED_LOG_FILE_NAME">hubbo-structured</property>
-        <property name="SOURCE_STRUCTURED_LOG_FILE_NAME">hubbo-source-structured</property>
+        <property name="LOGSTASH_HOST">172.168.0.102</property>
+        <property name="LOGSTASH_PORT">5000</property>
+        <property name="APP_NAME">hetu</property>
     </Properties>
 
 
     <appenders>
+
         <!--1、控制台输出-->
         <console name="Console" target="SYSTEM_OUT">
             <!--控制台只输出level及其以上级别的信息(onMatch),其他的直接拒绝(onMismatch)-->
@@ -36,7 +42,7 @@
                 <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
             </filters>
             <!--输出日志的格式-->
-            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <PatternLayout pattern="${CONSOLE_LOG_PATTERN}"/>
         </console>
 
         <RollingFile name="RollingFile" fileName="${LOG_DIR}/${FILE_NAME}.log"
@@ -55,17 +61,12 @@
             <DefaultRolloverStrategy max="${FILE_COUNT}"/>
         </RollingFile>
 
-        <!-- 整合elk -->
-        <!--        <Socket name="Logstash" host="127.0.0.1" port="4560" protocol="TCP">-->
-        <!--            <PatternLayout pattern="${logPattern}"/>-->
-        <!--        </Socket>-->
-
         <RollingFile name="RollingFileSource" fileName="${LOG_DIR}/${SOURCE_LOG_FILE_NAME}.log"
                      filePattern="${HISTORY_LOG_DIR}/${SOURCE_LOG_FILE_NAME}-DEBUG-%d{yyyy-MM-dd}-%i.log.gz">
             <filters>
                 <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
             </filters>
-            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <PatternLayout pattern="${SOURCE_LOG_PATTERN}"/>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="${INTERVAL}"/>
                 <SizeBasedTriggeringPolicy size="${SPLIT_SIZE}"/>
@@ -73,66 +74,45 @@
             <DefaultRolloverStrategy max="${FILE_COUNT}"/>
         </RollingFile>
 
-        <RollingFile name="StructuredRollingJsonFile" fileName="${LOG_DIR}/${STRUCTURED_LOG_FILE_NAME}.json"
-                     filePattern="${HISTORY_LOG_DIR}/${STRUCTURED_LOG_FILE_NAME}-DEBUG-%d{yyyy-MM-dd}-%i.json.gz">
-            <filters>
-                <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
-            </filters>
-            <JsonTemplateLayout eventTemplateUri="classpath:logging/template.json"/>
-            <Policies>
-                <TimeBasedTriggeringPolicy interval="${INTERVAL}"/>
-                <SizeBasedTriggeringPolicy size="${SPLIT_SIZE}"/>
-            </Policies>
-            <DefaultRolloverStrategy max="${FILE_COUNT}"/>
-        </RollingFile>
+        <!-- 整合elk -->
+        <Socket name="Logstash" host="${LOGSTASH_HOST}" port="${LOGSTASH_PORT}" protocol="TCP">
+            <JsonLayout compact="true" eventEol="true" includeStacktrace="true" objectMessageAsJsonObject="true">
+                <KeyValuePair key="app" value="${APP_NAME}"/>
+                <KeyValuePair key="environment" value="prod"/>
+                <KeyValuePair key="stack_trace" value="$${ctx:throwable}"/>
+            </JsonLayout>
+        </Socket>
 
-        <RollingFile name="StructuredRollingJsonFileSource"
-                     fileName="${LOG_DIR}/${SOURCE_STRUCTURED_LOG_FILE_NAME}.json"
-                     filePattern="${HISTORY_LOG_DIR}/${SOURCE_STRUCTURED_LOG_FILE_NAME}-DEBUG-%d{yyyy-MM-dd}-%i.json.gz">
-            <filters>
-                <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
-            </filters>
-            <JsonTemplateLayout eventTemplateUri="classpath:logging/template.json" eventEol="true"/>
-            <Policies>
-                <TimeBasedTriggeringPolicy interval="${INTERVAL}"/>
-                <SizeBasedTriggeringPolicy size="${SPLIT_SIZE}"/>
-            </Policies>
-            <DefaultRolloverStrategy max="${FILE_COUNT}"/>
-        </RollingFile>
-
-        <Rewrite name="RewriteSensitiveData">
-            <!--            <RegexReplaceRewritePolicy/>-->
-            <AppenderRef ref="Console"/>
-            <AppenderRef ref="RollingFile"/>
-            <AppenderRef ref="StructuredRollingJsonFile"/>
-        </Rewrite>
     </appenders>
 
 
     <loggers>
         <!-- 控制整个项目的日志等级 -->
-        <root level="info">
+        <root level="info" additivity="false" includeLocation="true">
             <AppenderRef ref="Console"/>
             <appender-ref ref="RollingFile"/>
+            <appender-ref ref="RollingFileSource"/>
+            <appender-ref ref="Logstash"/>
         </root>
 
-        <AsyncLogger name="org.springframework" level="info" additivity="false">
+        <AsyncLogger name="org.springframework" level="warn" additivity="false">
             <AppenderRef ref="Console"/>
             <appender-ref ref="RollingFile"/>
+            <appender-ref ref="Logstash"/>
         </AsyncLogger>
 
-        <AsyncLogger name="org.jooq.impl.DiagnosticsListeners" level="info" additivity="false">
+        <!--        <AsyncLogger name="org.jooq.impl.DiagnosticsListeners" level="info" additivity="false" includeLocation="true">-->
+        <!--            <AppenderRef ref="Console"/>-->
+        <!--            <appender-ref ref="RollingFile"/>-->
+        <!--        </AsyncLogger>-->
+
+        <AsyncLogger name="cn.hubbo" level="info" additivity="false" includeLocation="true">
             <AppenderRef ref="Console"/>
             <appender-ref ref="RollingFile"/>
-            <AppenderRef ref="StructuredRollingJsonFile"/>
-        </AsyncLogger>
-
-        <AsyncLogger name="cn.hubbo" level="info" additivity="false">
             <appender-ref ref="RollingFileSource"/>
-            <appender-ref ref="RewriteSensitiveData"/>
-            <AppenderRef ref="StructuredRollingJsonFile"/>
-            <AppenderRef ref="StructuredRollingJsonFileSource"/>
+            <appender-ref ref="Logstash"/>
         </AsyncLogger>
+
     </loggers>
 
 

@@ -7,7 +7,7 @@ ksp = "2.3.4"
 fory = "0.14.1"
 hubbo = "0.0.1"
 jooq = "3.20.10"
-kotlin = "2.3.10"
+kotlin = "2.3.20"
 moshi = "1.15.2"
 javaSource = "25"
 javaTarget = "25"
@@ -44,6 +44,7 @@ kotlinPoet = "2.2.0"
 kotlinxMetadata = "0.9.0"
 jooqPlugin = "10.1.1"
 r2dbcProxy = "1.1.6.RELEASE"
+jackson = "2.21.1"
 
 [libraries]
 guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
@@ -112,7 +113,7 @@ jooq-codegen = { group = "org.jooq", name = "jooq-codegen", version.ref = "jooq"
 jooq-gradle = { group = "org.jooq", name = "jooq-codegen-gradle", version.ref = "jooq" }
 jooq-plugin = { group = "nu.studer.jooq", name = "nu.studer.jooq.gradle.plugin", version.ref = "jooqPlugin" }
 r2dbc-proxy = { group = "io.r2dbc", name = "r2dbc-proxy", version.ref = "r2dbcProxy" }
-
+jackson-databind = { group = "com.fasterxml.jackson.core", name = "jackson-databind", version.ref = "jackson" }
 
 [bundles]
 r2dbc = ["postgresql-r2dbc", "r2dbc-pool", "r2dbc-proxy"]
@@ -126,7 +127,7 @@ reactive = ["rx-java", "reactor-core", "reactive-streams"]
 moshi = ["moshi", "moshi-adapters", "moshi-kotlin-codegen"]
 coroutines = ["kotlinx-coroutines-core", "kotlinx-coroutines-reactor"]
 apache = ["commons-io", "commons-lang3", "commons-codec", "commons-collections4", "commons-pool2"]
-logging = ["sl4j", "log4j-json-layout"]
+logging = ["sl4j"]
 ksp-processor = ["ksp", "ksp-processor", "kotlinpoet", "kotlinpoet-ksp"]
 jooq = ["jooq", "jooq-kotlin", "jooq-meta", "jooq-meta-kotlin", "jooq-codegen"]
 
