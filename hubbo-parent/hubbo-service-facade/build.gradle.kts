@@ -1,5 +1,5 @@
 plugins {
-
+    kotlin("kapt")
 }
 
 dependencies {
@@ -8,5 +8,6 @@ dependencies {
     api(project(":hubbo-scheduler"))
     api(project(":hubbo-integration"))
     api(project(":hubbo-native-invocation"))
+    kapt(libs.spring.context.indexer)
 }
 

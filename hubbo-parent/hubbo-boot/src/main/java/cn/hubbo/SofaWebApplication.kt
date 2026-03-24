@@ -28,7 +28,7 @@ class SofaWebApplication {
             val stopwatch = createStarted()
             System.setProperty("ip.address", NetUtils.getLocalHost())
             val applicationContext = SpringApplication.run(SofaWebApplication::class.java, *args)
-            val port = (applicationContext as ReactiveWebServerApplicationContext).webServer?.port.toString().orEmpty()
+            val port = (applicationContext as ReactiveWebServerApplicationContext).webServer?.port.toString()
             System.setProperty("server.port", port)
             val loggerContext = LogManager.getContext(false) as LoggerContext
             loggerContext.reconfigure()

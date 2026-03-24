@@ -10,8 +10,8 @@ dependencies {
     api(project(":hubbo-native-binding"))
     api(libs.bundles.logging)
     api(libs.jackson.databind)
-    ksp("org.apache.logging.log4j:log4j-core:2.25.3")
-    kapt("org.apache.logging.log4j:log4j-core:2.25.3")
+    // 亲测仅支持kapt 不支持ksp
+    kapt(libs.log4j.core)
     compileOnly("org.springframework.boot:spring-boot-starter-log4j2")
 }
 

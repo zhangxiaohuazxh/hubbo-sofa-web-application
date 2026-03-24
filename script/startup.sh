@@ -14,3 +14,5 @@ java -jar -XX:+UnlockExperimentalVMOptions -XX:+UseCompactObjectHeaders -XX:+Hea
 
 # Spring Boot4与aot相关的配置 刷新容器后自动退出
 #-Dspring.context.exit=onRefresh
+
+#--add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.lang.reflect=ALL-UNNAMED

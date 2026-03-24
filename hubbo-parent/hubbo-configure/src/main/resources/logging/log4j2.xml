@@ -88,7 +88,7 @@
 
     <loggers>
         <!-- 控制整个项目的日志等级 -->
-        <root level="info" additivity="false" includeLocation="true">
+        <root level="info" additivity="false" includeLocation="false">
             <AppenderRef ref="Console"/>
             <appender-ref ref="RollingFile"/>
             <appender-ref ref="RollingFileSource"/>
@@ -106,7 +106,7 @@
         <!--            <appender-ref ref="RollingFile"/>-->
         <!--        </AsyncLogger>-->
 
-        <AsyncLogger name="cn.hubbo" level="info" additivity="false" includeLocation="true">
+        <AsyncLogger name="cn.hubbo" level="info" additivity="false" includeLocation="false">
             <AppenderRef ref="Console"/>
             <appender-ref ref="RollingFile"/>
             <appender-ref ref="RollingFileSource"/>

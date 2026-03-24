@@ -45,6 +45,9 @@ kotlinxMetadata = "0.9.0"
 jooqPlugin = "10.1.1"
 r2dbcProxy = "1.1.6.RELEASE"
 jackson = "2.21.1"
+log4j = "2.25.3"
+spring = "7.0.6"
+micrometer = "1.2.1"
 
 [libraries]
 guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
@@ -114,6 +117,9 @@ jooq-gradle = { group = "org.jooq", name = "jooq-codegen-gradle", version.ref = 
 jooq-plugin = { group = "nu.studer.jooq", name = "nu.studer.jooq.gradle.plugin", version.ref = "jooqPlugin" }
 r2dbc-proxy = { group = "io.r2dbc", name = "r2dbc-proxy", version.ref = "r2dbcProxy" }
 jackson-databind = { group = "com.fasterxml.jackson.core", name = "jackson-databind", version.ref = "jackson" }
+log4j-core = { group = "org.apache.logging.log4j", name = "log4j-core", version.ref = "log4j" }
+spring-context-indexer = { group = "org.springframework", name = "spring-context-indexer", version.ref = "spring" }
+coroutines-micrometer-context-propagation = { group = "io.micrometer", name = "context-propagation", version.ref = "micrometer" }
 
 [bundles]
 r2dbc = ["postgresql-r2dbc", "r2dbc-pool", "r2dbc-proxy"]

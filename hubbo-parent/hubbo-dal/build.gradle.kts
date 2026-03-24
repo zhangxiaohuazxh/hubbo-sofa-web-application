@@ -1,6 +1,5 @@
 plugins {
-    //    id("nu.studer.jooq")
-    //    id("org.jooq.jooq-codegen-gradle")
+    kotlin("kapt")
 }
 
 dependencies {
@@ -12,4 +11,5 @@ dependencies {
     api(libs.postgresql.driver)
     api(project(":hubbo-common"))
     compileOnly("org.springframework.boot:spring-boot-starter")
+    kapt(libs.spring.context.indexer)
 }
