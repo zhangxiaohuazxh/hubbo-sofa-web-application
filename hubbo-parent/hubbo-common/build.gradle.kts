@@ -13,6 +13,7 @@ dependencies {
     // 亲测仅支持kapt 不支持ksp
     kapt(libs.log4j.core)
     compileOnly("org.springframework.boot:spring-boot-starter-log4j2")
+    compileOnly("org.springframework:spring-context")
 }
 
 kapt {

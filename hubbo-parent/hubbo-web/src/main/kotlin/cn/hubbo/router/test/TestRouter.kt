@@ -16,6 +16,7 @@ class TestRouter {
         return coRouter {
             "/test".nest {
                 GET("/datetime", handler::systemTime)
+                GET("/push", handler::pushMessage)
             }
         }
     }

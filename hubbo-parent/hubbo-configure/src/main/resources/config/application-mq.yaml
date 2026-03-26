@@ -1,0 +1,13 @@
+# 新版本的rocketmq5基于grpc调用
+rocketmq:
+  producer:
+    endpoints: ${rocketmq.host}:${rocketmq.port}
+    topic: hetu
+    ssl-enabled: false
+  simple-consumer:
+    endpoints: ${rocketmq.host}:${rocketmq.port}
+    consumer-group: ${rocketmq.consumer-group}
+    topic: ${rocketmq.consumer.topic}
+    tag: '*'
+
+

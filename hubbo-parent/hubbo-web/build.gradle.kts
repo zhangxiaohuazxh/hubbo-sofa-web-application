@@ -8,4 +8,6 @@ dependencies {
     api(project(":hubbo-service-facade"))
     api("org.springframework.boot:spring-boot-starter-webflux")
     kapt(libs.spring.context.indexer)
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation(libs.prometheus)
 }

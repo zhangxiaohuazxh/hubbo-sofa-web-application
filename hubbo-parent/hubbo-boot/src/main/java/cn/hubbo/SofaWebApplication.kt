@@ -1,5 +1,6 @@
 package cn.hubbo
 
+import cn.hubbo.common.utils.ContextUtils
 import cn.hubbo.config.db.DbProperties
 import cn.hubbo.utils.NetUtils
 import com.google.common.base.Stopwatch.createStarted
@@ -11,11 +12,13 @@ import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.server.reactive.context.ReactiveWebServerApplicationContext
+import org.springframework.context.ApplicationContext
+import org.springframework.context.ApplicationContextAware
 
 
-@SpringBootApplication
+@SpringBootApplication(exclude = [])
 @EnableConfigurationProperties(value = [DbProperties::class])
-class SofaWebApplication {
+class SofaWebApplication : ApplicationContextAware {
 
 
     companion object {
@@ -39,5 +42,8 @@ class SofaWebApplication {
 
     }
 
+    override fun setApplicationContext(applicationContext: ApplicationContext) {
+        ContextUtils.setApplicationContext(applicationContext)
+    }
 
 }

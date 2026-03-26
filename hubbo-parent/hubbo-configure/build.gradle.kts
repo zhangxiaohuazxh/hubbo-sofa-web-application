@@ -14,10 +14,11 @@ dependencies {
     implementation(libs.bundles.annotations)
     compileOnly(libs.bundles.r2dbc)
     compileOnly("org.springframework.boot:spring-boot-starter-jooq")
-    implementation("org.springframework.boot:spring-boot-starter-actuator")
     kapt(libs.spring.context.indexer)
     implementation(libs.coroutines.micrometer.context.propagation)
+    compileOnly(libs.rocketmq)
     compileOnly(project(":hubbo-common"))
+    compileOnly("org.springframework.boot:spring-boot-starter-data-redis-reactive")
 }
 
 // 拷贝用户目录下的隐藏文件到build/classes/config下，不会递归处理，目录名称 ${user.home}/project.name,文件必须小于1M

@@ -75,13 +75,13 @@
         </RollingFile>
 
         <!-- 整合elk -->
-        <Socket name="Logstash" host="${LOGSTASH_HOST}" port="${LOGSTASH_PORT}" protocol="TCP">
-            <JsonLayout compact="true" eventEol="true" includeStacktrace="true" objectMessageAsJsonObject="true">
-                <KeyValuePair key="app" value="${APP_NAME}"/>
-                <KeyValuePair key="environment" value="prod"/>
-                <KeyValuePair key="stack_trace" value="$${ctx:throwable}"/>
-            </JsonLayout>
-        </Socket>
+        <!--        <Socket name="Logstash" host="${LOGSTASH_HOST}" port="${LOGSTASH_PORT}" protocol="TCP">-->
+        <!--            <JsonLayout compact="true" eventEol="true" includeStacktrace="true" objectMessageAsJsonObject="true">-->
+        <!--                <KeyValuePair key="app" value="${APP_NAME}"/>-->
+        <!--                <KeyValuePair key="environment" value="prod"/>-->
+        <!--                <KeyValuePair key="stack_trace" value="$${ctx:throwable}"/>-->
+        <!--            </JsonLayout>-->
+        <!--        </Socket>-->
 
     </appenders>
 
@@ -92,13 +92,13 @@
             <AppenderRef ref="Console"/>
             <appender-ref ref="RollingFile"/>
             <appender-ref ref="RollingFileSource"/>
-            <appender-ref ref="Logstash"/>
+            <!--            <appender-ref ref="Logstash"/>-->
         </root>
 
         <AsyncLogger name="org.springframework" level="warn" additivity="false">
             <AppenderRef ref="Console"/>
             <appender-ref ref="RollingFile"/>
-            <appender-ref ref="Logstash"/>
+            <!--            <appender-ref ref="Logstash"/>-->
         </AsyncLogger>
 
         <!--        <AsyncLogger name="org.jooq.impl.DiagnosticsListeners" level="info" additivity="false" includeLocation="true">-->
@@ -110,7 +110,7 @@
             <AppenderRef ref="Console"/>
             <appender-ref ref="RollingFile"/>
             <appender-ref ref="RollingFileSource"/>
-            <appender-ref ref="Logstash"/>
+            <!--            <appender-ref ref="Logstash"/>-->
         </AsyncLogger>
 
     </loggers>

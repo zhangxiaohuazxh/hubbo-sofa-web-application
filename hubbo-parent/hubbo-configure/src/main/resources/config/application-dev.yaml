@@ -3,6 +3,13 @@ management:
     web:
       exposure:
         include: "*"
+      base-path: /actuator
+    endpoint:
+      prometheus:
+        enabled: true
+        tags:
+          application: ${spring.application.name}
+          environment: ${spring.profiles.active}
 
 spring:
   main:
