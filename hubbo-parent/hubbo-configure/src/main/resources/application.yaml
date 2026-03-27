@@ -3,6 +3,6 @@ spring:
     name: hubbo-sofa-web-application
   profiles:
     active: dev
-    include: local,auth,datasource,mybatis,security,log4j2,registry,mq
+    include: local,auth,datasource,security,log4j2,registry,mq
   webflux:
     base-path: /api

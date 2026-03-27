@@ -11,7 +11,7 @@ class DateUtils {
         val datetimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
         @JvmStatic
-        fun currentTimeString(dateTime: LocalDateTime): String {
+        fun currentTimeString(dateTime: LocalDateTime = LocalDateTime.now()): String {
             return datetimeFormatter.format(dateTime)
         }
 

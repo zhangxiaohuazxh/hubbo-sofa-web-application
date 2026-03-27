@@ -1,7 +1,7 @@
 # 示例配置文件，并不会真的生效，真正的配置在 用户目录下,如 C:\Users\yunjiang\.config\hubbo
-postgres:
-  host: 8.8.8.8
-  port: 5432
-  username: postgres
-  passwd: xxx
-  dbname: xxx
+#postgres:
+#  host: 8.8.8.8
+#  port: 5432
+#  username: postgres
+#  passwd: xxx
+#  dbname: xxx

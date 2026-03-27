@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 import org.springframework.boot.gradle.tasks.run.BootRun
 
@@ -17,7 +18,7 @@ repositories {
     gradlePluginPortal()
 }
 
-val libs = rootProject.extensions.getByType<org.gradle.api.artifacts.VersionCatalogsExtension>().named("libs")
+val libs = rootProject.extensions.getByType<VersionCatalogsExtension>().named("libs")
 
 dependencies {
     val springBom = libs.findLibrary("spring-boot-dependencies").get()
@@ -87,6 +88,13 @@ tasks.withType<BootRun> {
 
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
+}
+
+tasks.withType<KotlinCompile>().configureEach {
+    compilerOptions {
+        freeCompilerArgs.add("-XXLanguage:+UnnamedLocalVariables")
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_25)
+    }
 }
 
 tasks.withType<BootJar> {
@@ -169,7 +177,7 @@ distributions {
 
 // zip包插件
 plugins.withId("distribution") {
-    val distContainer = extensions.getByType<org.gradle.api.distribution.DistributionContainer>()
+    val distContainer = extensions.getByType<DistributionContainer>()
     if (project.name == "hubbo-boot") {
         tasks.register<Zip>("zip") {
             archiveFileName.set("${project.name}-${project.version}.zip")

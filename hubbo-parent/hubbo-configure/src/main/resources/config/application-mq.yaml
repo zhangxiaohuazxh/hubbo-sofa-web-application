@@ -2,12 +2,12 @@
 rocketmq:
   producer:
     endpoints: ${rocketmq.host}:${rocketmq.port}
-    topic: hetu
-    ssl-enabled: false
+    topic: ${rocketmq.producers.topic}
+    ssl-enabled: ${rocketmq.ssl.enabled}
   simple-consumer:
     endpoints: ${rocketmq.host}:${rocketmq.port}
-    consumer-group: ${rocketmq.consumer-group}
+    consumer-group: ${rocketmq.consumers.group}
     topic: ${rocketmq.consumer.topic}
-    tag: '*'
+    tag: ${rocketmq.consumer.tag}
 
 
