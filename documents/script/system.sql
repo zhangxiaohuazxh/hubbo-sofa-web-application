@@ -303,3 +303,142 @@ comment on column t_dict_data.update_by is '更新人';
 comment on column t_dict_data.update_time is '更新时间';
 comment on column t_dict_data.description is '备注信息';
 comment on column t_dict_data.tenant_id is '租户id';
+
+create table t_project
+(
+    project_id      bigint primary key,
+    project_name    varchar(255) unique not null,
+    project_owner   bigint              not null,
+    repository_url  varchar(255)        not null,
+    master_branch   varchar(255)        not null,
+    build_type      char(1)             not null,
+    build_config_id bigint              not null,
+    current_branch  varchar(255)        not null,
+    publish_mode    char(1)             not null
+);
+
+comment on table t_project is '项目信息表';
+comment on column t_project.project_id is '项目编号';
+comment on column t_project.project_name is '项目名称';
+comment on column t_project.project_owner is '项目管理人，超管，具体的授权后续设计';
+comment on column t_project.repository_url is '仓库地址';
+comment on column t_project.master_branch is '主分支';
+comment on column t_project.build_type is '构建类型，maven、gradle、npm、pnpm、rsBuild';
+comment on column t_project.build_config_id is '构建配置的关联id';
+comment on column t_project.current_branch is '当前的正式分支';
+comment on column t_project.publish_mode is '发布模式，支持 full全量发布、group分组发布...';
+
+create table t_project_iteration
+(
+    iteration_id   bigint primary key,
+    project_id     bigint       not null,
+    iteration_name varchar(255) not null,
+    base_line      varchar(64)  not null,
+    current_branch varchar(64)  not null,
+    enabled        boolean               DEFAULT true,
+    deleted        boolean               DEFAULT false NOT NULL,
+    create_by      bigint       not null,
+    create_time    timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    update_by      bigint,
+    update_time    timestamp             DEFAULT CURRENT_TIMESTAMP
+);
+
+comment on table t_project_iteration is '项目迭代记录表';
+comment on column t_project_iteration.iteration_id is '迭代编号';
+comment on column t_project_iteration.project_id is '项目编号';
+comment on column t_project_iteration.iteration_name is '迭代名称';
+comment on column t_project_iteration.base_line is '基线';
+comment on column t_project_iteration.current_branch is '当前分支名称';
+comment on column t_project_iteration.enabled is '是否启用';
+comment on column t_project_iteration.deleted is '是否删除';
+comment on column t_project_iteration.create_by is '创建人';
+comment on column t_project_iteration.create_time is '创建时间';
+comment on column t_project_iteration.update_by is '更新人';
+comment on column t_project_iteration.update_time is '更新时间';
+
+-- todo 还没想好怎么设计
+create table t_project_iteration_stage
+(
+    stage_id bigint primary key,
+    stage    char(1)
+);
+
+comment on table t_project_iteration_stage is '发布阶段信息表';
+comment on column t_project_iteration_stage.stage_id is '发布阶段信息编号id';
+comment on column t_project_iteration_stage.stage is '阶段';
+
+create table t_server_group
+(
+    group_id    bigint primary key,
+    project_id  bigint      not null,
+    group_name  varchar(64) not null,
+    enabled     boolean              DEFAULT true,
+    deleted     boolean              DEFAULT false NOT NULL,
+    create_by   bigint      NOT NULL,
+    create_time timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    update_by   bigint,
+    update_time timestamp            DEFAULT CURRENT_TIMESTAMP
+);
+
+comment on table t_server_group is '主机分组信息表';
+comment on column t_server_group.group_id is '分组id';
+comment on column t_server_group.project_id is '项目id';
+comment on column t_server_group.group_name is '分组名称';
+comment on column t_server_group.enabled is '是否启用';
+comment on column t_server_group.deleted is '是否删除';
+comment on column t_server_group.create_by is '创建人';
+comment on column t_server_group.create_time is '创建时间';
+comment on column t_server_group.update_by is '更新人';
+comment on column t_server_group.update_time is '更新时间';
+
+
+create table t_server_info
+(
+    server_id       bigint primary key,
+    host            varchar(64) not null,
+    port            int default 22,
+    user_name       varchar(64) not null,
+    credential_type char(1)     not null,
+    passwd          varchar(64) not null,
+    group_id        bigint      not null
+);
+
+comment on table t_server_info is '主机信息表';
+comment on column t_server_info.server_id is '主机编号';
+comment on column t_server_info.host is '主机';
+comment on column t_server_info.port is '端口';
+comment on column t_server_info.user_name is '用户名';
+comment on column t_server_info.credential_type is '凭据类型，ssh、password';
+comment on column t_server_info.passwd is '认证凭据';
+comment on column t_server_info.group_id is '主机分组id';
+
+
+create table t_release_history
+(
+    release_id    bigint primary key,
+    project_id    bigint      not null,
+    version       char(40)    not null,
+    tag           varchar(32),
+    branch        varchar(64) not null,
+    operator      bigint      not null,
+    status        char(1),
+    total_cost    bigint,
+    compile_start timestamp,
+    compile_end   timestamp,
+    publish_start timestamp,
+    publish_end   timestamp
+);
+
+comment on table t_release_history is '发布历史表';
+comment on column t_release_history.release_id is '发布历史编号id';
+comment on column t_release_history.project_id is '项目编号';
+comment on column t_release_history.version is 'git提交的版本号';
+comment on column t_release_history.tag is 'git tag';
+comment on column t_release_history.branch is '发布分支';
+comment on column t_release_history.operator is '操作人';
+comment on column t_release_history.status is '发布的状态，构建中、编译完毕、部署中、部署成功、部署失败、取消';
+comment on column t_release_history.total_cost is '流水线执行总耗时';
+comment on column t_release_history.compile_start is '编译开始时间';
+comment on column t_release_history.compile_end is '编译开始时间';
+comment on column t_release_history.publish_start is '开始发布时间';
+comment on column t_release_history.publish_end is '发布完成时间';

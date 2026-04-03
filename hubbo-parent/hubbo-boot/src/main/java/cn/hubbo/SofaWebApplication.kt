@@ -6,6 +6,7 @@ import cn.hubbo.utils.NetUtils
 import com.google.common.base.Stopwatch.createStarted
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.core.LoggerContext
+import org.apache.rocketmq.client.autoconfigure.RocketMQAutoConfiguration
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.boot.SpringApplication
@@ -16,7 +17,7 @@ import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
 
 
-@SpringBootApplication(exclude = [])
+@SpringBootApplication(exclude = [RocketMQAutoConfiguration::class])
 @EnableConfigurationProperties(value = [DbProperties::class])
 class SofaWebApplication : ApplicationContextAware {
 

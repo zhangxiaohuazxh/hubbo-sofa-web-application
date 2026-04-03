@@ -21,14 +21,14 @@ class TestHandler(val sysCommonService: SysCommonService) {
 
     private val logger: Logger by lazy { LoggerFactory.getLogger(TestHandler::class.java) }
 
-    @Resource
-    private lateinit var rocketMQTemplate: RocketMQClientTemplate
+    //    @Resource
+    //    private lateinit var rocketMQTemplate: RocketMQClientTemplate
 
 
     suspend fun systemTime(request: ServerRequest): ServerResponse {
         logger.info("访问系统时间接口")
-        val messageViews = rocketMQTemplate.receive(3, Duration.ofMinutes(1))
-        logger.info("接收到的消息 {}", messageViews)
+        //        val messageViews = rocketMQTemplate.receive(3, Duration.ofMinutes(1))
+        //        logger.info("接收到的消息 {}", messageViews)
         return ServerResponse.ok()
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValueAndAwait(mapOf("data" to LocalDateTime.now().currentTimeString()))
@@ -36,7 +36,7 @@ class TestHandler(val sysCommonService: SysCommonService) {
 
     suspend fun pushMessage(request: ServerRequest): ServerResponse {
         logger.info("推送消息")
-        rocketMQTemplate.syncSendNormalMessage("hetu", "first message")
+        //        rocketMQTemplate.syncSendNormalMessage("hetu", "first message")
         return ServerResponse.ok()
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValueAndAwait(mapOf("data" to "success"))
