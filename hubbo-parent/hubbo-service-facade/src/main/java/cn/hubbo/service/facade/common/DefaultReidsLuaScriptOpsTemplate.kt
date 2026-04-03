@@ -1,6 +1,9 @@
 package cn.hubbo.service.facade.common
 
 import cn.hubbo.service.common.ReidsLuaScriptOpsTemplate
+import io.netty.buffer.ByteBuf
+import io.netty.buffer.ByteBufAllocator
+import io.netty.util.ReferenceCountUtil
 import jakarta.annotation.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.reactive.awaitLast
@@ -10,7 +13,6 @@ import org.springframework.data.redis.connection.ReactiveRedisConnectionFactory
 import org.springframework.data.redis.core.ReactiveRedisTemplate
 import org.springframework.data.redis.core.script.RedisScript
 import org.springframework.stereotype.Service
-import java.nio.ByteBuffer
 import java.nio.charset.StandardCharsets
 
 @Service
@@ -27,12 +29,18 @@ class DefaultReidsLuaScriptOpsTemplate :
     override suspend fun loadScript(scriptContent: String): String {
         return withContext(Dispatchers.IO) {
             return@withContext reactiveRedisTemplate.execute { connection: ReactiveRedisConnection ->
-                val scriptingCommands = connection.scriptingCommands()
-                val arr = scriptContent.toByteArray(StandardCharsets.UTF_8)
-                val byteBuffer = ByteBuffer.allocateDirect(arr.size)
-                byteBuffer.put(arr)
-                byteBuffer.flip()
-                scriptingCommands.scriptLoad(byteBuffer)
+                var byteBuf: ByteBuf? = null
+                try {
+                    val arr = scriptContent.toByteArray(StandardCharsets.UTF_8)
+                    byteBuf = ByteBufAllocator.DEFAULT.directBuffer(arr.size)
+                    val scriptingCommands = connection.scriptingCommands()
+                    byteBuf.writeBytes(arr)
+                    scriptingCommands.scriptLoad(byteBuf.nioBuffer())
+                } finally {
+                    byteBuf?.let {
+                        ReferenceCountUtil.release(byteBuf)
+                    }
+                }
             }.awaitLast()
         }
     }
