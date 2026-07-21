@@ -18,5 +18,6 @@ dependencies {
     api(libs.disruptor)
     //    ksp("com.squareup.moshi:moshi-kotlin-codegen")
     api(project(":hubbo-annotations"))
-
+    api(libs.awssdk)
+    api(libs.snakeyaml)
 }
