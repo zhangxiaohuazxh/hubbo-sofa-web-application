@@ -26,14 +26,17 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
+        with:
+          build-root-directory: hubbo-parent
         # 不指定 gradle-version，让 wrapper 自行下载 gradle-wrapper.properties 中指定的版本
         # setup-gradle 仅负责缓存加速，不干预 wrapper 的版本选择
 
       - name: Grant execute permission to gradlew
-        run: chmod +x ./gradlew
+        run: chmod +x ./hubbo-parent/gradlew
 
       - name: Build with Gradle Wrapper
         run: ./gradlew build --no-daemon --stacktrace
+        working-directory: hubbo-parent
         # --no-daemon: CI 环境无需守护进程，避免进程残留
         # --stacktrace: 失败时输出完整堆栈，便于排查
 
