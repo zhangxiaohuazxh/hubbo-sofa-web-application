@@ -3,17 +3,12 @@ package cn.hubbo.utils
 import org.yaml.snakeyaml.Yaml
 import java.io.InputStream
 
-class YamlUtils {
+object YamlUtils {
 
-    companion object {
+    val yaml: Yaml = Yaml()
 
-        @JvmStatic
-        inline fun <reified T> parse(inputstream: InputStream): T {
-            val yaml = Yaml()
-            val res = yaml.load<T>(inputstream)
-            return res as T
-        }
-
-    }
+    @JvmStatic
+    inline fun <reified T> parse(inputStream: InputStream): T =
+        inputStream.use { yaml.load<T>(it) } as T
 
 }
