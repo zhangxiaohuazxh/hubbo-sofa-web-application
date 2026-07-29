@@ -24,6 +24,11 @@ jobs:
           distribution: "temurin"
           cache: "gradle"
 
+      # 仅 CI 环境：替换 Gradle 下载地址为官方源（本地仍用腾讯云镜像）
+      - name: Switch Gradle distribution URL for CI
+        run: |
+          sed -i "s|distributionUrl=.*|distributionUrl=https\\://services.gradle.org/distributions/gradle-9.3.1-bin.zip|" hubbo-parent/gradle/wrapper/gradle-wrapper.properties
+
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
