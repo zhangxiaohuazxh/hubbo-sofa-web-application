@@ -1,7 +1,9 @@
 package cn.hubbo.service.facade.cicd
 
-import cn.hubbo.common.cicd.Project
-import cn.hubbo.service.cicd.IntegrationService
+import cn.hubbo.dal.IntegrationDao
+import cn.hubbo.entity.vo.IterationVO
+import cn.hubbo.service.devops.IntegrationService
+import jakarta.annotation.Resource
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -11,10 +13,28 @@ class IntegrationServiceImpl : IntegrationService {
 
     private val logger: Logger by lazy { LoggerFactory.getLogger(IntegrationServiceImpl::class.java) }
 
-    override fun deploy(project: Project) {
+    @Resource
+    private lateinit var iterationDao: IntegrationDao
+
+
+    override suspend fun continuousIntegration(iteration: IterationVO) {
         logger.info("===================开始执行部署任务===================")
-        logger.info("项目信息 {}", project)
+        logger.info("项目信息 {}", iteration)
+        val projectIteration = iterationDao.findProjectIntegrationInfoByIterationId(iteration.iterationId)
+        logger.info("查询到的迭代信息 {}", projectIteration)
+        val project = iterationDao.findProjectInfoByProjectId(projectIteration!!.projectId)
+        logger.info("查询到的项目信息  {}", project)
+        //  执行阶段任务
+        //  clone
+        //  checkout
+        //   compile
+        //   test
+        //   build
         logger.info("===================部署任务执行完成===================")
+    }
+
+    override suspend fun continuousDelivery() {
+        TODO("Not yet implemented")
     }
 
 

@@ -10,6 +10,11 @@ class NumberUtils {
             return value in 48.toByte()..57.toByte()
         }
 
+        @JvmStatic
+        fun isNumeric(value: Char): Boolean {
+            return value in '0'..'9'
+        }
+
     }
 
 }

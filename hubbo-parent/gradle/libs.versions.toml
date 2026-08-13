@@ -53,6 +53,7 @@ redisson = "4.3.0"
 rocketmq = "2.3.5"
 awssdk = "2.47.5"
 snakeyaml = "2.6"
+commonsExec = "1.6.0"
 
 [libraries]
 guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
@@ -130,6 +131,7 @@ redisson = { group = "org.redisson", name = "redisson", version.ref = "redisson"
 rocketmq = { group = "org.apache.rocketmq", name = "rocketmq-v5-client-spring-boot", version.ref = "rocketmq" }
 awssdk = { group = "software.amazon.awssdk", name = "s3", version.ref = "awssdk" }
 snakeyaml = { group = "org.yaml", name = "snakeyaml", version.ref = "snakeyaml" }
+commons-exec = { group = "org.apache.commons", name = "commons-exec", version.ref = "commonsExec" }
 
 [bundles]
 r2dbc = ["postgresql-r2dbc", "r2dbc-pool", "r2dbc-proxy"]

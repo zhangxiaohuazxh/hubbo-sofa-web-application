@@ -1,6 +1,6 @@
 package cn.hubbo.unit.utils
 
-import cn.hubbo.entity.build.BuildConfig
+import cn.hubbo.entity.devops.ci.BuildConfig
 import cn.hubbo.utils.YamlUtils
 import org.junit.jupiter.api.Test
 import org.slf4j.Logger

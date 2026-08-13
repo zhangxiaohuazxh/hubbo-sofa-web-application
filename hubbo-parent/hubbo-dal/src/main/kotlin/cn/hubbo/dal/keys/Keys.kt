@@ -10,6 +10,8 @@ import cn.hubbo.dal.tables.TDictData
 import cn.hubbo.dal.tables.TMenu
 import cn.hubbo.dal.tables.TMenuPermission
 import cn.hubbo.dal.tables.TPermission
+import cn.hubbo.dal.tables.TProject
+import cn.hubbo.dal.tables.TProjectIteration
 import cn.hubbo.dal.tables.TRole
 import cn.hubbo.dal.tables.TRolePermission
 import cn.hubbo.dal.tables.TUser
@@ -19,6 +21,8 @@ import cn.hubbo.dal.tables.records.TDictDataRecord
 import cn.hubbo.dal.tables.records.TMenuPermissionRecord
 import cn.hubbo.dal.tables.records.TMenuRecord
 import cn.hubbo.dal.tables.records.TPermissionRecord
+import cn.hubbo.dal.tables.records.TProjectIterationRecord
+import cn.hubbo.dal.tables.records.TProjectRecord
 import cn.hubbo.dal.tables.records.TRolePermissionRecord
 import cn.hubbo.dal.tables.records.TRoleRecord
 import cn.hubbo.dal.tables.records.TUserRecord
@@ -41,6 +45,9 @@ val T_MENU_PK: UniqueKey<TMenuRecord> = Internal.createUniqueKey(TMenu.T_MENU, D
 val T_MENU_PERMISSION_PK: UniqueKey<TMenuPermissionRecord> = Internal.createUniqueKey(TMenuPermission.T_MENU_PERMISSION, DSL.name("t_menu_permission_pk"), arrayOf(TMenuPermission.T_MENU_PERMISSION.ID), true)
 val T_PERMISSION_PERMISSION_CODE_KEY: UniqueKey<TPermissionRecord> = Internal.createUniqueKey(TPermission.T_PERMISSION, DSL.name("t_permission_permission_code_key"), arrayOf(TPermission.T_PERMISSION.PERMISSION_CODE), true)
 val T_PERMISSION_PK: UniqueKey<TPermissionRecord> = Internal.createUniqueKey(TPermission.T_PERMISSION, DSL.name("t_permission_pk"), arrayOf(TPermission.T_PERMISSION.PERMISSION_ID), true)
+val T_PROJECT_PKEY: UniqueKey<TProjectRecord> = Internal.createUniqueKey(TProject.T_PROJECT, DSL.name("t_project_pkey"), arrayOf(TProject.T_PROJECT.PROJECT_ID), true)
+val T_PROJECT_PROJECT_NAME_KEY: UniqueKey<TProjectRecord> = Internal.createUniqueKey(TProject.T_PROJECT, DSL.name("t_project_project_name_key"), arrayOf(TProject.T_PROJECT.PROJECT_NAME), true)
+val T_PROJECT_ITERATION_PKEY: UniqueKey<TProjectIterationRecord> = Internal.createUniqueKey(TProjectIteration.T_PROJECT_ITERATION, DSL.name("t_project_iteration_pkey"), arrayOf(TProjectIteration.T_PROJECT_ITERATION.ITERATION_ID), true)
 val T_ROLE_PK: UniqueKey<TRoleRecord> = Internal.createUniqueKey(TRole.T_ROLE, DSL.name("t_role_pk"), arrayOf(TRole.T_ROLE.ROLE_ID), true)
 val T_ROLE_PERMISSION_PK: UniqueKey<TRolePermissionRecord> = Internal.createUniqueKey(TRolePermission.T_ROLE_PERMISSION, DSL.name("t_role_permission_pk"), arrayOf(TRolePermission.T_ROLE_PERMISSION.ID), true)
 val T_ROLE_PERMISSION_UK: UniqueKey<TRolePermissionRecord> = Internal.createUniqueKey(TRolePermission.T_ROLE_PERMISSION, DSL.name("t_role_permission_uk"), arrayOf(TRolePermission.T_ROLE_PERMISSION.ROLE_ID, TRolePermission.T_ROLE_PERMISSION.PERMISSION_ID, TRolePermission.T_ROLE_PERMISSION.ENABLED), true)

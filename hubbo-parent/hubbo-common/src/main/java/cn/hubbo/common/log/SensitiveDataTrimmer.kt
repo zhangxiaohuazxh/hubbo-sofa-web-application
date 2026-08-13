@@ -7,14 +7,10 @@ import org.apache.logging.log4j.core.LogEvent
 import org.apache.logging.log4j.core.config.plugins.Plugin
 import org.apache.logging.log4j.core.pattern.ConverterKeys
 import org.apache.logging.log4j.core.pattern.LogEventPatternConverter
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 @Plugin(name = "sensitiveDataTrimmer", category = "Converter")
 @ConverterKeys("sdt")
 class SensitiveDataTrimmer : LogEventPatternConverter {
-
-    private val logger: Logger by lazy { LoggerFactory.getLogger(SensitiveDataTrimmer::class.java) }
 
     constructor(options: Array<String>?) : super("trim", "trim")
 
@@ -35,7 +31,7 @@ class SensitiveDataTrimmer : LogEventPatternConverter {
         val result = Splitter.on(" ").splitToStream(message)
             .map { deSensitization(it) }
             .toList()
-            .joinToString("")
+            .joinToString(" ")
         buffer.append(result)
     }
 

@@ -5,12 +5,10 @@ import cn.hubbo.dal.tables.pojos.TUser
 import cn.hubbo.dal.tables.references.T_ROLE
 import cn.hubbo.dal.tables.references.T_USER_ROLE
 import cn.hubbo.entity.auth.SystemUserInfo
-import com.google.common.collect.ImmutableList
 import kotlinx.coroutines.reactor.awaitSingle
 import kotlinx.coroutines.reactor.awaitSingleOrNull
 import org.jooq.DSLContext
 import org.jooq.Records
-import org.jooq.impl.DSL
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Repository
@@ -98,8 +96,8 @@ class UserDao(val dsl: DSLContext) {
      */
     // 全量查询所有的用户和角色信息
     suspend fun findUserRoleList() {
-//        dsl.select(T_USER.USER_ID, T_USER.USER_NAME, DSL.multiset())
-//            .from(T_USER)
+        //        dsl.select(T_USER.USER_ID, T_USER.USER_NAME, DSL.multiset())
+        //            .from(T_USER)
     }
 
 

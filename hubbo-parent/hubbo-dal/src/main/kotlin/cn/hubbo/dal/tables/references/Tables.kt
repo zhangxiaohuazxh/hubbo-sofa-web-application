@@ -10,6 +10,8 @@ import cn.hubbo.dal.tables.TDictData
 import cn.hubbo.dal.tables.TMenu
 import cn.hubbo.dal.tables.TMenuPermission
 import cn.hubbo.dal.tables.TPermission
+import cn.hubbo.dal.tables.TProject
+import cn.hubbo.dal.tables.TProjectIteration
 import cn.hubbo.dal.tables.TRole
 import cn.hubbo.dal.tables.TRolePermission
 import cn.hubbo.dal.tables.TUser
@@ -41,6 +43,16 @@ val T_MENU_PERMISSION: TMenuPermission = TMenuPermission.T_MENU_PERMISSION
  * 权限信息表
  */
 val T_PERMISSION: TPermission = TPermission.T_PERMISSION
+
+/**
+ * 项目信息表
+ */
+val T_PROJECT: TProject = TProject.T_PROJECT
+
+/**
+ * 项目迭代记录表
+ */
+val T_PROJECT_ITERATION: TProjectIteration = TProjectIteration.T_PROJECT_ITERATION
 
 /**
  * 角色基础信息表

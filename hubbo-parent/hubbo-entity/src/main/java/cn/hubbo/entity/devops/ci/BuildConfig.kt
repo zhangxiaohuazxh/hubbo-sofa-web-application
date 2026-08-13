@@ -1,4 +1,4 @@
-package cn.hubbo.entity.build
+package cn.hubbo.entity.devops.ci
 
 class BuildConfig {
 

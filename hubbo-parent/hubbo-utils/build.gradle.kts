@@ -20,4 +20,5 @@ dependencies {
     api(project(":hubbo-annotations"))
     api(libs.awssdk)
     api(libs.snakeyaml)
+    api(libs.commons.exec)
 }

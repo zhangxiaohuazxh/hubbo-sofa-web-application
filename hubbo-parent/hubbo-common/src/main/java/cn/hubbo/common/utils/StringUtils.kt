@@ -40,6 +40,16 @@ class StringUtils {
         }
 
         @JvmStatic
+        fun isNumeric(chars: CharArray, start: Int = 0, end: Int = chars.size): Boolean {
+            for (index in start until end) {
+                if (!NumberUtils.isNumeric(chars[index])) {
+                    return false
+                }
+            }
+            return true
+        }
+
+        @JvmStatic
         fun isAddressString(value: String): Boolean {
             val chars = value.toCharArray()
             var score = 0

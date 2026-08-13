@@ -9,6 +9,8 @@ import cn.hubbo.dal.tables.TDictData
 import cn.hubbo.dal.tables.TMenu
 import cn.hubbo.dal.tables.TMenuPermission
 import cn.hubbo.dal.tables.TPermission
+import cn.hubbo.dal.tables.TProject
+import cn.hubbo.dal.tables.TProjectIteration
 import cn.hubbo.dal.tables.TRole
 import cn.hubbo.dal.tables.TRolePermission
 import cn.hubbo.dal.tables.TUser
@@ -70,6 +72,16 @@ open class Public : SchemaImpl(DSL.name("public"), DefaultCatalog.DEFAULT_CATALO
     val T_PERMISSION: TPermission get() = TPermission.T_PERMISSION
 
     /**
+     * 项目信息表
+     */
+    val T_PROJECT: TProject get() = TProject.T_PROJECT
+
+    /**
+     * 项目迭代记录表
+     */
+    val T_PROJECT_ITERATION: TProjectIteration get() = TProjectIteration.T_PROJECT_ITERATION
+
+    /**
      * 角色基础信息表
      */
     val T_ROLE: TRole get() = TRole.T_ROLE
@@ -97,6 +109,8 @@ open class Public : SchemaImpl(DSL.name("public"), DefaultCatalog.DEFAULT_CATALO
         TMenu.T_MENU,
         TMenuPermission.T_MENU_PERMISSION,
         TPermission.T_PERMISSION,
+        TProject.T_PROJECT,
+        TProjectIteration.T_PROJECT_ITERATION,
         TRole.T_ROLE,
         TRolePermission.T_ROLE_PERMISSION,
         TUser.T_USER,
