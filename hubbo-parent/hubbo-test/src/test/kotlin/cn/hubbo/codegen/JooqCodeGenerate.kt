@@ -51,7 +51,9 @@ class JooqCodeGenerate {
             "t_menu_permission",
             "t_role_permission",
             "t_dict_data",
-            "t_button_permission"
+            "t_button_permission",
+            "t_project",
+            "t_project_iteration"
         )
 
         private val excludeTables = null

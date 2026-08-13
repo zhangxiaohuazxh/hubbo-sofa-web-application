@@ -1,11 +1,10 @@
-build:
-  name: xxx
-  steps:
-    - name: workspace
-      run: rm -rf /xxx/xxx & mkdir -p /xxx/xxx
-    - name: clone
-      run: git clone https://github.com/zhangxiaohuazxh/hubbo-devops.git
-    - name: test
-      run: mvn test
-    - name: build
-      run: mvn clean build package
+name: xxx
+steps:
+  - name: workspace
+    run: rm -rf /xxx/xxx & mkdir -p /xxx/xxx
+  - name: clone
+    run: git clone https://github.com/zhangxiaohuazxh/hubbo-devops.git
+  - name: test
+    run: mvn test
+  - name: build
+    run: mvn clean build package
