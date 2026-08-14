@@ -3,6 +3,7 @@ package cn.hubbo.service.facade.cicd
 import cn.hubbo.dal.IntegrationDao
 import cn.hubbo.entity.vo.IterationVO
 import cn.hubbo.service.devops.IntegrationService
+import cn.hubbo.utils.CommandLineUtils
 import jakarta.annotation.Resource
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -30,6 +31,10 @@ class IntegrationServiceImpl : IntegrationService {
         //   compile
         //   test
         //   build
+        val command =
+            "rm -rf ${project!!.projectName} && git clone ${project!!.repositoryUrl} && cd ${project.projectName}  && git checkout ${projectIteration.currentBranch} && mvn clean compile package"
+        val res = CommandLineUtils.exec(command, timeoutMillis = 60_000L)
+        logger.info("执行结果 {}", res)
         logger.info("===================部署任务执行完成===================")
     }
 

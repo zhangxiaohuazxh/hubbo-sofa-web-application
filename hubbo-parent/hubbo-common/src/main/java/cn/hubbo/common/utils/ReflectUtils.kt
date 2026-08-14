@@ -1,12 +1,16 @@
 package cn.hubbo.common.utils
 
-import sun.misc.Unsafe
+// 注意：不能 import sun.misc.Unsafe —— kapt 会把源码里的 import 原样复制进生成的 Java 存根，
+// 而 JDK 25 上 javac 对 sun.misc.Unsafe 的"内部专用 API"警告是强制警告（无法用 -nowarn /
+// -Xlint / @SuppressWarnings 抑制），即使只是未使用的 import 也会触发。
+// 因此这里不 import，只在方法体内用全限定名 sun.misc.Unsafe（stub 不包含方法体，不会产生警告）。
 import java.lang.invoke.MethodHandles
 import java.lang.ref.SoftReference
 import java.lang.reflect.Field
 import java.lang.reflect.Method
 import java.util.concurrent.ConcurrentHashMap
 
+@Suppress("DEPRECATION", "DEPRECATION_ERROR", "UNCHECKED_CAST")
 class ReflectUtils {
 
     companion object {
@@ -22,10 +26,14 @@ class ReflectUtils {
             ConcurrentHashMap(64)
         }
 
-        private val unsafe: Unsafe by lazy {
-            val declaredField = Unsafe::class.java.getDeclaredField("theUnsafe")
+        // 注意：这里故意声明为 Any 而不是 Unsafe —— kapt 会为 Kotlin 声明生成 Java 存根并交给 javac 编译，
+        // 而 JDK 25 上 javac 对 sun.misc.Unsafe 的"内部专用 API"警告是强制警告，无法用 -nowarn /
+        // -Xlint / @SuppressWarnings 抑制。把 Unsafe 只留在方法体内（stub 不包含方法体），
+        // 生成的存根就不会引用 sun.misc.Unsafe，也就不会产生这条每次编译都出现的警告。
+        private val unsafe: Any by lazy {
+            val declaredField = sun.misc.Unsafe::class.java.getDeclaredField("theUnsafe")
             declaredField.trySetAccessible()
-            declaredField.get(null) as Unsafe
+            declaredField.get(null)!!
         }
 
         @JvmStatic
@@ -34,7 +42,7 @@ class ReflectUtils {
         }
 
         @JvmStatic
-        fun getUnsafeInstance(): Unsafe {
+        fun getUnsafeInstance(): Any {
             return unsafe
         }
 
@@ -49,18 +57,18 @@ class ReflectUtils {
                 return objectFieldOffsetCache[key]!!
             }
             val field = getObjectField(kClass, fieldName)
-            val offset = unsafe.objectFieldOffset(field)
+            val offset = (unsafe as sun.misc.Unsafe).objectFieldOffset(field)
             objectFieldOffsetCache[key] = offset
             return offset
         }
 
         fun <T : Any> getObjectFieldValue(kClass: Class<T>, obj: Any, fieldName: String): Any {
             val fieldOffset = getObjectFieldOffset(kClass, fieldName)
-            return unsafe.getObject(obj, fieldOffset)
+            return (unsafe as sun.misc.Unsafe).getObject(obj, fieldOffset)
         }
 
         fun <T : Any> getObjectFieldValue(obj: Any, offset: Long): T {
-            return unsafe.getObject(obj, offset) as T
+            return (unsafe as sun.misc.Unsafe).getObject(obj, offset) as T
         }
 
 
