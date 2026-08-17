@@ -5,6 +5,7 @@ import org.apache.commons.io.filefilter.NameFileFilter
 import org.apache.commons.io.filefilter.TrueFileFilter
 import org.apache.commons.lang3.StringUtils
 import java.io.File
+import java.util.jar.JarFile
 
 object FileUtils {
 
@@ -32,6 +33,20 @@ object FileUtils {
         val root = DirNode(directory.name)
         markProjectStructureRelativePath(directory, type).forEach(root::add)
         return root
+    }
+
+    fun isExecutableJar(file: File): Boolean {
+        if (!file.exists() || file.isDirectory) {
+            return false
+        }
+        runCatching {
+            JarFile(file).use {
+                val manifest = it.manifest ?: return false
+                val attribute = manifest.mainAttributes.getValue("Main-Class")
+                return attribute.trim().isNotBlank()
+            }
+        }
+        return false
     }
 
 }

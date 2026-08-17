@@ -1,4 +1,4 @@
-package cn.hubbo.service.facade.cicd
+package cn.hubbo.service.facade.devops
 
 import cn.hubbo.dal.IntegrationDao
 import cn.hubbo.entity.vo.IterationVO

@@ -21,4 +21,5 @@ dependencies {
     api(libs.awssdk)
     api(libs.snakeyaml)
     api(libs.commons.exec)
+    api(libs.jbang)
 }

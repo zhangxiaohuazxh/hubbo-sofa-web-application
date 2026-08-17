@@ -32,6 +32,7 @@ object CommandLineUtils {
         consumer: Consumer<Executor> = {},
         charset: Charset = StandardCharsets.UTF_8,
         timeoutMillis: Long = 30_000L,
+        workingDirectory: File = FileUtils.getTempDirectory()
     ): CommandExecutedResult {
         // 统一通过 shell 执行,以支持管道、&&、cd 等 shell 语法。
         // 不能直接 CommandLine.parse(command) 按空白拆分参数: 它不解释 &&、|、cd 等语法,
@@ -47,7 +48,7 @@ object CommandLineUtils {
         val errStream = ByteArrayOutputStream()
         val streamHandler = PumpStreamHandler(outputStream, errStream)
         defaultExecutor.streamHandler = streamHandler
-        defaultExecutor.workingDirectory = FileUtils.getTempDirectory()
+        defaultExecutor.workingDirectory = workingDirectory
         consumer.accept(defaultExecutor)
         // 超时保护: 某些命令(如 ping 不带 -c)会永不退出,超时后强制杀掉子进程,避免调用方永久卡死
         with(Dispatchers.IO) {

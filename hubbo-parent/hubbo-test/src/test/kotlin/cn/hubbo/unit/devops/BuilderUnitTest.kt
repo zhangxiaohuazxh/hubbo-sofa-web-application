@@ -1,4 +1,4 @@
-package cn.hubbo.unit.cicd
+package cn.hubbo.unit.devops
 
 import cn.hubbo.common.cicd.Builder
 import cn.hubbo.common.cicd.Iteration
