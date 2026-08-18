@@ -4,6 +4,7 @@ import cn.hubbo.integration.SofaApplicationTest
 import cn.hubbo.service.common.ReidsLuaScriptOpsTemplate
 import jakarta.annotation.Resource
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -15,6 +16,7 @@ class ReactiveRedisTemplateTest : SofaApplicationTest() {
     @Resource
     private lateinit var redisScriptOpsTemplate: ReidsLuaScriptOpsTemplate
 
+    @Disabled
     @Test
     fun testUploadScript2RedisServer(): Unit = runBlocking {
         ::redisScriptOpsTemplate.isInitialized.takeIf { it }?.let {

@@ -196,13 +196,13 @@ class JavaCodeUtils {
                 )
             }
             // 处理返回值类型
-            declaration.returnType?.let { returnType ->
+            declaration.returnType.let { returnType ->
                 methodBuilder.returns(TypeName.get(returnType))
             } ?: run {
                 methodBuilder.returns(TypeName.VOID)
             }
             // 根据返回类型添加默认的函数体
-            val returnTypeString = declaration.returnType?.toString() ?: "void"
+            val returnTypeString = declaration.returnType.toString()
             if (returnTypeString == "void" || returnTypeString.endsWith(".Void")) {
                 methodBuilder.addCode("")
             } else {

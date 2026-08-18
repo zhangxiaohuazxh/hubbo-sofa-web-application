@@ -1,5 +1,6 @@
 package cn.hubbo.utils
 
+import dev.jbang.jash.Jash
 import kotlinx.coroutines.Dispatchers
 import org.apache.commons.exec.CommandLine
 import org.apache.commons.exec.DefaultExecutor
@@ -14,9 +15,14 @@ import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import java.time.Duration
 import java.util.function.Consumer
+import dev.jbang.jash.Jash.*
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import java.io.OutputStream
 
 object CommandLineUtils {
 
+    private val logger: Logger by lazy { LoggerFactory.getLogger(CommandLineUtils::class.java) }
 
     /**
      * bash 执行指定的命令
@@ -59,8 +65,7 @@ object CommandLineUtils {
                 when {
                     watchdog.killedProcess() -> CommandExecutedResult(
                         -2,
-                        errStream.toString(charset).ifBlank { "命令执行超时(${timeoutMillis}ms),已强制终止: $command" }
-                    )
+                        errStream.toString(charset).ifBlank { "命令执行超时(${timeoutMillis}ms),已强制终止: $command" })
 
                     !defaultExecutor.isFailure(code) -> CommandExecutedResult(0, outputStream.toString(charset))
                     else -> CommandExecutedResult(-1, errStream.toString(charset))
@@ -68,14 +73,37 @@ object CommandLineUtils {
             } catch (e: ExecuteException) {
                 val timedOut = watchdog.killedProcess()
                 CommandExecutedResult(
-                    if (timedOut) -2 else -1,
-                    errStream.toString(charset).ifBlank { "命令执行失败: $command" }
-                )
+                    if (timedOut) -2 else -1, errStream.toString(charset).ifBlank { "命令执行失败: $command" })
             }
         }
+    }
+
+    suspend fun execute(
+        command: String,
+        outputStream: OutputStream = System.out,
+        timeout: Duration = Duration.ofSeconds(30),
+        workingDirectory: File = FileUtils.getTempDirectory()
+    ): CommandExecutedResult {
+        val res = runCatching {
+            val directory = "cd ${workingDirectory.path}"
+            val command = shell("$directory && $command").withAnyExitCode().withTimeout(timeout)
+            command.streamBytes().use { stream ->
+                stream.forEachOrdered { outputStream.write(it) }
+                outputStream.flush()
+            }
+            if (command.isSuccessful) CommandExecutedResult(0, null)
+            else CommandExecutedResult(-1, null)
+        }
+        return res.fold(
+            onSuccess = { it },
+            onFailure = {
+                logger.info("任务执行出错", it)
+                CommandExecutedResult(-1, it.message)
+            }
+        )
     }
 
 
 }
 
-data class CommandExecutedResult(val exitCode: Int, val output: String)
+data class CommandExecutedResult(val exitCode: Int, val output: String?)

@@ -32,7 +32,7 @@ class IntegrationServiceImpl : IntegrationService {
         //   test
         //   build
         val command =
-            "rm -rf ${project!!.projectName} && git clone ${project!!.repositoryUrl} && cd ${project.projectName}  && git checkout ${projectIteration.currentBranch} && mvn clean compile package"
+            "rm -rf ${project!!.projectName} && git clone ${project.repositoryUrl} && cd ${project.projectName}  && git checkout ${projectIteration.currentBranch} && mvn clean compile package"
         val res = CommandLineUtils.exec(command, timeoutMillis = 60_000L)
         logger.info("执行结果 {}", res)
         logger.info("===================部署任务执行完成===================")

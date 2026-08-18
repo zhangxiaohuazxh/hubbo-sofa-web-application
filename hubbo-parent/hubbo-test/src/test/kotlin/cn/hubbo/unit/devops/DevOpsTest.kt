@@ -1,5 +1,6 @@
 package cn.hubbo.unit.devops
 
+import cn.hubbo.utils.devops.DevOpsConfiguration
 import cn.hubbo.utils.devops.LocalStorageInfo
 import cn.hubbo.utils.devops.impl.JavaDevOpsImpl
 import cn.hubbo.utils.devops.impl.RustDevOpsImpl
@@ -16,22 +17,18 @@ object JavaDevOpsUnitTest {
 
     @Test
     fun testClone(): Unit = runBlocking {
-        val ops = JavaDevOpsImpl()
-        val localStorageInfo = ops.clone("https://gitee.com/xuxueli0323/xxl-job.git")
+        val ops = JavaDevOpsImpl(DevOpsConfiguration("https://gitee.com/xuxueli0323/xxl-job.git"))
+        val localStorageInfo = ops.clone()
         logger.info("项目存储信息 {}", localStorageInfo)
-        ops.compile(localStorageInfo)
-        ops.build(localStorageInfo)
+        ops.compile()
+        ops.build()
     }
 
     @Test
     fun testCaptureFinalProduct(): Unit = runBlocking {
-        val ops = JavaDevOpsImpl()
-        val files = ops.captureProduct(
-            LocalStorageInfo(
-                url = "https://gitee.com/xuxueli0323/xxl-job.git",
-                path = File(FileUtils.getTempDirectory(), "xxl-job")
-            )
-        )
+        val devOpsConfiguration = DevOpsConfiguration("https://gitee.com/xuxueli0323/xxl-job.git")
+        val ops = JavaDevOpsImpl(devOpsConfiguration)
+        val files = ops.captureProduct()
         for (file in files) {
             logger.info("构建的产物 {}", file)
         }

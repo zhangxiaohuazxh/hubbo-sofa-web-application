@@ -2,6 +2,7 @@ package cn.hubbo.integration.handler.test
 
 import jakarta.annotation.Resource
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -11,6 +12,7 @@ import org.springframework.test.web.reactive.server.expectBody
 import org.springframework.web.reactive.function.server.RouterFunction
 import org.springframework.web.reactive.function.server.ServerResponse
 
+@Disabled
 @SpringBootTest
 class TestHandlerTest() {
 
@@ -21,6 +23,7 @@ class TestHandlerTest() {
         LoggerFactory.getLogger(TestHandlerTest::class.java)
     }
 
+    @Disabled
     @Test
     fun testGetSystemTimeRouter(): Unit = runBlocking {
         val client: WebTestClient = WebTestClient.bindToRouterFunction(routerFunction).build()

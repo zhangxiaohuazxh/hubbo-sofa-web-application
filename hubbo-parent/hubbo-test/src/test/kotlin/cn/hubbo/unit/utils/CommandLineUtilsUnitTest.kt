@@ -2,6 +2,7 @@ package cn.hubbo.unit.utils
 
 import cn.hubbo.utils.CommandExecutedResult
 import cn.hubbo.utils.CommandLineUtils
+import dev.jbang.jash.Jash
 import kotlinx.coroutines.runBlocking
 import org.apache.commons.io.FileUtils
 import org.junit.jupiter.api.Test
@@ -9,6 +10,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.nio.charset.Charset
+
 
 object CommandLineUtilsUnitTest {
 
@@ -44,10 +46,19 @@ object CommandLineUtilsUnitTest {
         logger.info("默认字符集 {}", Charset.defaultCharset())
         logger.info("默认的临时目录 {}", FileUtils.getTempDirectoryPath())
         val res =
-            CommandLineUtils.exec("rm -rf xxl-job && git clone https://gitee.com/xuxueli0323/xxl-job.git && cd xxl-job && mvn clean compile package", timeoutMillis = 60_000L)
+            CommandLineUtils.exec(
+                "rm -rf xxl-job && git clone https://gitee.com/xuxueli0323/xxl-job.git && cd xxl-job && mvn clean compile package",
+                timeoutMillis = 60_000L
+            )
         if (res.exitCode != 0) {
             logger.info("任务执行失败 {}", res.output)
         }
+    }
+
+    @Test
+    fun testJashExecute(): Unit = runBlocking {
+        val res = CommandLineUtils.execute("pwd")
+        logger.run { info("执行结果 {}", res) }
     }
 
 }
