@@ -22,4 +22,6 @@ dependencies {
     api(libs.snakeyaml)
     api(libs.commons.exec)
     api(libs.jbang)
+    api(libs.jgit)
+    api(libs.jgit.ssh.apache)
 }

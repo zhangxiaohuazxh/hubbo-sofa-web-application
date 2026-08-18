@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     testImplementation(project(":hubbo-boot"))
+    testImplementation(libs.jgit)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.kotlin.test)
     testImplementation("org.springframework.boot:spring-boot-starter-test")

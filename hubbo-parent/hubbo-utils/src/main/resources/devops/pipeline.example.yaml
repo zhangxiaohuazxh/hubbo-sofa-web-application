@@ -1,0 +1,137 @@
+# DevOps 流水线声明式配置示例
+# 与 cn.hubbo.utils.devops 接口体系一一对应：
+#   source    -> SourceManager / CloneOptions
+#   stages    -> PipelineDefinition / StageDefinition（编排器驱动各能力阶段）
+#   hooks     -> HookRegistry / Hook
+#   gate      -> QualityGate / GateConfig
+#   notify    -> Notifier / NotificationEvent
+#   report    -> Reporter / ReportData / ReportFormat
+
+apiVersion: devops.hubbo.cn/v1
+kind: Pipeline
+metadata:
+  name: hubbo-service-cicd
+  environment: DEV
+
+spec:
+  globalTimeout: 2h
+
+  # ---------- 代码克隆 ----------
+  source:
+    clone:
+      url: git@github.com:org/hubbo-service.git
+      vcs: GIT
+      revision:
+        type: BRANCH
+        name: main
+      auth:
+        type: SSH_KEY
+        privateKeyPath: /secrets/deploy_key
+      proxy:
+        host: proxy.corp.local
+        port: 8080
+      depth: 1
+
+  # ---------- 阶段编排 ----------
+  stages:
+    - name: syntax-check
+      stage: SYNTAX_CHECK
+      options:
+        language: KOTLIN
+        paths: [ "src" ]
+
+    - name: lint
+      stage: LINT
+      dependsOn: [ "syntax-check" ]
+      options:
+        tool: detekt
+        severityThreshold: MEDIUM
+        ruleSet: config/detekt.yml
+
+    - name: test
+      stage: TEST
+      dependsOn: [ "lint" ]
+      options:
+        type: UNIT
+        coverageEnabled: true
+        coverageThreshold: 0.80
+        parallelism: 4
+
+    - name: analyze
+      stage: STATIC_ANALYSIS
+      dependsOn: [ "test" ]
+      options:
+        sastEnabled: true
+        dependencyScanEnabled: true
+
+    - name: build
+      stage: BUILD
+      dependsOn: [ "analyze" ]
+      options:
+        tool: GRADLE
+        artifactType: JAR
+        parameters:
+          "-Pprofile": "prod"
+
+    - name: quality-gate
+      stage: QUALITY_GATE
+      dependsOn: [ "build" ]
+      options:
+        rules:
+          - dimension: COVERAGE
+            operator: ">="
+            threshold: 0.80
+            action: BLOCK
+          - dimension: LINT_ERRORS
+            operator: "=="
+            threshold: 0
+          - dimension: CRITICAL_VULNS
+            operator: "<="
+            threshold: 0
+          - dimension: TEST_FAILURES
+            operator: "=="
+            threshold: 0
+
+    - name: deploy
+      stage: DEPLOY
+      dependsOn: [ "quality-gate" ]
+      condition: "branch == 'main'"     # 仅 main 分支触发部署
+      retries: 1
+      timeout: 30m
+      options:
+        strategy: CANARY
+        environment: DEV
+        canary:
+          initialWeight: 10
+          steps: 5
+          stepInterval: 1m
+        healthCheck:
+          endpoint: /healthz
+          expectedStatus: 200
+          retries: 3
+
+  # ---------- 钩子（阶段前后执行自定义逻辑） ----------
+  hooks:
+    beforeCompile:
+      - name: install-toolchain
+        command: "make toolchain"
+    beforeDeploy:
+      - name: predeploy-db-migration
+        command: "flyway migrate"
+    afterDeploy:
+      - name: smoke-test
+        command: "curl -sf http://svc.local/healthz"
+
+  # ---------- 通知 ----------
+  notifications:
+    - channel: SLACK
+      on: [ "SUCCEEDED", "FAILED" ]
+      recipients: [ "#ci-cd" ]
+    - channel: EMAIL
+      on: [ "FAILED" ]
+      recipients: [ "dev@hubbo.cn" ]
+
+  # ---------- 报告 ----------
+  reporting:
+    formats: [ "JSON", "HTML", "JUNIT_XML" ]
+    outputDir: "reports"
