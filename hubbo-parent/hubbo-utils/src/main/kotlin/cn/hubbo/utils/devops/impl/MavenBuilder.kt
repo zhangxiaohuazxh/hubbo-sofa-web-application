@@ -27,7 +27,7 @@ class MavenBuilder(
     override val supportedTools: Set<BuildTool> = setOf(BuildTool.MAVEN)
 
     override suspend fun build(ctx: PipelineContext, options: BuildOptions): BuildResult {
-        val result = CommandLineUtils.execute("mvn package -B -e", workingDirectory = projectDirectory)
+        val result = CommandLineUtils.execute("mvn clean compile package -B -e -U", workingDirectory = projectDirectory)
         if (result.exitCode != 0) {
             throw DevOpsError.recoverable(ErrorCode.BUILD_FAILED, Stage.BUILD, result.output ?: "mvn package failed")
         }

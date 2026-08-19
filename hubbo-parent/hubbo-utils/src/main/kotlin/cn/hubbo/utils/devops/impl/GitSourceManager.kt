@@ -83,6 +83,7 @@ open class GitSourceManager(
     override suspend fun clone(ctx: PipelineContext, options: CloneOptions): CheckoutResult = ctx.trace("git.clone") {
         validateVcs(options)
         val workspace = resolveWorkspace(options, ctx)
+        clean(ctx, workspace)
         ensureWorkspaceAvailable(workspace)
         logger.info(
             "git clone {} -> {} (revision={})",
@@ -403,7 +404,7 @@ open class GitSourceManager(
             .map { it.name.removePrefix("refs/remotes/origin/") }
             .filter { it.isNotBlank() && !it.equals("HEAD", ignoreCase = true) }
             .distinct()
-        return branches.singleOrNull() ?: "master"
+        return branches.singleOrNull() ?: "main"
     }
 
     /** 检出修订版本：分支建本地跟踪分支，标签/提交为分离 HEAD。 */

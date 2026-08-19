@@ -4,9 +4,16 @@ import cn.hubbo.common.cicd.Builder
 import cn.hubbo.common.cicd.Iteration
 import cn.hubbo.common.cicd.IterationStatus
 import cn.hubbo.common.cicd.Project
+import cn.hubbo.utils.devops.config.BuildOptions
+import cn.hubbo.utils.devops.config.BuildTool
+import cn.hubbo.utils.devops.core.PipelineContexts
+import cn.hubbo.utils.devops.core.model.ArtifactType
+import cn.hubbo.utils.devops.impl.MavenBuilder
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.io.File
 import java.time.LocalDateTime
 
 class BuilderUnitTest {
@@ -64,6 +71,15 @@ class BuilderUnitTest {
         simpleBuilder.run()
         val enhanceSimpleBuilder = EnhanceSimpleBuilder(iteration, simpleBuilder)
         enhanceSimpleBuilder.run()
+    }
+
+    @Test
+    fun testMavenBuilder(): Unit = runBlocking {
+        val pipelineContext = PipelineContexts.default()
+        val mavenBuilder = MavenBuilder(File("C:\\Users\\33233\\AppData\\Local\\Temp\\xxl-job"))
+        val result =
+            mavenBuilder.build(pipelineContext, BuildOptions(tool = BuildTool.MAVEN, artifactType = ArtifactType.JAR))
+        logger.info("执行结果 {}", result)
     }
 
 

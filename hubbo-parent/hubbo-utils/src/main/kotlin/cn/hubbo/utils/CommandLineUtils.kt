@@ -2,23 +2,17 @@ package cn.hubbo.utils
 
 import dev.jbang.jash.Jash
 import kotlinx.coroutines.Dispatchers
-import org.apache.commons.exec.CommandLine
-import org.apache.commons.exec.DefaultExecutor
-import org.apache.commons.exec.ExecuteException
-import org.apache.commons.exec.ExecuteWatchdog
-import org.apache.commons.exec.Executor
-import org.apache.commons.exec.PumpStreamHandler
+import org.apache.commons.exec.*
 import org.apache.commons.io.FileUtils
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.OutputStream
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import java.time.Duration
 import java.util.function.Consumer
-import dev.jbang.jash.Jash.*
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-import java.io.OutputStream
 
 object CommandLineUtils {
 
@@ -84,23 +78,45 @@ object CommandLineUtils {
         timeout: Duration = Duration.ofSeconds(30),
         workingDirectory: File = FileUtils.getTempDirectory()
     ): CommandExecutedResult {
-        val res = runCatching {
-            val directory = "cd ${workingDirectory.path}"
-            val command = shell("$directory && $command").withAnyExitCode().withTimeout(timeout)
-            command.streamBytes().use { stream ->
+        return runCatching {
+            // 用 Jash 的 workPath 原生设置工作目录, 彻底避免把 cd 拼进命令带来的问题:
+            // bash 下 Windows 反斜杠路径会被当作转义字符吞掉(cd C:\Users\... 变 cd C:Users...),
+            // cmd 下跨盘符 cd 需要 /d 且对引号敏感。
+            val (shellBin, shellArg) = resolveShell()
+            val jash = Jash.builder(shellBin, shellArg, command)
+                .workPath(workingDirectory.toPath())
+                .start()
+                .withTimeout(timeout)
+            // 进程输出流只能消费一次: join() 或在消费后读取 exitCode 都会重新打开已被关闭的流,
+            // 触发 IOException("Stream closed")。因此这里只消费一次流, 由 Jash 在流结束时
+            // 自行判定退出码——非 0 抛 ProcessException, 超时抛 ProcessTimeoutException。
+            jash.streamBytes().use { stream ->
                 stream.forEachOrdered { outputStream.write(it) }
                 outputStream.flush()
             }
-            if (command.isSuccessful) CommandExecutedResult(0, null)
-            else CommandExecutedResult(-1, null)
-        }
-        return res.fold(
+            CommandExecutedResult(0, null)
+        }.fold(
             onSuccess = { it },
             onFailure = {
                 logger.info("任务执行出错", it)
                 CommandExecutedResult(-1, it.message)
             }
         )
+    }
+
+    /** 复刻 jash 的 shell 探测($SHELL 优先, Windows 回退 ComSpec), 保证与 shell() 行为一致。 */
+    private fun resolveShell(): Pair<String, String> {
+        System.getenv("SHELL")?.takeIf { it.isNotBlank() }?.let { return it to "-c" }
+        if (System.getProperty("os.name").contains("Windows")) {
+            System.getenv("ComSpec")?.takeIf { it.isNotBlank() }?.let { return it to "/C" }
+            return "cmd.exe" to "/C"
+        }
+        val os = System.getProperty("os.name").lowercase()
+        return when {
+            os.contains("mac") -> "/bin/zsh" to "-c"
+            os.contains("nux") || os.contains("nix") -> "/bin/bash" to "-c"
+            else -> "/bin/sh" to "-c"
+        }
     }
 
 

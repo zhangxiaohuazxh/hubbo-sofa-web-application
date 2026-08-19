@@ -1,6 +1,7 @@
 package cn.hubbo.unit.devops
 
 import cn.hubbo.utils.devops.config.CloneOptions
+import cn.hubbo.utils.devops.config.RevisionSpec
 import cn.hubbo.utils.devops.core.PipelineContexts
 import cn.hubbo.utils.devops.impl.GitSourceManager
 import kotlinx.coroutines.runBlocking
@@ -19,7 +20,7 @@ object SourceManagerUnitTest {
         val pipelineContext = PipelineContexts.default()
         val result = sourceManager.clone(
             pipelineContext,
-            CloneOptions("https://gitee.com/xuxueli0323/xxl-job.git", refspec = "master")
+            CloneOptions("https://gitee.com/xuxueli0323/xxl-job.git", revision = RevisionSpec.Branch("master"))
         )
         logger.info("clone result {}", result)
     }
