@@ -28,6 +28,8 @@ data class Artifact(
     val checksum: String,
     val sizeBytes: Long,
     val buildMetadata: Map<String, String> = emptyMap(),
+    /** 制品坐标（上传/下载时用于定位与生成存储 key）；缺省时回退解析 [buildMetadata]。 */
+    val coordinates: Coordinates? = null,
 )
 
 /** 制品坐标（兼容 Maven 坐标系）。 */
@@ -36,8 +38,9 @@ data class Coordinates(
     val artifact: String,
     val version: String,
     val packaging: String = "jar",
+    val classifier: String? = null,
 ) {
-    val coordinateKey: String get() = "$group:$artifact:$version:$packaging"
+    val coordinateKey: String get() = "$group:$artifact:$version:$packaging${classifier?.let { ":$it" } ?: ""}"
 }
 
 /** 制品仓库中的引用（上传后返回，用于后续下载/晋升/回滚）。 */
@@ -46,6 +49,10 @@ data class ArtifactReference(
     val repository: String,
     val storageKey: String,
     val metadata: Map<String, String> = emptyMap(),
+    /** 存储桶（S3/GCS 等对象存储使用）；缺省时按 [repository] 从实现配置解析。 */
+    val bucket: String? = null,
+    /** 对象版本号（开启版本控制的桶返回；未开启时为 null）。 */
+    val versionId: String? = null,
 )
 
 /** 制品仓库类型。 */

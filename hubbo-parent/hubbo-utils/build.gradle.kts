@@ -19,6 +19,9 @@ dependencies {
     //    ksp("com.squareup.moshi:moshi-kotlin-codegen")
     api(project(":hubbo-annotations"))
     api(libs.awssdk)
+    api(libs.s3.kotlin)
+    // AWS SDK for Kotlin 的 HTTP 引擎：必须在运行期类路径上，否则 S3Client 构建时找不到引擎
+    implementation(libs.smithy.okhttp.engine)
     api(libs.snakeyaml)
     api(libs.commons.exec)
     api(libs.jbang)

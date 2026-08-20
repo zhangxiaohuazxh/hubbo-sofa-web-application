@@ -8,6 +8,7 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.kotlin.test)
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation(libs.mockk)
     add("kspTest", libs.moshi.kotlin.codegen)
     testImplementation(libs.jooq.codegen)
     //    kapt("com.squareup.moshi:moshi-kotlin-codegen")
