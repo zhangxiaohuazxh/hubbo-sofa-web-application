@@ -21,7 +21,7 @@ public final class TraceUtils {
 			return traceId;
 		}
 		traceId = generateTraceId();
-		//MDC.put(LibraryConstants.TRACE_ID.getValue(), traceId);
+		MDC.put(LibraryConstants.TRACE_ID.getValue(), traceId);
 		return traceId;
 	}
 
@@ -41,8 +41,24 @@ public final class TraceUtils {
 		return buffer.toString();
 	}
 
-	public static void validTraceId(String traceId) {
-		// todo
+	/**
+	 * 校验外部传入的 traceId 是否合法。
+	 * <p>只允许字母/数字，长度 20~64（防止通过请求头伪造或注入非法字符）。</p>
+	 *
+	 * @param traceId 待校验的 traceId
+	 * @return 合法返回 true
+	 */
+	public static boolean validTraceId(String traceId) {
+		if (StringUtils.isBlank(traceId) || traceId.length() < 20 || traceId.length() > 64) {
+			return false;
+		}
+		for (int i = 0; i < traceId.length(); i++) {
+			char c = traceId.charAt(i);
+			if (!Character.isLetterOrDigit(c)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 }

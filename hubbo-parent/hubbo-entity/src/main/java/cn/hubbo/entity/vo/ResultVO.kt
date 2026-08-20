@@ -7,12 +7,12 @@ data class ResultVO<T>(val code: Int? = 200, val msg: String? = "success", val d
 
         @JvmStatic
         fun <T> success(): ResultVO<T> {
-            return ResultVO(0, "success", null)
+            return ResultVO(200, "success", null)
         }
 
         @JvmStatic
         fun <T> success(data: T): ResultVO<T> {
-            return ResultVO(0, "success", data)
+            return ResultVO(200, "success", data)
         }
 
     }

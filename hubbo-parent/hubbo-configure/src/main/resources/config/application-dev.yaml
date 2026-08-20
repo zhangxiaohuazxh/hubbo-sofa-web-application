@@ -14,3 +14,6 @@ management:
 spring:
   main:
     lazy-initialization: true
+hubbo:
+  test:
+    enabled: true

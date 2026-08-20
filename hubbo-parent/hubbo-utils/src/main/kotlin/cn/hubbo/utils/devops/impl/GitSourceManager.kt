@@ -51,8 +51,8 @@ import kotlin.coroutines.coroutineContext
  *   对「认证 + 代理 + 指定修订」的组合场景行为完全可控。
  * - **认证**：匿名 / Token / 用户名密码走 `CredentialsProvider`（HTTP Basic）；
  *   SSH 私钥走 `SshdSessionFactoryBuilder`，显式注入私钥文件路径与口令，不依赖 `~/.ssh` 默认密钥。
- * - **代理**：写入本地仓库 `http.proxy` / `http.proxyUser` / `http.proxyPassword`，
- *   `TransportHttp` 在建立连接时读取，无需全局静态配置（线程安全）。
+ * - **代理**：在内存中配置 `http.proxy` / `http.proxyUser` / `http.proxyPassword`（不落盘），
+ *   `TransportHttp` 在建立连接时从同一 Repository 实例读取，无需全局静态配置（线程安全）。
  * - **取消**：所有 JGit 调用在 [Dispatchers.IO] 上执行，并通过
  *   [CancellationAwareProgressMonitor] 将协程取消传播给 JGit（不留下孤儿进程）。
  * - **错误映射**：JGit 异常统一翻译为 [DevOpsError]，区分可恢复（网络、超时）
@@ -220,14 +220,15 @@ open class GitSourceManager(
         return Git.wrap(repo)
     }
 
-    /** 在发起网络 I/O 前写入仓库配置（当前用于 HTTP 代理）。 */
+    /** 在发起网络 I/O 前配置仓库（当前用于 HTTP 代理）。 */
     private fun configureRepository(repo: Repository, options: CloneOptions) {
         val proxy = options.proxy ?: return
         val config = repo.config
         config.setString("http", null, "proxy", "${proxy.scheme}://${proxy.host}:${proxy.port}")
         if (!proxy.username.isNullOrBlank()) config.setString("http", null, "proxyUser", proxy.username)
         if (!proxy.password.isNullOrBlank()) config.setString("http", null, "proxyPassword", proxy.password)
-        config.save()
+        // 只写内存配置、不调用 config.save()：代理密码明文落盘到 .git/config 存在泄露风险。
+        // TransportHttp 通过同一个 Repository 实例读取该配置，无需持久化即可生效。
     }
 
     /** 按需拉取指定引用集合。 */

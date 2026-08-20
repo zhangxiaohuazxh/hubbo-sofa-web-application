@@ -53,13 +53,11 @@ class ReflectUtils {
 
         fun <T : Any> getObjectFieldOffset(kClass: Class<T>, fieldName: String): Long {
             val key = "${kClass.name}-$fieldName"
-            if (objectFieldOffsetCache.containsKey(key)) {
-                return objectFieldOffsetCache[key]!!
+            // computeIfAbsent 原子完成 检查+计算+写入，避免并发下重复计算
+            return objectFieldOffsetCache.computeIfAbsent(key) {
+                val field = getObjectField(kClass, fieldName)
+                (unsafe as sun.misc.Unsafe).objectFieldOffset(field)
             }
-            val field = getObjectField(kClass, fieldName)
-            val offset = (unsafe as sun.misc.Unsafe).objectFieldOffset(field)
-            objectFieldOffsetCache[key] = offset
-            return offset
         }
 
         fun <T : Any> getObjectFieldValue(kClass: Class<T>, obj: Any, fieldName: String): Any {

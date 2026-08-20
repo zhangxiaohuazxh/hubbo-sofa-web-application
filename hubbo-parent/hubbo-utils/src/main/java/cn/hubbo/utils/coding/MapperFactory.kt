@@ -1,6 +1,6 @@
 package cn.hubbo.utils.coding
 
-import com.google.common.collect.Maps
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * FFI代理函数说明
@@ -10,7 +10,8 @@ import com.google.common.collect.Maps
  */
 object MapperFactory {
 
-    private val FFI_OBJECT_MAP: MutableMap<String?, Any?> = Maps.newHashMap<String?, Any?>()
+    /** 使用 ConcurrentHashMap 保证并发注册/读取安全；key 用全限定类名避免跨包同名类互相覆盖 */
+    private val FFI_OBJECT_MAP: MutableMap<String, Any?> = ConcurrentHashMap()
 
     /**
      * 获取Mapper
@@ -21,11 +22,11 @@ object MapperFactory {
      * @return Mapper
      */
     fun <T> getMapper(`class`: Class<T?>): T? {
-        return FFI_OBJECT_MAP[`class`.simpleName] as T?
+        return FFI_OBJECT_MAP[`class`.name] as T?
     }
 
     fun <T> registerMapper(`class`: Class<T?>, mapper: T) {
-        FFI_OBJECT_MAP[`class`.simpleName] = mapper
+        FFI_OBJECT_MAP[`class`.name] = mapper
     }
 
 

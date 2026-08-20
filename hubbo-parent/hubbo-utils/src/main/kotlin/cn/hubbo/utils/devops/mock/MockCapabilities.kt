@@ -85,6 +85,7 @@ import java.time.Duration
 import java.time.Instant
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
+import java.util.concurrent.atomic.AtomicLong
 
 /**
  * 内存 Mock 能力实现。
@@ -287,9 +288,12 @@ class MockDeployer : Deployer {
 class MockOrchestrator : PipelineOrchestrator {
     private val runs = ConcurrentHashMap<String, PipelineRun>()
 
+    /** 原子递增的 runId 计数器，避免并发下 runs.size+1 产生重复 id */
+    private val runCounter = AtomicLong(0)
+
     override suspend fun run(ctx: PipelineContext, pipeline: PipelineDefinition): PipelineRun {
         val run = PipelineRun(
-            runId = "run-${runs.size + 1}",
+            runId = "run-${runCounter.incrementAndGet()}",
             definition = pipeline,
             status = PipelineStatus.SUCCEEDED,
             startedAt = Instant.now(),
@@ -383,7 +387,6 @@ class InMemoryHookRegistry : HookRegistry {
 
     override fun register(hookPoint: HookPoint, hook: Hook, name: String?, order: Int) {
         hooks.computeIfAbsent(hookPoint) { CopyOnWriteArrayList() }.add(Registered(name, order, hook))
-        hooks[hookPoint]?.sortBy { it.order }
     }
 
     override fun unregister(name: String): Boolean {
@@ -395,6 +398,7 @@ class InMemoryHookRegistry : HookRegistry {
     }
 
     override suspend fun fire(ctx: PipelineContext, hookPoint: HookPoint, payload: HookPayload) {
-        hooks[hookPoint]?.forEach { it.hook.execute(ctx, payload) }
+        // 执行前统一按 order 排序，避免 register 时并发 add+sort 的竞态
+        hooks[hookPoint]?.sortedBy { it.order }?.forEach { it.hook.execute(ctx, payload) }
     }
 }

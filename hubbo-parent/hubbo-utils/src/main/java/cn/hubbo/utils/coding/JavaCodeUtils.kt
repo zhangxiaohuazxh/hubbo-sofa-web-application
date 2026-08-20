@@ -39,8 +39,6 @@ import javax.lang.model.element.TypeElement
  * 1. String[] Type写法 String[].classs
  */
 
-private val log: Logger = LoggerFactory.getLogger(JavaCodeUtils::class.java)
-
 class JavaCodeUtils {
 
 
@@ -104,7 +102,7 @@ class JavaCodeUtils {
         fun parseSourceCode(
             annotatedElement: TypeElement, ignore: RoundEnvironment, predicate: Predicate<ExecutableElement>?
         ): JavaSourceStructureInfo {
-            log.info("开始解析{}", annotatedElement.qualifiedName)
+            logger.info("开始解析{}", annotatedElement.qualifiedName)
             val methods = newArrayList<MethodDeclaration>()
             val structureInfo = JavaSourceStructureInfo(
                 modifiers = annotatedElement.modifiers,
@@ -141,12 +139,12 @@ class JavaCodeUtils {
                     methods.add(methodDeclaration)
                 }
             }
-            log.info("{}解析结束", annotatedElement.qualifiedName)
+            logger.info("{}解析结束", annotatedElement.qualifiedName)
             return structureInfo
         }
 
         fun generateSourceCode(sourceInfo: JavaSourceStructureInfo): TypeSpec {
-            log.info("开始生成{}的源码", sourceInfo.className)
+            logger.info("开始生成{}的源码", sourceInfo.className)
             val typeSpecBuilder = getTypeSpecBuilder(sourceInfo.subClassName())
                 .addModifiers(*sourceInfo.modifiers.toTypedArray<Modifier>())
                 .superclass(TypeName.get(sourceInfo.supperClass))
@@ -156,7 +154,7 @@ class JavaCodeUtils {
                     typeSpecBuilder.addMethod(generateSingleMethod(declaration))
                 }
             }
-            log.info("生成{}的源码成功", sourceInfo.className)
+            logger.info("生成{}的源码成功", sourceInfo.className)
             return typeSpecBuilder.build()
         }
 

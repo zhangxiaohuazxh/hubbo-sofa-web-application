@@ -12,16 +12,16 @@ object FileUtils {
     private val mapping: Map<String, List<String>> = hashMapOf(
         "java" to listOf("pom.xml", "build.gradle.kts"),
         "rust" to listOf("Cargo.toml"),
-        "node" to listOf("packages.json"),
+        "node" to listOf("package.json"),
     )
 
     @JvmStatic
-    suspend fun markProjectStructure(directory: File, type: String): Collection<File> {
+    fun markProjectStructure(directory: File, type: String): Collection<File> {
         val namedFilter = NameFileFilter(mapping[type.lowercase()] ?: return emptyList())
         return FileUtils.listFiles(directory, namedFilter, TrueFileFilter.INSTANCE).distinct()
     }
 
-    suspend fun markProjectStructureRelativePath(directory: File, type: String): Collection<String> {
+    fun markProjectStructureRelativePath(directory: File, type: String): Collection<String> {
         return markProjectStructure(directory, type)
             .map { File(it.parent) }
             .map { it.relativeTo(directory).toString() }
@@ -29,7 +29,7 @@ object FileUtils {
     }
 
     /** 把相对路径结果改写成目录树：父目录作为父节点 */
-    suspend fun markProjectStructureTree(directory: File, type: String): DirNode {
+    fun markProjectStructureTree(directory: File, type: String): DirNode {
         val root = DirNode(directory.name)
         markProjectStructureRelativePath(directory, type).forEach(root::add)
         return root

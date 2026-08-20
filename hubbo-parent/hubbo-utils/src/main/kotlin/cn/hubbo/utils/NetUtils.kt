@@ -3,6 +3,7 @@ package cn.hubbo.utils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.net.Inet4Address
+import java.net.InetAddress
 import java.net.InetSocketAddress
 import java.net.NetworkInterface
 import java.net.NetworkInterface.getNetworkInterfaces
@@ -43,7 +44,7 @@ class NetUtils {
         fun isVirtualNetWorkInterface(`interface`: NetworkInterface): Boolean {
             val displayName = `interface`.displayName
             //val hardwareAddress = `interface`.hardwareAddress
-            return !virtualNetWorkInterfaceNames.none {
+            return virtualNetWorkInterfaceNames.any {
                 displayName.uppercase().contains(it)
             }
         }
@@ -80,7 +81,8 @@ class NetUtils {
                     }
                 }
             }
-            return ""
+            // 未匹配到物理网卡时回退到回环地址，避免返回空串导致日志模板里 ip 为空
+            return InetAddress.getLoopbackAddress().hostAddress
         }
 
 

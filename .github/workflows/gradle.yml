@@ -50,7 +50,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: devops-jar
-          path: module/devops/build/libs/*.jar
+          path: hubbo-parent/hubbo-boot/build/libs/*.jar
           retention-days: 7
 
 #      - name: Set up Docker Buildx

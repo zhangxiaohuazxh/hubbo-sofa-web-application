@@ -61,4 +61,19 @@ object CommandLineUtilsUnitTest {
         logger.run { info("执行结果 {}", res) }
     }
 
+    @Test
+    fun testExecWithEnvironmentVariables(): Unit = runBlocking {
+        if (!System.getProperty("os.name").contains("Win")) {
+            // 用户可控数据通过环境变量传入：值含 shell 元字符时不应被解析执行，应原样输出
+            val value = "safe;value&with '\$meta' chars"
+            val result = CommandLineUtils.exec(
+                "echo \"\$INJECTION_PROOF\"",
+                environment = mapOf("INJECTION_PROOF" to value)
+            )
+            logger.info("执行结果 {}", result)
+            assert(result.exitCode == 0) { "命令执行失败: ${result.output}" }
+            assert(result.output?.trim() == value) { "环境变量未原样传递: ${result.output}" }
+        }
+    }
+
 }

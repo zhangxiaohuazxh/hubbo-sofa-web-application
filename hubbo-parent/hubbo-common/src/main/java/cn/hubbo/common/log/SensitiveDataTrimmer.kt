@@ -28,11 +28,22 @@ class SensitiveDataTrimmer : LogEventPatternConverter {
         if (StringUtils.isBlank(message)) {
             return
         }
-        val result = Splitter.on(" ").splitToStream(message)
-            .map { deSensitization(it) }
-            .toList()
-            .joinToString(" ")
-        buffer.append(result)
+        // 快速短路：手机号/证件号/银行卡必须含数字，邮箱必须含@，地址/姓名必然含非ASCII字符。
+        // 三条都不满足时不可能命中任何脱敏规则，直接输出原文，避免每条日志都走分词+正则。
+        if (!message.any { it.isDigit() } && !message.contains('@') && !message.any { it.code > 127 }) {
+            buffer.append(message)
+            return
+        }
+        val tokens = Splitter.on(" ").split(message)
+        val iterator = tokens.iterator()
+        var appended = false
+        for (token in iterator) {
+            if (appended) {
+                buffer.append(' ')
+            }
+            buffer.append(deSensitization(token))
+            appended = true
+        }
     }
 
 

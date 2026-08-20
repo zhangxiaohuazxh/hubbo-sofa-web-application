@@ -1,4 +1,4 @@
-java -jar -XX:+UnlockExperimentalVMOptions -XX:+UseCompactObjectHeaders -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=./dump.hprof ./hubbo-parent/hubbo-boot/target/hubbo-sofa-boot.jar --spring.profiles.active=dev
+java -jar -XX:+UnlockExperimentalVMOptions -XX:+UseCompactObjectHeaders -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=./dump.hprof ./hubbo-parent/hubbo-boot/build/libs/hubbo-boot-0.0.1.jar --spring.profiles.active=dev
 
 # 启用压缩对象头特性
 # -XX:+UnlockExperimentalVMOptions -XX:+UseCompactObjectHeaders

@@ -1,5 +1,6 @@
 r2dbc:
   datasource:
+    # 供 jOOQ 代码生成等场景使用的 JDBC URL
     url: jdbc:postgresql://${db.host}:${db.port}/${db.dbname}?directConnection=true&useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
     host: ${db.host}
     port: ${db.port}
@@ -7,6 +8,8 @@ r2dbc:
     username: ${db.username}
     password: ${db.passwd}
     driver: ${db.driver}
+    pool-max-size: 10
+    pool-max-idle-time-seconds: 60
 
 
 spring:

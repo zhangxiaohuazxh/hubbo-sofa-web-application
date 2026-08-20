@@ -19,13 +19,18 @@ import org.slf4j.LoggerFactory
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.core.env.Environment
+import org.springframework.core.env.Profiles
 import java.time.Duration
 
 
 @Configuration
-class R2DbcConfiguration(val properties: DbProperties) {
+class R2DbcConfiguration(val properties: DbProperties, private val environment: Environment) {
 
     private val sqlLogger: Logger by lazy { LoggerFactory.getLogger("cn.hubbo.JooqSQLLogger") }
+
+    /** 生产环境关闭格式化/执行/诊断日志，减少不必要的开销 */
+    private val productionProfile: Boolean = environment.acceptsProfiles(Profiles.of("prod"))
 
     @Bean
     fun connectionFactory(): ConnectionFactory {
@@ -39,7 +44,6 @@ class R2DbcConfiguration(val properties: DbProperties) {
                 .option(DATABASE, properties.dbname)
                 .build()
         )
-        // todo 优化点 某些情况下会报错
         return ProxyConnectionFactory.builder(connectionFactory)
             .onAfterQuery { queryExecutionInfo ->
                 runCatching {
@@ -61,6 +65,8 @@ class R2DbcConfiguration(val properties: DbProperties) {
                             }
                         }
                     }
+                }.onFailure { exception ->
+                    sqlLogger.warn("捕获SQL日志失败", exception)
                 }
             }
             .build()
@@ -68,10 +74,10 @@ class R2DbcConfiguration(val properties: DbProperties) {
 
 
     @Bean("connectionPool")
-    fun devConnectionPool(): ConnectionPool? {
-        val configuration = ConnectionPoolConfiguration.builder(connectionFactory())
-            .maxIdleTime(Duration.ofMinutes(1))
-            .maxSize(10)
+    fun devConnectionPool(connectionFactory: ConnectionFactory): ConnectionPool? {
+        val configuration = ConnectionPoolConfiguration.builder(connectionFactory)
+            .maxIdleTime(Duration.ofSeconds(properties.poolMaxIdleTimeSeconds))
+            .maxSize(properties.poolMaxSize)
             .build()
         return ConnectionPool(configuration)
     }
@@ -82,11 +88,11 @@ class R2DbcConfiguration(val properties: DbProperties) {
         val settings = Settings().apply {
             withRenderSchema(false)
             withRenderCatalog(false)
-            // 线上环境禁用
-            withRenderFormatted(true)
-            withExecuteLogging(true)
-            // 线上环境禁用
-            withDiagnosticsLogging(true)
+            // 生产环境禁用
+            withRenderFormatted(!productionProfile)
+            withExecuteLogging(!productionProfile)
+            // 生产环境禁用
+            withDiagnosticsLogging(!productionProfile)
             withStatementType(StatementType.PREPARED_STATEMENT)
             withInlineThreshold(50)
             withRenderTable(RenderTable.WHEN_MULTIPLE_TABLES)
@@ -112,7 +118,9 @@ class DbProperties(
     val dbname: String,
     val username: String,
     val password: String,
-    val url: String
+    val url: String,
+    val poolMaxSize: Int = 10,
+    val poolMaxIdleTimeSeconds: Long = 60,
 ) {
 
 }

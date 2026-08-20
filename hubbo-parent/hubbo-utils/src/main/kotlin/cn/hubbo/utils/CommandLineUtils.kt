@@ -2,6 +2,7 @@ package cn.hubbo.utils
 
 import dev.jbang.jash.Jash
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.apache.commons.exec.*
 import org.apache.commons.io.FileUtils
 import org.slf4j.Logger
@@ -32,7 +33,8 @@ object CommandLineUtils {
         consumer: Consumer<Executor> = {},
         charset: Charset = StandardCharsets.UTF_8,
         timeoutMillis: Long = 30_000L,
-        workingDirectory: File = FileUtils.getTempDirectory()
+        workingDirectory: File = FileUtils.getTempDirectory(),
+        environment: Map<String, String> = emptyMap()
     ): CommandExecutedResult {
         // 统一通过 shell 执行,以支持管道、&&、cd 等 shell 语法。
         // 不能直接 CommandLine.parse(command) 按空白拆分参数: 它不解释 &&、|、cd 等语法,
@@ -51,11 +53,16 @@ object CommandLineUtils {
         defaultExecutor.workingDirectory = workingDirectory
         consumer.accept(defaultExecutor)
         // 超时保护: 某些命令(如 ping 不带 -c)会永不退出,超时后强制杀掉子进程,避免调用方永久卡死
-        with(Dispatchers.IO) {
+        // 用户可控数据通过 execute(commandLine, environment) 以进程环境变量形式传入, 避免命令注入
+        return withContext(Dispatchers.IO) {
             val watchdog = ExecuteWatchdog.builder().setTimeout(Duration.ofMillis(timeoutMillis)).get()
             defaultExecutor.watchdog = watchdog
-            return try {
-                val code = defaultExecutor.execute(commandLine)
+            try {
+                val code = if (environment.isEmpty()) {
+                    defaultExecutor.execute(commandLine)
+                } else {
+                    defaultExecutor.execute(commandLine, environment)
+                }
                 when {
                     watchdog.killedProcess() -> CommandExecutedResult(
                         -2,
@@ -84,7 +91,7 @@ object CommandLineUtils {
             // cmd 下跨盘符 cd 需要 /d 且对引号敏感。
             val (shellBin, shellArg) = resolveShell()
             val jash = Jash.builder(shellBin, shellArg, command)
-                .workPath(workingDirectory.toPath())
+                .workPath(validateWorkingDirectory(workingDirectory).toPath())
                 .start()
                 .withTimeout(timeout)
             // 进程输出流只能消费一次: join() 或在消费后读取 exitCode 都会重新打开已被关闭的流,
@@ -98,10 +105,23 @@ object CommandLineUtils {
         }.fold(
             onSuccess = { it },
             onFailure = {
-                logger.info("任务执行出错", it)
+                logger.warn("任务执行出错", it)
                 CommandExecutedResult(-1, it.message)
             }
         )
+    }
+
+    /**
+     * 校验并规范化工作目录。
+     *
+     * @throws IllegalArgumentException 目录不存在或不是目录时抛出
+     */
+    private fun validateWorkingDirectory(dir: File): File {
+        val normalized = dir.canonicalFile
+        require(normalized.exists() && normalized.isDirectory) {
+            "工作目录不存在或不是目录: ${normalized.absolutePath}"
+        }
+        return normalized
     }
 
     /** 复刻 jash 的 shell 探测($SHELL 优先, Windows 回退 ComSpec), 保证与 shell() 行为一致。 */

@@ -2,6 +2,7 @@ package cn.hubbo.router.system
 
 import cn.hubbo.handler.system.SystemResourceHandler
 import cn.hubbo.handler.test.TestHandler
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.reactive.function.server.RouterFunction
@@ -11,7 +12,9 @@ import org.springframework.web.reactive.function.server.coRouter
 @Configuration
 class SystemResourceRouter {
 
+    /** 测试端点仅在配置 hubbo.test.enabled=true 的环境注册（生产环境禁用） */
     @Bean
+    @ConditionalOnProperty(name = ["hubbo.test.enabled"], havingValue = "true")
     fun tetsRoute(handler: TestHandler): RouterFunction<ServerResponse> {
         return coRouter {
             "/test".nest {

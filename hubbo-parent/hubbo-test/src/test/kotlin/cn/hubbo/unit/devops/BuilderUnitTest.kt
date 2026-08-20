@@ -8,9 +8,13 @@ import cn.hubbo.utils.devops.config.BuildOptions
 import cn.hubbo.utils.devops.config.BuildTool
 import cn.hubbo.utils.devops.core.PipelineContexts
 import cn.hubbo.utils.devops.core.model.ArtifactType
+import cn.hubbo.utils.devops.impl.GradleBuilder
 import cn.hubbo.utils.devops.impl.MavenBuilder
+import com.google.common.io.Files
 import kotlinx.coroutines.runBlocking
+import org.apache.commons.io.FileUtils
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.io.TempDir
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -76,11 +80,36 @@ class BuilderUnitTest {
     @Test
     fun testMavenBuilder(): Unit = runBlocking {
         val pipelineContext = PipelineContexts.default()
-        val mavenBuilder = MavenBuilder(File("C:\\Users\\33233\\AppData\\Local\\Temp\\xxl-job"))
+        val mavenBuilder = MavenBuilder(File(FileUtils.getTempDirectory(), "xxl-job"))
         val result =
             mavenBuilder.build(pipelineContext, BuildOptions(tool = BuildTool.MAVEN, artifactType = ArtifactType.JAR))
         logger.info("执行结果 {}", result)
     }
 
+    @Test
+    fun testGradleBuilder(): Unit = runBlocking {
+        val pipelineContext = PipelineContexts.default()
+        val gradleBuilder = GradleBuilder(File(FileUtils.getTempDirectory(), "gradle-project"))
+        val result =
+            gradleBuilder.build(pipelineContext, BuildOptions(tool = BuildTool.GRADLE, artifactType = ArtifactType.JAR))
+        logger.info("执行结果 {}", result)
+    }
 
+    @Test
+    fun testMavenBuilderWithNonExistentDirectory(@TempDir tempDir: File): Unit = runBlocking {
+        val pipelineContext = PipelineContexts.default()
+        val mavenBuilder = MavenBuilder(File(tempDir, "non-existent"))
+        val result =
+            mavenBuilder.build(pipelineContext, BuildOptions(tool = BuildTool.MAVEN, artifactType = ArtifactType.JAR))
+        logger.info("执行结果 {}", result)
+    }
+
+    @Test
+    fun testGradleBuilderWithNonExistentDirectory(@TempDir tempDir: File): Unit = runBlocking {
+        val pipelineContext = PipelineContexts.default()
+        val gradleBuilder = GradleBuilder(File(tempDir, "non-existent"))
+        val result =
+            gradleBuilder.build(pipelineContext, BuildOptions(tool = BuildTool.GRADLE, artifactType = ArtifactType.JAR))
+        logger.info("执行结果 {}", result)
+    }
 }

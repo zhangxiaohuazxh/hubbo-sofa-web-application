@@ -44,4 +44,6 @@ target
 env/**/*.conf
 # 忽略系统中的日志文件
 *.log
-hubbo-*.json
+hubbo-*.json# 本地环境配置（含真实凭据，禁止提交）
+hubbo-parent/hubbo-configure/src/main/resources/config/application.properties
+hubbo-parent/hubbo-configure/src/main/resources/config/env.properties
