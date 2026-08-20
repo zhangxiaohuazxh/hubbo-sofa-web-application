@@ -177,7 +177,7 @@ class JavaCodeUtils {
                         val componentTypeName = mapTypeName(componentType)
                         return ArrayTypeName.of(componentTypeName)
                     }
-                    TODO("unsported type: $typeString")
+                    throw IllegalArgumentException("Unsupported type: $typeString")
                 }
             }
         }

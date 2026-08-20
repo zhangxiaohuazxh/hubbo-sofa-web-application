@@ -475,13 +475,14 @@ open class GitSourceManager(
     /** 计算两个提交之间的变更文件列表（用于流水线条件触发）。 */
     private fun changedFilesBetween(repo: Repository, from: ObjectId, to: ObjectId): List<String> {
         repo.newObjectReader().use { reader ->
-            val formatter = DiffFormatter(DisabledOutputStream.INSTANCE)
-            formatter.setRepository(repo)
-            val oldTree = CanonicalTreeParser().also { it.reset(reader, from) }
-            val newTree = CanonicalTreeParser().also { it.reset(reader, to) }
-            return formatter.scan(oldTree, newTree)
-                .mapNotNull { it.newPath ?: it.oldPath }
-                .distinct()
+            DiffFormatter(DisabledOutputStream.INSTANCE).use { formatter ->
+                formatter.setRepository(repo)
+                val oldTree = CanonicalTreeParser().also { it.reset(reader, from) }
+                val newTree = CanonicalTreeParser().also { it.reset(reader, to) }
+                return formatter.scan(oldTree, newTree)
+                    .mapNotNull { it.newPath ?: it.oldPath }
+                    .distinct()
+            }
         }
     }
 

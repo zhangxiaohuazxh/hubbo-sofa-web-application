@@ -10,10 +10,10 @@ class ReflectUtilsUnitTest {
     private val logger: Logger by lazy { LoggerFactory.getLogger(ReflectUtilsUnitTest::class.java) }
 
     @Test
-    fun testGetObjectFieldOffsetAndFieldValue() {
+    fun testGetObjectFieldValue() {
         val str = "hello world"
-        val offset = ReflectUtils.getObjectFieldOffset(String::class.java, "value")
-        val value = ReflectUtils.getObjectFieldValue<ByteArray>(str, offset)
+        val handle = ReflectUtils.getObjectFieldHandle(String::class.java, "value")
+        val value = ReflectUtils.getObjectFieldValue<ByteArray>(str, handle)
         logger.info("获取到的数组长度 {} 内容 {}", value.size, String(value))
     }
 

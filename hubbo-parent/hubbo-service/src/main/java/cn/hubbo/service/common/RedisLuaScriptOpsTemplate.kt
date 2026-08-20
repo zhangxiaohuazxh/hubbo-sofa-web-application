@@ -2,7 +2,7 @@ package cn.hubbo.service.common
 
 import org.springframework.data.redis.connection.ReactiveRedisConnection
 
-interface ReidsLuaScriptOpsTemplate {
+interface RedisLuaScriptOpsTemplate {
 
 
     /**

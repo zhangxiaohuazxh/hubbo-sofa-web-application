@@ -1,6 +1,8 @@
 package cn.hubbo.service.facade.common
 
-import cn.hubbo.service.common.ReidsLuaScriptOpsTemplate
+import cn.hubbo.service.common.RedisLuaScriptOpsTemplate
+import com.google.common.cache.Cache
+import com.google.common.cache.CacheBuilder
 import io.netty.buffer.ByteBuf
 import io.netty.buffer.ByteBufAllocator
 import io.netty.util.ReferenceCountUtil
@@ -12,11 +14,10 @@ import org.springframework.data.redis.core.ReactiveRedisTemplate
 import org.springframework.data.redis.core.script.RedisScript
 import org.springframework.stereotype.Service
 import java.nio.charset.StandardCharsets
-import java.util.concurrent.ConcurrentHashMap
 
 @Service
-class DefaultReidsLuaScriptOpsTemplate :
-    ReidsLuaScriptOpsTemplate {
+class DefaultRedisLuaScriptOpsTemplate :
+    RedisLuaScriptOpsTemplate {
 
     @Resource
     lateinit var reactiveRedisTemplate: ReactiveRedisTemplate<String, Any>
@@ -25,8 +26,10 @@ class DefaultReidsLuaScriptOpsTemplate :
         reactiveRedisTemplate.connectionFactory
     }
 
-    /** 按 sha1+结果类型缓存脚本实例，避免每次执行都新建对象 */
-    private val scriptCache: ConcurrentHashMap<String, RedisScript<*>> = ConcurrentHashMap()
+    /** 按 sha1+结果类型缓存脚本实例，有界缓存，避免无上限增长 */
+    private val scriptCache: Cache<String, RedisScript<*>> = CacheBuilder.newBuilder()
+        .maximumSize(512)
+        .build()
 
     override suspend fun loadScript(scriptContent: String): String {
         return reactiveRedisTemplate.execute { connection: ReactiveRedisConnection ->
@@ -52,7 +55,7 @@ class DefaultReidsLuaScriptOpsTemplate :
         argv: MutableList<*>,
         targetType: Class<T>
     ): T {
-        val redisScript: RedisScript<T> = scriptCache.computeIfAbsent("$sha1:${targetType.name}") {
+        val redisScript: RedisScript<T> = scriptCache.get("$sha1:${targetType.name}") {
             object : RedisScript<T> {
                 override fun getSha1(): String {
                     return sha1

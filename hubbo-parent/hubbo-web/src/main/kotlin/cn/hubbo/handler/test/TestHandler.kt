@@ -1,5 +1,6 @@
 package cn.hubbo.handler.test
 
+import cn.hubbo.entity.vo.ResultVO.Companion.success
 import cn.hubbo.utils.extension.currentTimeString
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -21,14 +22,14 @@ class TestHandler {
         logger.info("访问系统时间接口")
         return ServerResponse.ok()
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValueAndAwait(mapOf("data" to LocalDateTime.now().currentTimeString()))
+            .bodyValueAndAwait(success(LocalDateTime.now().currentTimeString()))
     }
 
     suspend fun pushMessage(request: ServerRequest): ServerResponse {
         logger.info("推送消息")
         return ServerResponse.ok()
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValueAndAwait(mapOf("data" to "success"))
+            .bodyValueAndAwait(success("success"))
     }
 
 

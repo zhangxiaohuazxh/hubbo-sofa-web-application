@@ -59,7 +59,7 @@ RUN apk add --no-cache curl tzdata && \
 
 WORKDIR /app
 
-COPY --from=builder /app/hubbo-boot/build/libs/*.jar /app/libs
+COPY --from=builder /app/hubbo-boot/build/libs/hubbo-boot-0.0.1.jar /app/libs/
 
 # 暴露端口（根据您的应用调整）
 EXPOSE 8080

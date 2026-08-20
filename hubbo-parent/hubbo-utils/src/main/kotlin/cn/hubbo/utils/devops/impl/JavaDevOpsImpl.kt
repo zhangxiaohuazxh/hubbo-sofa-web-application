@@ -26,6 +26,7 @@ import cn.hubbo.utils.devops.core.model.SyntaxCheckResult
 import cn.hubbo.utils.devops.core.model.SyntaxError
 import cn.hubbo.utils.devops.core.model.TestReport
 import cn.hubbo.utils.devops.core.model.TestType
+import org.apache.commons.codec.digest.DigestUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -39,7 +40,6 @@ import java.time.Duration
  * 同时将新版能力接口（[SyntaxChecker]、[Tester]、[Compiler]、[Builder]）
  * 映射到 Maven 命令，供能力层与流水线编排调用。
  */
-@Suppress("DEPRECATION")
 class JavaDevOpsImpl(private val devOpsConfiguration: DevOpsConfiguration) : DevOps {
 
     private val logger: Logger = LoggerFactory.getLogger(JavaDevOpsImpl::class.java)
@@ -51,24 +51,29 @@ class JavaDevOpsImpl(private val devOpsConfiguration: DevOpsConfiguration) : Dev
     // ==================== 旧版方法 ====================
 
     @Deprecated("请使用 builder.build(ctx, BuildOptions)")
+    @Suppress("DEPRECATION")
     override suspend fun build() {
         CommandLineUtils.execute("mvn package -B -e", workingDirectory = getDevOpsConfiguration().projectDirectory())
     }
 
     @Deprecated("请使用 syntaxChecker.check(ctx, SyntaxCheckOptions)")
+    @Suppress("DEPRECATION")
     override suspend fun check() {
         CommandLineUtils.execute("mvn validate", workingDirectory = getDevOpsConfiguration().projectDirectory())
     }
 
     @Deprecated("请使用 tester.test(ctx, TestOptions)")
+    @Suppress("DEPRECATION")
     override suspend fun test() {
         CommandLineUtils.execute("mvn test", workingDirectory = getDevOpsConfiguration().projectDirectory())
     }
 
     @Deprecated("请使用 compiler.compile(ctx, CompileOptions)")
+    @Suppress("DEPRECATION")
     override suspend fun compileCommand(): String = "mvn clean compile package"
 
     @Deprecated("请使用 builder.build 返回的 BuildResult.artifacts")
+    @Suppress("DEPRECATION")
     override fun isFinalProduct(file: File): Boolean =
         file.isFile && file.name.endsWith(".jar") && cn.hubbo.utils.FileUtils.isExecutableJar(file)
 
@@ -140,7 +145,7 @@ class JavaDevOpsImpl(private val devOpsConfiguration: DevOpsConfiguration) : Dev
                     name = file.name,
                     type = options.artifactType,
                     file = path,
-                    checksum = "sha256-mock",
+                    checksum = DigestUtils.sha256Hex(Files.newInputStream(path)),
                     sizeBytes = Files.size(path),
                 )
             }

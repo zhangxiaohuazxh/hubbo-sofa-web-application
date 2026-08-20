@@ -18,7 +18,9 @@ class ContextUtils {
             if (::applicationContext.isInitialized) {
                 return applicationContext
             }
-            throw UnsupportedOperationException()
+            throw UnsupportedOperationException(
+                "ApplicationContext not initialized. Call setApplicationContext() during application startup first."
+            )
         }
 
     }

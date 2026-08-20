@@ -26,9 +26,10 @@
         <property name="SOURCE_LOG_PATTERN">%style{${sys:ip.address}:${sys:server.port}}{bright,magenta}-%style{%d{yyyy-MM-dd-HH:mm:ss.SSS}}{green}-%style{%t}{blue}-%highlight{%-5level}{FATAL=red, ERROR=red, WARN=yellow, INFO=green, DEBUG=blue, TRACE=blue}-%style{[%X{traceId}]}{bright,green}-%style{%l}{cyan}-%style{%msg}{bright,magenta}%n</property>
         <!-- @formatter:on-->
         <property name="SOURCE_LOG_FILE_NAME">hubbo-source</property>
-        <property name="LOGSTASH_HOST">172.168.0.102</property>
-        <property name="LOGSTASH_PORT">5000</property>
-        <property name="APP_NAME">hetu</property>
+        <!-- Logstash 地址外部化，通过环境变量注入，避免硬编码内网地址 -->
+        <property name="LOGSTASH_HOST">${env:LOGSTASH_HOST:-127.0.0.1}</property>
+        <property name="LOGSTASH_PORT">${env:LOGSTASH_PORT:-5000}</property>
+        <property name="APP_NAME">hubbo</property>
     </Properties>
 
 

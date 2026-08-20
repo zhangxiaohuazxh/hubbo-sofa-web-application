@@ -15,7 +15,7 @@ class SystemResourceRouter {
     /** 测试端点仅在配置 hubbo.test.enabled=true 的环境注册（生产环境禁用） */
     @Bean
     @ConditionalOnProperty(name = ["hubbo.test.enabled"], havingValue = "true")
-    fun tetsRoute(handler: TestHandler): RouterFunction<ServerResponse> {
+    fun testRoute(handler: TestHandler): RouterFunction<ServerResponse> {
         return coRouter {
             "/test".nest {
                 GET("/datetime", handler::systemTime)
@@ -33,7 +33,7 @@ class SystemResourceRouter {
                 }
                 "/server".nest {
                     GET("/time", handler::requestServerTime)
-                    GET("/millils", handler::requestServerTimeMillis)
+                    GET("/millis", handler::requestServerTimeMillis)
                 }
             }
         }

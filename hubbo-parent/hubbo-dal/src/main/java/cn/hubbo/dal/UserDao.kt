@@ -27,7 +27,7 @@ class UserDao(val dsl: DSLContext) {
      * 而且查询出的列的数量要和构造函数的参数个数一致，否则编译会报错
      * 可以使用 DSL.inline('1').`as`("status") 凑数
      */
-    suspend fun findByUsernameLike(username: String): MutableList<TUser?> {
+    suspend fun findByUsernameLike(username: String): List<TUser> {
         return Flux.from(
             dsl.select(
                 T_USER.USER_ID,
@@ -48,7 +48,6 @@ class UserDao(val dsl: DSLContext) {
                 .where(T_USER.USER_NAME.contains(username))
         ).map(Records.mapping(::TUser))
             .collectList()
-            .map { it.toMutableList() }
             .awaitSingle()
     }
 
@@ -69,7 +68,7 @@ class UserDao(val dsl: DSLContext) {
     /**
      * 扁平化查询，适用于简单查询，数据量不大的情况，CPU负担相对来说较小
      */
-    suspend fun findUserRolesByUserId(userId: Long): MutableList<SystemUserInfo> {
+    suspend fun findUserRolesByUserId(userId: Long): List<SystemUserInfo> {
         return Flux.from(
             dsl.select(T_USER.USER_ID, T_USER.USER_NAME, T_ROLE.ROLE_ID, T_ROLE.ROLE_NAME)
                 .from(T_USER)

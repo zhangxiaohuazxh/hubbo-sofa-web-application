@@ -25,6 +25,7 @@ import cn.hubbo.utils.devops.core.model.SyntaxCheckResult
 import cn.hubbo.utils.devops.core.model.SyntaxError
 import cn.hubbo.utils.devops.core.model.TestReport
 import cn.hubbo.utils.devops.core.model.TestType
+import org.apache.commons.codec.digest.DigestUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -37,7 +38,6 @@ import java.time.Duration
  * 与 [JavaDevOpsImpl] 类似：保留旧版命令式方法，
  * 同时将新版能力接口映射到 Cargo 命令。
  */
-@Suppress("DEPRECATION")
 class RustDevOpsImpl(private val devOpsConfiguration: DevOpsConfiguration) : DevOps {
 
     private val logger: Logger = LoggerFactory.getLogger(RustDevOpsImpl::class.java)
@@ -49,14 +49,17 @@ class RustDevOpsImpl(private val devOpsConfiguration: DevOpsConfiguration) : Dev
     // ==================== 旧版方法 ====================
 
     @Deprecated("请使用 compiler.compile(ctx, CompileOptions)")
+    @Suppress("DEPRECATION")
     override suspend fun compileCommand(): String = "cargo check"
 
     @Deprecated("请使用 builder.build(ctx, BuildOptions)")
+    @Suppress("DEPRECATION")
     override suspend fun build() {
         CommandLineUtils.execute("cargo build", workingDirectory = getDevOpsConfiguration().projectDirectory())
     }
 
     @Deprecated("请使用 builder.build 返回的 BuildResult.artifacts")
+    @Suppress("DEPRECATION")
     override fun isFinalProduct(file: File): Boolean =
         file.isFile && file.canExecute() && file.absolutePath.contains("target")
 
@@ -123,7 +126,7 @@ class RustDevOpsImpl(private val devOpsConfiguration: DevOpsConfiguration) : Dev
                     name = file.name,
                     type = options.artifactType,
                     file = path,
-                    checksum = "sha256-mock",
+                    checksum = DigestUtils.sha256Hex(Files.newInputStream(path)),
                     sizeBytes = Files.size(path),
                 )
             }

@@ -84,6 +84,7 @@ import java.nio.file.Path
 import java.time.Duration
 import java.time.Instant
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicLong
 
@@ -364,7 +365,7 @@ class MockEnvironmentManager : EnvironmentManager {
 class InMemoryMetrics : MetricsSink {
     val counters = ConcurrentHashMap<String, Long>()
     val gauges = ConcurrentHashMap<String, Double>()
-    val histograms = ConcurrentHashMap<String, MutableList<Double>>()
+    val histograms = ConcurrentHashMap<String, ConcurrentLinkedQueue<Double>>()
 
     override fun counter(name: String, delta: Long, tags: Map<String, String>) {
         counters.merge(name, delta, Long::plus)
@@ -375,7 +376,8 @@ class InMemoryMetrics : MetricsSink {
     }
 
     override fun histogram(name: String, value: Double, tags: Map<String, String>) {
-        histograms.computeIfAbsent(name) { CopyOnWriteArrayList() }.add(value)
+        // 追加频繁：用无锁队列，避免 CopyOnWriteArrayList 每次 add 全量复制
+        histograms.computeIfAbsent(name) { ConcurrentLinkedQueue() }.add(value)
     }
 }
 
@@ -391,8 +393,12 @@ class InMemoryHookRegistry : HookRegistry {
 
     override fun unregister(name: String): Boolean {
         var removed = false
-        hooks.values.forEach { list ->
-            removed = list.removeAll { it.name == name } || removed
+        hooks.entries.forEach { (point, list) ->
+            val filtered = list.filterNot { it.name == name }
+            if (filtered.size != list.size) {
+                removed = true
+                hooks[point] = filtered as MutableList<Registered>
+            }
         }
         return removed
     }

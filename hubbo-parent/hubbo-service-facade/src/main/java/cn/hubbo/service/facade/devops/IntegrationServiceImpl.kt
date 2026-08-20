@@ -56,7 +56,8 @@ class IntegrationServiceImpl : IntegrationService {
     }
 
     override suspend fun continuousDelivery() {
-        TODO("Not yet implemented")
+        logger.warn("continuousDelivery 尚未实现，暂不执行")
+        throw UnsupportedOperationException("continuousDelivery 尚未实现")
     }
 
     private fun validateSafeName(value: String, field: String): String {

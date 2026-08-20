@@ -27,99 +27,46 @@ class DeSensitizationUtils {
             }
             val chars = value.toCharArray()
             val asterisk = '*'
+            val sb = StringBuilder(value.length)
             return when (type) {
-                PHONE -> {
-                    String(
-                        charArrayOf(
-                            chars[0], chars[1], chars[2], asterisk, asterisk, asterisk, asterisk, chars[8], chars[9], chars[10]
-                        )
-                    )
-                }
+                PHONE -> sb.append(chars[0]).append(chars[1]).append(chars[2])
+                    .append("****")
+                    .append(chars[8]).append(chars[9]).append(chars[10])
+                    .toString()
 
-                VISA -> {
-                    String(
-                        charArrayOf(
-                            chars[0], chars[1], chars[2], asterisk, asterisk, asterisk, asterisk, chars[7], chars[8]
-                        )
-                    )
-                }
+                VISA -> sb.append(chars[0]).append(chars[1]).append(chars[2])
+                    .append("****")
+                    .append(chars[7]).append(chars[8])
+                    .toString()
 
-                ID_CARD -> {
-                    String(
-                        charArrayOf(
-                            chars[0], chars[1], chars[2], chars[3], chars[4], chars[5],
-                            asterisk,
-                            asterisk,
-                            asterisk,
-                            asterisk,
-                            asterisk,
-                            asterisk,
-                            asterisk,
-                            asterisk,
-                            chars[14],
-                            chars[15],
-                            chars[16],
-                            chars[17],
-                        )
-                    )
-                }
+                ID_CARD -> sb.append(chars[0]).append(chars[1]).append(chars[2]).append(chars[3])
+                    .append(chars[4]).append(chars[5])
+                    .append("********")
+                    .append(chars[14]).append(chars[15]).append(chars[16]).append(chars[17])
+                    .toString()
 
-                UNION_PAY_BANK_CARD -> {
-                    String(
-                        charArrayOf(
-                            chars[0], chars[1], chars[2], chars[3], chars[4], chars[5],
-                            asterisk,
-                            asterisk,
-                            asterisk,
-                            asterisk,
-                            asterisk,
-                            asterisk,
-                            asterisk,
-                            asterisk,
-                            chars[chars.size - 5],
-                            chars[chars.size - 4],
-                            chars[chars.size - 3],
-                            chars[chars.size - 2],
-                            chars[chars.size - 1],
-                        )
-                    )
-                }
+                UNION_PAY_BANK_CARD -> sb.append(chars[0]).append(chars[1]).append(chars[2]).append(chars[3])
+                    .append(chars[4]).append(chars[5])
+                    .append("********")
+                    .append(chars[chars.size - 5]).append(chars[chars.size - 4]).append(chars[chars.size - 3])
+                    .append(chars[chars.size - 2]).append(chars[chars.size - 1])
+                    .toString()
 
                 EMAIL -> {
-                    val newChars = CharArray(chars.size)
-                    for ((index, v) in chars.withIndex()) {
-                        if (index <= 8) {
-                            newChars[index] = asterisk
-                        } else {
-                            newChars[index] = v
-                        }
-                    }
-                    String(newChars)
+                    repeat(9) { sb.append(asterisk) }
+                    sb.append(chars, 9, chars.size - 9)
+                    sb.toString()
                 }
 
-                ADDRESS -> {
-                    String(
-                        charArrayOf(
-                            chars[0], chars[1], chars[2], chars[3], chars[4], chars[5],
-                            asterisk,
-                            asterisk,
-                            asterisk,
-                            asterisk,
-                            asterisk,
-                            asterisk,
-                            asterisk,
-                            asterisk
-                        )
-                    )
-                }
+                ADDRESS -> sb.append(chars[0]).append(chars[1]).append(chars[2]).append(chars[3])
+                    .append(chars[4]).append(chars[5])
+                    .append("********")
+                    .toString()
 
                 NAME -> {
-                    val newChars = CharArray(chars.size)
-                    newChars[0] = chars[0]
-                    for (index in 1 until chars.size) {
-                        newChars[index] = asterisk
-                    }
-                    String(newChars)
+                    sb.append(chars[0])
+                    repeat(chars.size - 1) { sb.append(asterisk) }
+                    sb.toString()
                 }
 
                 NONE -> value

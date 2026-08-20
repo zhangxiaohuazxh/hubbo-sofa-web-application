@@ -1,7 +1,7 @@
 package cn.hubbo.integration.service.common
 
 import cn.hubbo.integration.SofaApplicationTest
-import cn.hubbo.service.common.ReidsLuaScriptOpsTemplate
+import cn.hubbo.service.common.RedisLuaScriptOpsTemplate
 import jakarta.annotation.Resource
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Disabled
@@ -14,7 +14,7 @@ class ReactiveRedisTemplateTest : SofaApplicationTest() {
     private val logger: Logger by lazy { LoggerFactory.getLogger(ReactiveRedisTemplateTest::class.java) }
 
     @Resource
-    private lateinit var redisScriptOpsTemplate: ReidsLuaScriptOpsTemplate
+    private lateinit var redisScriptOpsTemplate: RedisLuaScriptOpsTemplate
 
     @Disabled
     @Test

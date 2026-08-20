@@ -94,7 +94,8 @@ class R2DbcConfiguration(val properties: DbProperties, private val environment: 
             // 生产环境禁用
             withDiagnosticsLogging(!productionProfile)
             withStatementType(StatementType.PREPARED_STATEMENT)
-            withInlineThreshold(50)
+            // 阈值保持低值，避免过早内联绑定变量破坏 PostgreSQL 的查询计划缓存
+            withInlineThreshold(3)
             withRenderTable(RenderTable.WHEN_MULTIPLE_TABLES)
             withRenderQuotedNames(RenderQuotedNames.NEVER)
         }
@@ -118,6 +119,7 @@ class DbProperties(
     val dbname: String,
     val username: String,
     val password: String,
+    /** 供 jOOQ 代码生成等 JDBC 场景使用 */
     val url: String,
     val poolMaxSize: Int = 10,
     val poolMaxIdleTimeSeconds: Long = 60,

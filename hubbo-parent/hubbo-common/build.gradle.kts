@@ -27,6 +27,4 @@ kapt {
         // 告诉处理器包含插件元数据
         arg("log4j.skip.plugin.processing", "false")
     }
-    // 确保生成路径正确
-    includeCompileClasspath = false
 }

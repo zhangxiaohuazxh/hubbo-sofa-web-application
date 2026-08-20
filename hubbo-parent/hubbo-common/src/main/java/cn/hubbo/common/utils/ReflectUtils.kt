@@ -1,24 +1,27 @@
 package cn.hubbo.common.utils
 
-// 注意：不能 import sun.misc.Unsafe —— kapt 会把源码里的 import 原样复制进生成的 Java 存根，
-// 而 JDK 25 上 javac 对 sun.misc.Unsafe 的"内部专用 API"警告是强制警告（无法用 -nowarn /
-// -Xlint / @SuppressWarnings 抑制），即使只是未使用的 import 也会触发。
-// 因此这里不 import，只在方法体内用全限定名 sun.misc.Unsafe（stub 不包含方法体，不会产生警告）。
 import java.lang.invoke.MethodHandles
+import java.lang.invoke.VarHandle
 import java.lang.ref.SoftReference
 import java.lang.reflect.Field
 import java.lang.reflect.Method
 import java.util.concurrent.ConcurrentHashMap
 
-@Suppress("DEPRECATION", "DEPRECATION_ERROR", "UNCHECKED_CAST")
+/**
+ * 反射工具：基于 VarHandle（JDK 9+）读写对象字段。
+ *
+ * 替代 sun.misc.Unsafe —— 后者是 JVM 内部 API，JDK 25 会触发强制警告，
+ * 且绕过内存安全保证，存在被移除的风险。
+ */
+@Suppress("UNCHECKED_CAST")
 class ReflectUtils {
 
     companion object {
 
         private val lookup: MethodHandles.Lookup by lazy { MethodHandles.lookup() }
 
-        // 不强制缓存，内存不足时允许释放掉缓存对象
-        private val objectFieldOffsetCache: MutableMap<String, Long> by lazy {
+        // 字段 VarHandle 缓存（只增不删，数量受类/字段规模约束，可控）
+        private val varHandleCache: MutableMap<String, VarHandle> by lazy {
             ConcurrentHashMap(64)
         }
 
@@ -26,50 +29,39 @@ class ReflectUtils {
             ConcurrentHashMap(64)
         }
 
-        // 注意：这里故意声明为 Any 而不是 Unsafe —— kapt 会为 Kotlin 声明生成 Java 存根并交给 javac 编译，
-        // 而 JDK 25 上 javac 对 sun.misc.Unsafe 的"内部专用 API"警告是强制警告，无法用 -nowarn /
-        // -Xlint / @SuppressWarnings 抑制。把 Unsafe 只留在方法体内（stub 不包含方法体），
-        // 生成的存根就不会引用 sun.misc.Unsafe，也就不会产生这条每次编译都出现的警告。
-        private val unsafe: Any by lazy {
-            val declaredField = sun.misc.Unsafe::class.java.getDeclaredField("theUnsafe")
-            declaredField.trySetAccessible()
-            declaredField.get(null)!!
-        }
-
         @JvmStatic
         fun lookup(): MethodHandles.Lookup {
             return lookup
-        }
-
-        @JvmStatic
-        fun getUnsafeInstance(): Any {
-            return unsafe
         }
 
         fun getObjectField(kClass: Class<out Any>, fieldName: String): Field {
             return kClass.getDeclaredField(fieldName)
         }
 
-
-        fun <T : Any> getObjectFieldOffset(kClass: Class<T>, fieldName: String): Long {
+        /** 获取字段的 VarHandle（带缓存），用于高性能字段读写。 */
+        @JvmStatic
+        fun getObjectFieldHandle(kClass: Class<*>, fieldName: String): VarHandle {
             val key = "${kClass.name}-$fieldName"
-            // computeIfAbsent 原子完成 检查+计算+写入，避免并发下重复计算
-            return objectFieldOffsetCache.computeIfAbsent(key) {
+            return varHandleCache.computeIfAbsent(key) {
                 val field = getObjectField(kClass, fieldName)
-                (unsafe as sun.misc.Unsafe).objectFieldOffset(field)
+                if (!field.trySetAccessible()) {
+                    field.isAccessible = true
+                }
+                MethodHandles.privateLookupIn(kClass, lookup).unreflectVarHandle(field)
             }
         }
 
+        /** 读取对象字段值（装箱形式）。 */
+        @JvmStatic
         fun <T : Any> getObjectFieldValue(kClass: Class<T>, obj: Any, fieldName: String): Any {
-            val fieldOffset = getObjectFieldOffset(kClass, fieldName)
-            return (unsafe as sun.misc.Unsafe).getObject(obj, fieldOffset)
+            return getObjectFieldHandle(kClass, fieldName).get(obj)
         }
 
-        fun <T : Any> getObjectFieldValue(obj: Any, offset: Long): T {
-            return (unsafe as sun.misc.Unsafe).getObject(obj, offset) as T
+        /** 通过 [VarHandle] 读取对象字段值并转型。 */
+        @JvmStatic
+        fun <T : Any> getObjectFieldValue(obj: Any, handle: VarHandle): T {
+            return handle.get(obj) as T
         }
-
-
     }
 
 }

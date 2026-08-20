@@ -2,9 +2,9 @@ name: Java CI with Gradle
 
 on:
   push:
-    branches: ["feature-system-base-20260124"]
+    branches: ["master"]
   pull_request:
-    branches: ["feature-system-base-20260124"]
+    branches: ["master"]
 
 jobs:
   build:

@@ -2,13 +2,15 @@
 <configuration xmlns="https://www.jooq.org/xsd/jooq-runtime-3.20.10.xsd"
                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                xsi:schemaLocation="https://www.jooq.org/xsd/jooq-runtime-3.20.10.xsd">
+    <!--
+      连接信息通过系统属性 / 环境变量注入，禁止提交真实凭据到仓库。
+      用法示例: mvn -Ddb.url=jdbc:postgresql://localhost:5432/hubbo -Ddb.user=pg -Ddb.password=xxx
+    -->
     <jdbc>
         <driver>org.postgresql.Driver</driver>
-        <url>
-            jdbc:postgresql://hubbo.cn:34393/hubbo
-        </url>
-        <user>pg</user>
-        <password>12192121</password>
+        <url>${db.url}</url>
+        <user>${db.user}</user>
+        <password>${db.password}</password>
     </jdbc>
 
     <generator>

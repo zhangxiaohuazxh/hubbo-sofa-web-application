@@ -51,14 +51,13 @@ class StringUtils {
 
         @JvmStatic
         fun isAddressString(value: String): Boolean {
-            val chars = value.toCharArray()
             var score = 0
             for (keyword in ADDRESS_KEYWORDS) {
                 if (value.contains(keyword)) {
                     score++
                 }
             }
-            return score >= 3 && chars.size >= 10
+            return score >= 3 && value.length >= 10
         }
 
     }

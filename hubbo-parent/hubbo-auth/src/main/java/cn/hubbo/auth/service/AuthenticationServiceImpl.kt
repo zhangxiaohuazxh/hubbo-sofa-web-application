@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j
 class AuthenticationServiceImpl : AuthenticationService {
 
     override fun login(): ResultVO<UserVO> {
-        TODO("Not yet implemented")
+        return ResultVO(code = 501, msg = "Not yet implemented")
     }
 
 }
