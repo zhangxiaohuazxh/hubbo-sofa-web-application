@@ -27,4 +27,5 @@ dependencies {
     api(libs.jbang)
     api(libs.jgit)
     api(libs.jgit.ssh.apache)
+    api(libs.netty.incubator.codec.http3)
 }

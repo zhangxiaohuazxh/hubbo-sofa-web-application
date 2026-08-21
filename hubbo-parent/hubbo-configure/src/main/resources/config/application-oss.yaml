@@ -1,0 +1,27 @@
+hubbo:
+  oss:
+    client:
+      endpoint-url: "https://fs.hubbo.cn"
+      region: "us-east-1"
+      access-key-id: "BGpo2wJ1SqgELVO0xo6q"
+      secret-access-key: "xVDNP1BCqXrwcMo2DVWi6jigg3syObLbWSf6pKmi"
+      force-path-style: true
+      max-attempts: 3
+      connect-timeout-seconds: 10
+      read-timeout-seconds: 300
+      write-timeout-seconds: 300
+      # 保持 false：aws-chunked 签名编码服务端不支持，会报 SignatureDoesNotMatch
+      enable-aws-chunked: false
+      # 保持 true：经 nginx 网关时 HTTP/2 大文件 PUT 会 PROTOCOL_ERROR 连接重置
+      force-http-11: true
+    artifact-manager:
+      repositories:
+        releases:
+          bucket: "hubbo-releases"
+          prefix: "artifacts"
+        snapshots:
+          bucket: "hubbo-snapshots"
+          prefix: "artifacts"
+      default-repository:
+        bucket: "hubbo-default"
+        prefix: "artifacts"

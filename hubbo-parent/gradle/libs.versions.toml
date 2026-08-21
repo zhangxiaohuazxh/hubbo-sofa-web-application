@@ -59,6 +59,7 @@ commonsExec = "1.6.0"
 jbang = "0.0.3"
 jgit = "7.3.0.202506031305-r"
 mockk = "1.13.8"
+nettyIncubatorHttp3 = "0.0.30.Final"
 
 [libraries]
 guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
@@ -144,6 +145,7 @@ commons-exec = { group = "org.apache.commons", name = "commons-exec", version.re
 jbang = { group = "dev.jbang", name = "jash", version.ref = "jbang" }
 jgit = { group = "org.eclipse.jgit", name = "org.eclipse.jgit", version.ref = "jgit" }
 jgit-ssh-apache = { group = "org.eclipse.jgit", name = "org.eclipse.jgit.ssh.apache", version.ref = "jgit" }
+netty-incubator-codec-http3 = { group = "io.netty.incubator", name = "netty-incubator-codec-http3", version.ref = "nettyIncubatorHttp3" }
 
 [bundles]
 r2dbc = ["postgresql-r2dbc", "r2dbc-pool", "r2dbc-proxy"]

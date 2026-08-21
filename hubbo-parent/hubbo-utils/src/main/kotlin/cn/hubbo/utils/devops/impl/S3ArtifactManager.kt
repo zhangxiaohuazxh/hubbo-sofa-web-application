@@ -22,8 +22,10 @@ import aws.sdk.kotlin.services.s3.model.S3Exception
 import aws.smithy.kotlin.runtime.content.ByteStream
 import aws.smithy.kotlin.runtime.content.fromFile
 import aws.smithy.kotlin.runtime.content.writeToFile
+import aws.smithy.kotlin.runtime.http.engine.AlpnId
 import aws.smithy.kotlin.runtime.http.engine.okhttp.OkHttpEngine
 import aws.smithy.kotlin.runtime.net.url.Url
+import kotlin.time.Duration.Companion.seconds
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.net.URLEncoder
@@ -63,6 +65,15 @@ data class S3ArtifactManagerConfig(
  * @property secretAccessKey 访问密钥。
  * @property forcePathStyle 使用路径风格寻址（`http://host/bucket/key`）。S3 兼容服务几乎都要求 true。
  * @property maxAttempts 每个请求的最大尝试次数（含首次）；为 null 时使用 SDK 默认（3 次）。
+ * @property connectTimeoutSeconds 连接超时秒数，默认 10s
+ * @property readTimeoutSeconds 读取超时秒数，默认 300s（大文件下载需更长）
+ * @property writeTimeoutSeconds 写入超时秒数，默认 300s（大文件上传需更长）
+ * @property enableAwsChunked 是否启用 aws-chunked 分块编码，默认 false。
+ * 自建 S3 兼容存储（MinIO / Rustfs）不支持该编码，即使服务端能解析也会因签名算法
+ * 不同而报 SignatureDoesNotMatch。
+ * @property forceHttp11 强制使用 HTTP/1.1，默认 true。经 nginx/openresty 网关的
+ * S3 兼容存储对大文件 PUT 走 HTTP/2 会返回 PROTOCOL_ERROR 并重置连接（上传超时），
+ * 强制 HTTP/1.1 可规避。
  */
 data class S3ClientOptions(
     val endpointUrl: String? = null,
@@ -71,6 +82,11 @@ data class S3ClientOptions(
     val secretAccessKey: String? = null,
     val forcePathStyle: Boolean = true,
     val maxAttempts: Int? = null,
+    val connectTimeoutSeconds: Int = 10,
+    val readTimeoutSeconds: Int = 300,
+    val writeTimeoutSeconds: Int = 300,
+    val enableAwsChunked: Boolean = false,
+    val forceHttp11: Boolean = true,
 )
 
 /**
@@ -97,6 +113,9 @@ fun createS3Client(options: S3ClientOptions = S3ClientOptions()): S3Client = S3C
     options.endpointUrl?.let { endpointUrl = Url.parse(it) }
     if (options.forcePathStyle) forcePathStyle = true
     options.maxAttempts?.let { attempts -> retryStrategy { maxAttempts = attempts } }
+    // 默认关闭 aws-chunked：自建 S3 兼容存储不支持该签名分块编码，
+    // 实测即使走 HTTP/1.1 也会报 SignatureDoesNotMatch。
+    enableAwsChunked = options.enableAwsChunked
     val ak = options.accessKeyId?.takeIf { it.isNotBlank() }
     if (ak != null) {
         credentialsProvider = StaticCredentialsProvider {
@@ -105,7 +124,18 @@ fun createS3Client(options: S3ClientOptions = S3ClientOptions()): S3Client = S3C
         }
     }
     // aws-sdk-kotlin 不会自动发现 HTTP 引擎，必须显式装配；OkHttp 引擎支持连接池与并发。
-    httpClient = OkHttpEngine { }
+    // 三个超时都要透传：只设 connectTimeout 时读写超时会落到引擎默认值（30s），
+    // 大文件上传/下载会被过早掐断。
+    httpClient = OkHttpEngine {
+        connectTimeout = options.connectTimeoutSeconds.seconds
+        socketReadTimeout = options.readTimeoutSeconds.seconds
+        socketWriteTimeout = options.writeTimeoutSeconds.seconds
+        // 强制 HTTP/1.1：nginx/openresty 网关对大文件 PUT 走 HTTP/2 会
+        // PROTOCOL_ERROR 重置连接（实测 60s 后 StreamResetException）。
+        if (options.forceHttp11) {
+            tlsContext { alpn = listOf(AlpnId.HTTP1_1) }
+        }
+    }
 }
 
 /**
