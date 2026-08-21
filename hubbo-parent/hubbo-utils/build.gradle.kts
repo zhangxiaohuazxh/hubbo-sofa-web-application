@@ -28,4 +28,5 @@ dependencies {
     api(libs.jgit)
     api(libs.jgit.ssh.apache)
     api(libs.netty.incubator.codec.http3)
+    api(libs.tika)
 }

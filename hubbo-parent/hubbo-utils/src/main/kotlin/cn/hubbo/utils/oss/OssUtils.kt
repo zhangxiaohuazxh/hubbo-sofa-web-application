@@ -10,15 +10,21 @@ import aws.smithy.kotlin.runtime.http.engine.AlpnId
 import aws.smithy.kotlin.runtime.http.engine.okhttp.OkHttpEngine
 import aws.smithy.kotlin.runtime.net.url.Url
 import kotlinx.coroutines.runBlocking
-import kotlin.time.Duration.Companion.seconds
+import org.apache.tika.Tika
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials
+import software.amazon.awssdk.regions.Region
+import software.amazon.awssdk.services.s3.presigner.S3Presigner
 import java.io.File
 import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
 import java.nio.charset.Charset
+import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
 import java.security.MessageDigest
-import java.util.concurrent.TimeUnit
+import kotlin.time.Duration.Companion.seconds
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider as JavaStaticCredentialsProvider
+import software.amazon.awssdk.services.s3.model.GetObjectRequest as JavaGetObjectRequest
+import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest as JavaGetObjectPresignRequest
 
 /**
  * Amazon S3 / MinIO / Rustfs 通用工具类
@@ -163,12 +169,13 @@ object OssUtils {
         contentType: String? = null,
         metadata: Map<String, String> = emptyMap(),
     ): PutObjectResponse = runBlocking {
+        val finalMetadata = metadata.takeIf { "rawFilename" in it } ?: metadata + ("rawFilename" to file.name)
         val request = buildPutRequest(
             bucket = bucket,
             key = key,
             body = ByteStream.fromFile(file),
-            contentType = contentType ?: guessContentType(file.name),
-            metadata = metadata,
+            contentType = contentType ?: guessContentType(file),
+            metadata = finalMetadata,
         )
         client.putObject(request)
     }
@@ -220,7 +227,6 @@ object OssUtils {
         val request = buildGetRequest(bucket, key, versionId)
         client.getObject(request) { response ->
             response.body?.writeToFile(targetFile.toPath())
-                ?: error("Empty response body for $bucket/$key")
             response
         }
     }
@@ -239,7 +245,6 @@ object OssUtils {
         try {
             client.getObject(request) { response ->
                 response.body?.writeToFile(tempFile.toPath())
-                    ?: error("Empty response body for $bucket/$key")
                 response
             }
             Files.readAllBytes(tempFile.toPath())
@@ -372,19 +377,65 @@ object OssUtils {
     /**
      * 生成预签名 URL（临时访问链接）
      *
-     * 实际项目建议使用 aws-sdk-kotlin 的 S3Presigner
-     * 这里提供简化版本参考
+     * 使用 Java SDK v2 的 S3Presigner 生成带 AWS Signature V4 签名的 URL。
+     *
+     * @param contentDisposition "download" 默认下载行为，"preview" 浏览器内预览（图片/视频等）
      */
     fun generatePresignedUrl(
         client: S3Client,
         bucket: String,
         key: String,
-        httpMethod: String = "GET",
         expirationSeconds: Int = 3600,
-    ): String {
-        val endpoint = client.config.endpointUrl?.toString() ?: "https://s3.${client.config.region}.amazonaws.com"
-        val pathStyle = if (client.config.forcePathStyle) "/$bucket" else ""
-        return "$endpoint$pathStyle/$key?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=...&X-Amz-Date=...&X-Amz-Expires=$expirationSeconds&X-Amz-SignedHeaders=host"
+        contentDisposition: FileOperationEnum = FileOperationEnum.DOWNLOAD,
+    ): String = runBlocking {
+        val creds = client.config.credentialsProvider?.resolve()
+            ?: error("No credentials found in client")
+        val region = client.config.region?.let { Region.of(it) } ?: Region.US_EAST_1
+        val endpoint = client.config.endpointUrl?.toString()
+            ?: "https://s3.${client.config.region}.amazonaws.com"
+
+        val presignerBuilder = S3Presigner.builder()
+            .region(region)
+            .credentialsProvider(
+                JavaStaticCredentialsProvider.create(
+                    AwsBasicCredentials.create(
+                        creds.accessKeyId,
+                        creds.secretAccessKey
+                    )
+                )
+            )
+            .endpointOverride(java.net.URI.create(endpoint))
+            .serviceConfiguration(
+                software.amazon.awssdk.services.s3.S3Configuration.builder()
+                    .pathStyleAccessEnabled(true)
+                    .build()
+            )
+
+        presignerBuilder.build().use { presigner ->
+            val getObjectRequestBuilder = JavaGetObjectRequest.builder()
+                .bucket(bucket)
+                .key(key)
+
+            when (contentDisposition) {
+                FileOperationEnum.PREVIEW -> {
+                    getObjectRequestBuilder.responseContentDisposition("inline")
+                    // 根据文件扩展名推断 Content-Type，确保浏览器能正确预览
+                    val filename = key.substringAfterLast('/')
+                    getObjectRequestBuilder.responseContentType(guessContentType(filename))
+                }
+                FileOperationEnum.DOWNLOAD -> {
+                    val filename = key.substringAfterLast('/')
+                    getObjectRequestBuilder.responseContentDisposition("attachment; filename=\"$filename\"")
+                }
+            }
+
+            val presignRequest = JavaGetObjectPresignRequest.builder()
+                .signatureDuration(java.time.Duration.ofSeconds(expirationSeconds.toLong()))
+                .getObjectRequest(getObjectRequestBuilder.build())
+                .build()
+
+            presigner.presignGetObject(presignRequest).url().toString()
+        }
     }
 
     // ==================== 异步 API (协程) ====================
@@ -400,12 +451,13 @@ object OssUtils {
         contentType: String? = null,
         metadata: Map<String, String> = emptyMap(),
     ): PutObjectResponse {
+        val finalMetadata = metadata.takeIf { "rawFilename" in it } ?: metadata + ("rawFilename" to file.name)
         val request = buildPutRequest(
             bucket = bucket,
             key = key,
             body = ByteStream.fromFile(file),
-            contentType = contentType ?: guessContentType(file.name),
-            metadata = metadata,
+            contentType = contentType ?: guessContentType(file),
+            metadata = finalMetadata,
         )
         return client.putObject(request)
     }
@@ -423,7 +475,6 @@ object OssUtils {
         val request = buildGetRequest(bucket, key, versionId)
         return client.getObject(request) { response ->
             response.body?.writeToFile(targetFile.toPath())
-                ?: error("Empty response body for $bucket/$key")
             response
         }
     }
@@ -443,8 +494,15 @@ object OssUtils {
 
     // ==================== 工具方法 ====================
 
+    private val tika = Tika()
+
     /**
-     * 根据文件名猜测 Content-Type
+     * 基于文件内容检测 Content-Type（使用 Apache Tika 魔数检测）
+     */
+    fun guessContentType(file: File): String = tika.detect(file)
+
+    /**
+     * 仅根据文件名扩展名猜测 Content-Type（降级方案，无文件内容时使用）
      */
     fun guessContentType(fileName: String): String = when {
         fileName.endsWith(".jar") || fileName.endsWith(".war") -> "application/java-archive"
@@ -546,4 +604,9 @@ object OssUtils {
             token = nextToken
         } while (token != null && token.isNotBlank())
     }
+}
+
+enum class FileOperationEnum {
+    DOWNLOAD,
+    PREVIEW
 }

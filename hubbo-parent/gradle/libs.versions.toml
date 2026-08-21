@@ -60,6 +60,7 @@ jbang = "0.0.3"
 jgit = "7.3.0.202506031305-r"
 mockk = "1.13.8"
 nettyIncubatorHttp3 = "0.0.30.Final"
+tika = "3.3.2"
 
 [libraries]
 guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
@@ -146,6 +147,7 @@ jbang = { group = "dev.jbang", name = "jash", version.ref = "jbang" }
 jgit = { group = "org.eclipse.jgit", name = "org.eclipse.jgit", version.ref = "jgit" }
 jgit-ssh-apache = { group = "org.eclipse.jgit", name = "org.eclipse.jgit.ssh.apache", version.ref = "jgit" }
 netty-incubator-codec-http3 = { group = "io.netty.incubator", name = "netty-incubator-codec-http3", version.ref = "nettyIncubatorHttp3" }
+tika = { group = "org.apache.tika", name = "tika-core", version.ref = "tika" }
 
 [bundles]
 r2dbc = ["postgresql-r2dbc", "r2dbc-pool", "r2dbc-proxy"]
